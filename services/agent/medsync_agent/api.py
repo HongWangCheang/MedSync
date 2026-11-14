@@ -9,18 +9,22 @@ from typing import Any
 from fastapi import FastAPI, HTTPException
 from langgraph.checkpoint.memory import InMemorySaver
 
+from . import experiment
 from .external import HttpExternal
 from .graph import StepRunner, build_graph
 from .models import ActionRequest, Outcome
 from .tool_ledger import InMemoryToolLedger, PostgresToolLedger
 
 
-def runner_from_env() -> tuple[StepRunner, Any]:
+def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
     external = HttpExternal(os.environ.get("MEDSYNC_EXTERNAL_URL", "http://127.0.0.1:9000"),
                             float(os.environ.get("MEDSYNC_EXTERNAL_TIMEOUT_S", "5")))
+    attempts = experiment.Attempts()
+    baseline = experiment.BaselineRunner(external, attempts)
     dsn = os.environ.get("MEDSYNC_PG_DSN")
     if not dsn:
-        return StepRunner(build_graph(InMemoryToolLedger(), external, InMemorySaver())), None
+        graph = build_graph(InMemoryToolLedger(), external, InMemorySaver(), attempts=attempts)
+        return StepRunner(graph), None, baseline
     from langgraph.checkpoint.postgres import PostgresSaver
     from psycopg.rows import dict_row
     from psycopg_pool import ConnectionPool
@@ -29,16 +33,17 @@ def runner_from_env() -> tuple[StepRunner, Any]:
                           kwargs={"autocommit": True, "prepare_threshold": 0, "row_factory": dict_row})
     checkpointer = PostgresSaver(pool)
     checkpointer.setup()
-    return StepRunner(build_graph(PostgresToolLedger(pool), external, checkpointer)), pool
+    graph = build_graph(PostgresToolLedger(pool), external, checkpointer, attempts=attempts)
+    return StepRunner(graph), pool, baseline
 
 
-def create_app(runner: StepRunner | None = None) -> FastAPI:
+def create_app(runner: StepRunner | None = None, baseline: experiment.BaselineRunner | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         pool = None
-        app.state.runner = runner
+        app.state.runner, app.state.baseline = runner, baseline
         if runner is None:
-            app.state.runner, pool = runner_from_env()
+            app.state.runner, pool, app.state.baseline = runner_from_env()
         yield
         if pool is not None:
             pool.close()
@@ -51,7 +56,14 @@ def create_app(runner: StepRunner | None = None) -> FastAPI:
 
     @app.post("/v1/actions/run", response_model=Outcome)
     def run(body: dict[str, Any]) -> Outcome:
-        return app.state.runner.run(ActionRequest.model_validate(body))
+        request = ActionRequest.model_validate(body)
+        mode = request.experiment_mode
+        if mode is not None:
+            if not experiment.enabled() or mode not in experiment.MODES:
+                raise HTTPException(400, "experiment modes are disabled")
+            if mode != "full":
+                return app.state.baseline.run(request)
+        return app.state.runner.run(request)
 
     @app.post("/v1/actions/{step_key}/resume", response_model=Outcome)
     def resume(step_key: str, body: dict[str, Any]) -> Outcome:

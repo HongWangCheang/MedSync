@@ -29,6 +29,7 @@ mocks (模拟医院预约 / 家属通知)                         故意不去�
 | [services/rag/](services/rag/) | 从 MedTrack 拷贝的说明书 RAG（可选，`--profile rag`） |
 | [chaos/](chaos/) | Toxiproxy 三跳配置和故障注入脚本 |
 | [scripts/smoke.py](scripts/smoke.py) | 端到端冒烟测试 |
+| [eval/](eval/) | 对比实验：B0 朴素重试 / B1 请求级幂等 / B2 参数哈希去重 / Full，报告见 [eval/report.md](eval/report.md) |
 | [docs/开发计划.md](docs/开发计划.md) | 分阶段开发计划 |
 
 ## 启动服务端
@@ -60,6 +61,23 @@ curl -X POST 127.0.0.1:9100/admin/faults -H 'Content-Type: application/json' \
      -d '{"path": "/hospital/bookings", "delay_s": 8}'
 ```
 
+## 对比实验
+
+640 个故障注入回合，以模拟外部系统记录的实际副作用次数为准：
+
+| | B0 朴素重试 | B1 请求级幂等 | B2 参数哈希去重 | **Full** |
+|---|---|---|---|---|
+| 重复副作用率 IVR | 50% | 33% | 33% | **0%** |
+| 过期 / 契约变更的动作被执行 | 20/20 | 20/20 | 20/20 | **0/20** |
+
+完整结果、消融实验和局限见 [eval/report.md](eval/report.md)，复现：
+
+```sh
+docker compose -f docker-compose.yml -f eval/compose.experiment.yml up -d --build
+python3 eval/run_experiment.py --reps 10
+uv run --with matplotlib python eval/report.py
+```
+
 ## 运行客户端
 
 需要 JDK 21。
@@ -80,8 +98,8 @@ cd client
 
 ```sh
 cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest' test   # 11 项
-cd services/agent   && uv run pytest -q                                            # 14 项
-cd services/mocks   && uv run pytest -q                                            # 3 项
+cd services/agent   && uv run pytest -q                                            # 19 项
+cd services/mocks   && uv run pytest -q                                            # 4 项
 cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 14 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
 cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 1 项：真实 Ktor 客户端 → 三跳 → mocks

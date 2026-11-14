@@ -31,10 +31,10 @@ class HttpExternal:
 
     def call(self, tool: str, payload: dict[str, Any], ref: str) -> dict[str, Any]:
         if tool == "book_appointment":
-            body = {k: payload.get(k, "") for k in ("patient_id", "department", "date", "note")}
+            body = {k: payload.get(k, "") for k in ("patient_id", "department", "date", "note", "trace")}
             return self._send("POST", "/hospital/bookings", json={**body, "ref": ref})
         if tool == "notify_family":
-            body = {k: payload.get(k, "") for k in ("to", "message")}
+            body = {k: payload.get(k, "") for k in ("to", "message", "trace")}
             return self._send("POST", "/notify", json={**body, "ref": ref})
         raise ValueError(f"not an external tool: {tool}")
 
