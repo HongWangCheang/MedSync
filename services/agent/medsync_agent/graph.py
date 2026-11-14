@@ -26,6 +26,7 @@ from .external import External, Unreachable
 from .models import EXTERNAL_TOOLS, ActionRequest, Outcome
 from .pharmacist import Pharmacist, PharmacistMisconfigured, PharmacistUnavailable, delegation, signed_owner
 from .revalidate import decide
+from .safety import SafetyReviewer, SafetyUnavailable
 from .tool_ledger import ToolLedger
 
 
@@ -33,6 +34,7 @@ class StepState(TypedDict, total=False):
     request: dict[str, Any]
     decision: dict[str, Any]
     answer: dict[str, Any]
+    review: dict[str, Any]
     outcome: dict[str, Any]
 
 
@@ -60,7 +62,7 @@ def _alternatives(external: External, day: str, days: int = 3) -> list[dict[str,
 
 def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
                 now_ms: Callable[[], int] = lambda: int(time.time() * 1000), attempts: Attempts | None = None,
-                pharmacist: Pharmacist | None = None):
+                pharmacist: Pharmacist | None = None, safety: SafetyReviewer | None = None):
     attempts = attempts or Attempts()
 
     def ask_pharmacist(request: ActionRequest) -> dict:
@@ -101,8 +103,23 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
         return update
 
     def safety_review(state: StepState) -> dict:
-        # Phase 3: interaction / conflict checks before irreversible actions. Pass-through for now.
-        return {}
+        # A medication record is compared with the user's other recent records (see safety.py). The result is kept
+        # in the thread, so a step that parks later (or is re-dispatched) does not review again.
+        request = ActionRequest.model_validate(state["request"])
+        if request.tool != "record_medication" or state.get("review") is not None:
+            return {}
+        if safety is None:
+            return {"review": {"status": "skipped", "reason": "not_configured"}}
+        token = delegation.get()
+        if not token:
+            return {"review": {"status": "skipped", "reason": "no_medication_access"}}
+        taken_at = request.payload.get("takenAt")
+        try:
+            review = safety.review(str(request.payload.get("name", "")),
+                                   int(taken_at) if isinstance(taken_at, (int, float)) else None, token)
+        except SafetyUnavailable as error:
+            raise ExternalPending(f"safety review unavailable: {error}") from error
+        return {"review": review}
 
     def executor(state: StepState) -> dict:
         request = ActionRequest.model_validate(state["request"])
@@ -111,7 +128,13 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
         if request.tool not in EXTERNAL_TOOLS:
             # record_* steps live in the gateway's action_ledger (the pharmacist reads them back through a delegated,
             # read-only token); there is no external side effect to run here.
-            return {"outcome": {"status": "DONE", "result": {"tool": request.tool, "accepted": True}}}
+            result: dict[str, Any] = {"tool": request.tool, "accepted": True}
+            review = state.get("review")
+            if review is not None:
+                result["safety"] = review
+            alerted = bool(review and review.get("alerts"))
+            return {"outcome": {"status": "DONE", "result": result,
+                                "reason": f"safety_alert_{review.get('severity') or 'moderate'}" if alerted else None}}
         payload = request.payload
         if request.experiment_mode:
             # Same simulated LLM re-planning as the baselines: arguments are reworded on every re-execution.

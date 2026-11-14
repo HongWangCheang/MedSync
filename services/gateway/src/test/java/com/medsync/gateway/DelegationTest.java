@@ -13,6 +13,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -51,7 +52,7 @@ class DelegationTest {
     }
 
     @Test
-    void onlyThePharmacistDispatchCarriesADelegation() throws Exception {
+    void onlyPharmacistAndMedicationRecordDispatchesCarryADelegation() throws Exception {
         ObjectMapper json = new ObjectMapper();
         ActionLedger ledger = mock(ActionLedger.class);
         AgentClient agent = mock(AgentClient.class);
@@ -60,18 +61,22 @@ class DelegationTest {
         ActionService service = new ActionService(ledger, agent, issuer, json);
         when(agent.run(any(ObjectNode.class), any())).thenReturn(new AgentClient.Outcome("PENDING", null, null));
 
-        for (String tool : new String[] {"book_appointment", "ask_pharmacist"}) {
+        for (String tool : new String[] {"book_appointment", "ask_pharmacist", "record_medication", "notify_family"}) {
             ActionMapper.Row row = new ActionMapper.Row(tool, "p", 0, tool, "f", "{\"tool\":\"" + tool + "\"}",
                 "DISPATCHED", null, null);
             when(ledger.find("acct", tool)).thenReturn(row);
             service.status("acct", tool);
         }
-        ArgumentCaptor<ObjectNode> body = ArgumentCaptor.forClass(ObjectNode.class);
-        verify(agent).run(body.capture(), isNull());
-        assertThat(body.getValue().get("tool").asText()).isEqualTo("book_appointment");
-        verify(agent).run(any(ObjectNode.class), eq("dlg_token"));
-        verify(issuer).issue("acct", Delegation.MEDICATIONS_READ);
-        assertThat(body.getValue().has("delegation")).isFalse();  // never in the body → never persisted
+        ArgumentCaptor<ObjectNode> plain = ArgumentCaptor.forClass(ObjectNode.class);
+        verify(agent, times(2)).run(plain.capture(), isNull());
+        assertThat(plain.getAllValues()).extracting(b -> b.get("tool").asText())
+            .containsExactly("book_appointment", "notify_family");
+        ArgumentCaptor<ObjectNode> delegated = ArgumentCaptor.forClass(ObjectNode.class);
+        verify(agent, times(2)).run(delegated.capture(), eq("dlg_token"));
+        assertThat(delegated.getAllValues()).extracting(b -> b.get("tool").asText())
+            .containsExactly("ask_pharmacist", "record_medication");
+        verify(issuer, times(2)).issue("acct", Delegation.MEDICATIONS_READ);
+        assertThat(delegated.getAllValues()).noneMatch(b -> b.has("delegation"));  // never in the body → never persisted
         verify(issuer, never()).issue(eq("acct"), eq("actions:write"));
         verify(mapper, never()).insert(anyString(), anyString(), anyString(), any(Long.class));
     }

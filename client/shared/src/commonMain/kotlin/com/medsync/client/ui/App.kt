@@ -38,6 +38,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.medsync.client.agents.PharmacistAnswer
+import com.medsync.client.agents.SafetyReview
 import com.medsync.client.app.MedSyncController
 import com.medsync.client.data.ActionEntity
 import com.medsync.client.outbox.ActionState
@@ -97,7 +98,9 @@ fun App(controller: MedSyncController) {
 
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(actions.asReversed(), key = { it.actionId }) { action ->
-                        ActionCard(action, onChoose = controller::choose) { decision -> controller.resolve(action, decision) }
+                        ActionCard(action, onChoose = controller::choose, onAsk = { controller.submit(it) }) { decision ->
+                            controller.resolve(action, decision)
+                        }
                     }
                 }
             }
@@ -109,6 +112,7 @@ fun App(controller: MedSyncController) {
 private fun ActionCard(
     action: ActionEntity,
     onChoose: (PharmacistAnswer, com.medsync.client.agents.Choice) -> Unit,
+    onAsk: (String) -> Unit,
     onDecision: (JsonObject?) -> Unit,
 ) {
     val state = ActionState.valueOf(action.state)
@@ -123,6 +127,9 @@ private fun ActionCard(
             Text(summary(action.tool, payload), style = MaterialTheme.typography.bodyMedium)
             if (action.tool == "ask_pharmacist" && state == ActionState.DONE) {
                 PharmacistAnswer.parse(action.resultJson)?.let { answer -> AnswerView(answer) { onChoose(answer, it) } }
+            }
+            if (action.tool == "record_medication" && state == ActionState.DONE) {
+                SafetyReview.parse(action.resultJson)?.let { review -> SafetyView(review, onAsk) }
             }
             val meta = buildList {
                 if (action.attempt > 0) add("重试 ${action.attempt} 次")
@@ -189,6 +196,51 @@ private fun AnswerView(answer: PharmacistAnswer, onChoose: (com.medsync.client.a
     }
 }
 
+/** The safety review of a synced medication record: each alert with the label excerpt behind it, and what was covered. */
+@Composable
+private fun SafetyView(review: SafetyReview, onAsk: (String) -> Unit) {
+    val colors = MaterialTheme.colorScheme
+    val container = when {
+        review.high -> colors.errorContainer
+        review.alerts.isNotEmpty() -> colors.tertiaryContainer
+        else -> colors.surfaceVariant
+    }
+    Card(colors = CardDefaults.cardColors(containerColor = container), modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            val title = when {
+                review.status == "skipped" -> "安全审核未执行（${review.skippedReason ?: "未知原因"}）"
+                review.status == "unresolved_medication" -> "安全审核：没认出「${review.medication}」，没有检查"
+                review.high -> "安全审核：有需要马上留意的提醒"
+                review.alerts.isNotEmpty() -> "安全审核：有用药提醒"
+                else -> "安全审核：说明书里没有找到相关提醒"
+            }
+            Text(title, style = MaterialTheme.typography.labelLarge)
+            review.alerts.forEach { alert ->
+                alert.findings.forEach { f ->
+                    var open by remember(f.summary) { mutableStateOf(false) }
+                    Column(Modifier.fillMaxWidth().clickable { open = !open }) {
+                        Text((if (alert.high) "⚠ " else "• ") + f.summary, style = MaterialTheme.typography.bodyMedium)
+                        Text("${f.label} · ${f.section}（点开看原文）", style = MaterialTheme.typography.labelSmall,
+                            color = colors.primary)
+                        if (open) {
+                            Text("“${f.excerpt}”", style = MaterialTheme.typography.bodySmall)
+                            f.url?.let { Text(it, style = MaterialTheme.typography.labelSmall) }
+                        }
+                    }
+                }
+                OutlinedButton(onClick = { onAsk(review.question(alert)) }) { Text("问药师：和${alert.with}能一起吃吗") }
+            }
+            val coverage = buildList {
+                if (review.checked.isNotEmpty()) add("已对照：${review.checked.joinToString("、")}")
+                if (review.unresolved.isNotEmpty()) add("没认出、未检查：${review.unresolved.joinToString("、")}")
+                if (review.notRecent.isNotEmpty()) add("一周前的记录未对照：${review.notRecent.joinToString("、")}")
+            }
+            if (coverage.isNotEmpty()) Text(coverage.joinToString("；"), style = MaterialTheme.typography.labelSmall)
+            review.note?.let { Text(it, style = MaterialTheme.typography.labelSmall) }
+        }
+    }
+}
+
 private fun options(resultJson: String?): List<JsonObject> = runCatching {
     Json.parseToJsonElement(resultJson!!).jsonObject["options"]!!.jsonArray.map { it.jsonObject }
 }.getOrDefault(emptyList())
@@ -225,6 +277,8 @@ private fun reasonLabel(reason: String): String = when (reason) {
     "tool_changed" -> "功能已更新，请重新确认"
     "parent_not_done" -> "前一步没有完成"
     "replayed", "reconciled" -> "已去重（$reason）"
+    "safety_alert_high" -> "安全审核：高风险提醒"
+    "safety_alert_moderate" -> "安全审核：有提醒"
     else -> reason
 }
 

@@ -18,6 +18,7 @@ class ActionService {
     /** What the device sees. ACCEPTED means "safe to poll later", never "done". */
     record View(String stepKey, String status, JsonNode result, String reason) {}
 
+    private static final Set<String> DELEGATED_TOOLS = Set.of("ask_pharmacist", "record_medication");
     private static final Set<String> AGENT_STATUSES = Set.of("DONE", "NEEDS_USER", "FAILED", "CANCELLED", "PENDING");
 
     private final ActionLedger ledger;
@@ -61,8 +62,9 @@ class ActionService {
         }
         ObjectNode request = (ObjectNode) parse(row.request());
         request.put("account_id", account);
-        // Only the pharmacist gets a delegation, and only "read medications"; booking or notifying never needs one.
-        String token = "ask_pharmacist".equals(row.tool()) ? delegation.issue(account, Delegation.MEDICATIONS_READ) : null;
+        // Only the pharmacist and the safety review of a medication record get a delegation, and only "read
+        // medications"; booking or notifying never needs one.
+        String token = DELEGATED_TOOLS.contains(row.tool()) ? delegation.issue(account, Delegation.MEDICATIONS_READ) : null;
         try {
             return settle(account, row, agent.run(request, token));
         } catch (AgentClient.Unavailable unavailable) {
