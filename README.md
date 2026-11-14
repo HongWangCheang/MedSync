@@ -100,19 +100,39 @@ cd client
 
 **安全审核**：每条服药记录同步到服务器时，会和你最近一周记录过的其他药对照一遍（例如先记了"华法林"，再记"布洛芬"）。依据只有 openFDA 说明书原文，不调用大模型：一种药的说明书在"禁用 / 用药前咨询医生或药师 / 药物相互作用 / 警告"里提到另一种药的成分或类别（如"blood thinning (anticoagulant)"），或者两种产品 24 小时内含有相同成分（如两种都含对乙酰氨基酚），就在这条记录下方提醒，点开能看到引用的原文，还可以一键转给药学 Agent 追问。药已经吃了，所以只提醒、不拦截；认不出的药名会列为"未检查"，没有提醒也不代表可以一起吃。审核服务暂时连不上时，这条记录会在服务器排队，恢复后补做审核，不会跳过。评测见 [services/rag/eval/safety/REPORT.md](services/rag/eval/safety/REPORT.md)。
 
+**跨 Agent 冲突检测**：离线时手机按当时的理解排好了动作，例如"吃了对乙酰氨基酚，告诉女儿我没事"会生成一条服药记录和一条待发消息。联网后，安全审核（以及药学问答里查到的说明书相互作用提醒）会把结论写到服务器的"发现板"上；不可逆的动作执行前，先查有没有排队时还不知道的结论和它矛盾。规则很少，写在 `services/agent/medsync_agent/conflicts.py`：
+
+| 排队的动作 | 后来的结论 | 处理 |
+| --- | --- | --- |
+| 通知家属 | 高风险提醒 | 暂停，问你：附上提醒再发 / 照原样发 / 取消 |
+| 通知家属 | 一般提醒，且消息里说"没事""放心"等 | 暂停，同上 |
+| 通知家属 | 一般提醒，消息内容中性 | 照常发送 |
+| 预约复诊 | 任何提醒 | 照常预约（去看医生和提醒并不矛盾） |
+
+暂停期间什么都不会发出去；"附上提醒再发"追加的文字由服务器根据审核结果生成，不采用手机传回的内容。为了让审核结果先到，同一句话里的通知会等服务器处理完那条服药记录再发送。
+
+下面三张截图来自桌面端界面走查（`WalkthroughTest`，无界面运行真实的 App，连着本机的 Compose 服务）：离线约的号被抢后改约；联网后服药记录出现提醒，排队的"我没事"被暂停；附上提醒后发出。
+
+<p>
+<img src="docs/screenshots/2-online-slot-taken.png" width="32%">
+<img src="docs/screenshots/6-alert-and-paused-message.png" width="32%">
+<img src="docs/screenshots/8-sent-with-note.png" width="32%">
+</p>
+
 界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
 
 ## 测试
 
 ```sh
 cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest,AgentClientTest' test   # 20 项
-cd services/agent   && uv run pytest -q                                            # 42 项
+cd services/agent   && uv run pytest -q                                            # 51 项
 cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 60 项
 cd services/rag     && .venv/bin/python -B evaluate_safety.py                      # 相互作用提醒评测，32 个用例
 cd services/mocks   && uv run pytest -q                                            # 4 项
 cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 22 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
 cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 2 项：真实 Ktor 客户端 → 三跳 → mocks / RAG
+cd client && MEDSYNC_WALKTHROUGH=1 ./gradlew :desktopApp:test   # 桌面端界面走查：点按钮、打字，截图存到 desktopApp/build/walkthrough
 ```
 
 ## 来源

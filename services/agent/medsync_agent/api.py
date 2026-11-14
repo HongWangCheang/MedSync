@@ -11,6 +11,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 from . import experiment
 from .external import HttpExternal
+from .findings import InMemoryFindingsBoard, PostgresFindingsBoard
 from .graph import StepRunner, build_graph
 from .models import ActionRequest, Outcome
 from .pharmacist import RagPharmacist, delegation
@@ -29,7 +30,7 @@ def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
     dsn = os.environ.get("MEDSYNC_PG_DSN")
     if not dsn:
         graph = build_graph(InMemoryToolLedger(), external, InMemorySaver(), attempts=attempts, pharmacist=pharmacist,
-                            safety=safety)
+                            safety=safety, board=InMemoryFindingsBoard())
         return StepRunner(graph), None, baseline
     from langgraph.checkpoint.postgres import PostgresSaver
     from psycopg.rows import dict_row
@@ -40,7 +41,7 @@ def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
     checkpointer = PostgresSaver(pool)
     checkpointer.setup()
     graph = build_graph(PostgresToolLedger(pool), external, checkpointer, attempts=attempts, pharmacist=pharmacist,
-                        safety=safety)
+                        safety=safety, board=PostgresFindingsBoard(pool))
     return StepRunner(graph), pool, baseline
 
 

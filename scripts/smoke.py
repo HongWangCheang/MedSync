@@ -139,6 +139,30 @@ def main() -> int:
     results.append(check("same ingredient twice in a day is graded high", dup.get("reason") == "safety_alert_high",
                          dup.get("reason") or dup["status"]))
 
+    print("6. cross-agent conflict: a message queued offline vs the safety review that came after")
+    plan = uuid.uuid4().hex
+    rec = step("record_medication", {"name": "对乙酰氨基酚", "takenAt": now, "note": ""}, toolClass="WRITE_IDEMPOTENT",
+               planId=plan)
+    msg = step("notify_family", {"to": "女儿", "message": "吃了对乙酰氨基酚，告诉女儿我没事"}, planId=plan, stepIndex=1)
+    http("POST", f"{GATEWAY}/v1/actions", rec, token, timeout=60)  # 泰诺 was recorded above: duplicate → high
+    _, paused = http("POST", f"{GATEWAY}/v1/actions", msg, token, timeout=60)
+    sent_while_paused = len(http("GET", f"{MOCKS}/notify?ref={msg['stepKey']}")[1])
+    ok = paused["status"] == "NEEDS_USER" and paused["reason"] == "conflict_with_later_finding" \
+        and paused["result"]["conflicts"] and sent_while_paused == 0
+    results.append(check("high alert pauses the queued message, nothing sent", ok, paused.get("reason") or ""))
+    _, done = http("POST", f"{GATEWAY}/v1/actions/{msg['stepKey']}/resume", {"decision": "send_with_note"}, token)
+    sent = http("GET", f"{MOCKS}/notify?ref={msg['stepKey']}")[1]
+    results.append(check("send_with_note sends once, warning appended", done["status"] == "DONE" and len(sent) == 1
+                         and "MedSync 用药提醒" in sent[0]["message"], done["status"]))
+    plan = uuid.uuid4().hex
+    rec = step("record_medication", {"name": "Aleve", "takenAt": now, "note": ""}, toolClass="WRITE_IDEMPOTENT",
+               planId=plan)
+    msg = step("notify_family", {"to": "女儿", "message": "吃了Aleve，告诉女儿我在家"}, planId=plan, stepIndex=1)
+    reviewed = http("POST", f"{GATEWAY}/v1/actions", rec, token, timeout=60)[1]
+    _, neutral = http("POST", f"{GATEWAY}/v1/actions", msg, token, timeout=60)
+    results.append(check("moderate alert + neutral message is not paused", reviewed.get("reason") ==
+                         "safety_alert_moderate" and neutral["status"] == "DONE", neutral["status"]))
+
     metrics =http("GET", f"{MOCKS}/metrics/side_effects")[1]
     dupes = sum(len(v) for v in metrics["duplicated"].values())
     results.append(check("no duplicated side effects overall", dupes == 0, json.dumps(metrics["duplicated"])))

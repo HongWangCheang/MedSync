@@ -124,7 +124,10 @@ private fun ActionCard(
                     modifier = Modifier.weight(1f))
                 AssistChip(onClick = {}, label = { Text(stateLabel(state)) })
             }
-            Text(summary(action.tool, payload), style = MaterialTheme.typography.bodyMedium)
+            // A finished booking or message shows what actually happened (rescheduled date, warning appended),
+            // not what was planned.
+            val shown = remember(action.payloadJson, action.resultJson, action.state) { shown(action, payload) }
+            Text(summary(action.tool, shown), style = MaterialTheme.typography.bodyMedium)
             if (action.tool == "ask_pharmacist" && state == ActionState.DONE) {
                 PharmacistAnswer.parse(action.resultJson)?.let { answer -> AnswerView(answer) { onChoose(answer, it) } }
             }
@@ -138,6 +141,20 @@ private fun ActionCard(
             }
             Text(meta.joinToString(" · "), style = MaterialTheme.typography.labelSmall)
             if (state == ActionState.NEEDS_USER) {
+                val found = remember(action.resultJson) { conflicts(action.resultJson) }
+                if (found.isNotEmpty()) {
+                    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+                        modifier = Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("已暂停：联网后的审核结论和这一步冲突", style = MaterialTheme.typography.labelLarge)
+                            found.forEach { c ->
+                                Text((if (c.str("severity") == "high") "⚠ " else "• ") + (c.str("summary") ?: ""),
+                                    style = MaterialTheme.typography.bodyMedium)
+                                c.str("why")?.let { Text(it, style = MaterialTheme.typography.labelSmall) }
+                            }
+                        }
+                    }
+                }
                 Spacer(Modifier.height(4.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     val options = remember(action.resultJson) { options(action.resultJson) }
@@ -145,7 +162,7 @@ private fun ActionCard(
                         OutlinedButton(onClick = { onDecision(null) }) { Text("取消这一步") }
                     }
                     options.forEach { option ->
-                        OutlinedButton(onClick = { onDecision(option) }) { Text(optionLabel(option)) }
+                        OutlinedButton(onClick = { onDecision(option) }) { Text(optionLabel(option, action.tool)) }
                     }
                 }
             }
@@ -212,6 +229,7 @@ private fun SafetyView(review: SafetyReview, onAsk: (String) -> Unit) {
                 review.status == "unresolved_medication" -> "安全审核：没认出「${review.medication}」，没有检查"
                 review.high -> "安全审核：有需要马上留意的提醒"
                 review.alerts.isNotEmpty() -> "安全审核：有用药提醒"
+                review.checked.isEmpty() && review.unresolved.isEmpty() -> "安全审核：最近一周没有其他服药记录，无需对照"
                 else -> "安全审核：说明书里没有找到相关提醒"
             }
             Text(title, style = MaterialTheme.typography.labelLarge)
@@ -240,6 +258,11 @@ private fun SafetyView(review: SafetyReview, onAsk: (String) -> Unit) {
         }
     }
 }
+
+/** Findings that paused this step (agent conflicts.py), if that is why it needs the user. */
+private fun conflicts(resultJson: String?): List<JsonObject> = runCatching {
+    Json.parseToJsonElement(resultJson!!).jsonObject["conflicts"]!!.jsonArray.map { it.jsonObject }
+}.getOrDefault(emptyList())
 
 private fun options(resultJson: String?): List<JsonObject> = runCatching {
     Json.parseToJsonElement(resultJson!!).jsonObject["options"]!!.jsonArray.map { it.jsonObject }
@@ -278,13 +301,25 @@ private fun reasonLabel(reason: String): String = when (reason) {
     "parent_not_done" -> "前一步没有完成"
     "replayed", "reconciled" -> "已去重（$reason）"
     "safety_alert_high" -> "安全审核：高风险提醒"
+    "conflict_with_later_finding" -> "联网后发现用药提醒，已暂停等你确认"
     "safety_alert_moderate" -> "安全审核：有提醒"
     else -> reason
 }
 
-private fun optionLabel(option: JsonObject): String = when (option["decision"]?.jsonPrimitive?.contentOrNull) {
+private val OUTCOME_FIELDS = mapOf("book_appointment" to listOf("department", "date"),
+    "notify_family" to listOf("to", "message"))
+
+private fun shown(action: ActionEntity, payload: JsonObject): JsonObject {
+    val fields = OUTCOME_FIELDS[action.tool] ?: return payload
+    if (action.state != ActionState.DONE.name) return payload
+    val result = runCatching { Json.parseToJsonElement(action.resultJson!!).jsonObject }.getOrNull() ?: return payload
+    return JsonObject(payload + fields.mapNotNull { key -> (result[key] as? JsonPrimitive)?.let { key to it } })
+}
+
+private fun optionLabel(option: JsonObject, tool: String): String = when (option["decision"]?.jsonPrimitive?.contentOrNull) {
     "choose" -> "改约 ${option.str("date")}"
-    "confirm" -> "仍然执行"
+    "confirm" -> if (tool == "notify_family") "照原样发送" else "仍然执行"
+    "send_with_note" -> "附上提醒再发"
     "cancel" -> "取消"
     else -> option.toString()
 }

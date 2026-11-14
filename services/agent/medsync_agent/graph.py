@@ -1,8 +1,12 @@
 """One LangGraph thread per logical step (thread_id = account:step_key).
 
-    START → revalidate ─┬─ PROCEED  → safety_review → executor ─┬─ DONE → END
-                        ├─ ASK_USER → ask_user (interrupt) ──────┤  REJECTED (e.g. slot taken meanwhile) → ask_user
-                        └─ CANCEL   → cancel → END               └─ PENDING → raise: node fails, checkpoint kept
+    START → revalidate ─┬─ PROCEED  → safety_review ─┬─ pass ─→ executor ─┬─ DONE → END
+                        │                             └─ pause ─→ ask_user  │  REJECTED (e.g. slot taken) → ask_user
+                        ├─ ASK_USER → ask_user (interrupt) ─→ safety_review └─ PENDING → raise: checkpoint kept
+                        └─ CANCEL   → cancel → END
+
+safety_review is where agents meet: a medication record is reviewed and the result posted to the findings board;
+an irreversible step is checked against findings its (offline) planner never saw, and paused if they contradict it.
 
 Durable execution: a node that raises (external unreachable) leaves the thread parked at that node. Re-dispatching
 the same step resumes from there (`invoke(None)`), so revalidate is not re-run and the executor's ledger decides
@@ -20,9 +24,11 @@ from typing import Any, Callable, TypedDict
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import Command, interrupt
 
+from . import conflicts
 from .executor import execute
 from .experiment import Attempts, rephrase
 from .external import External, Unreachable
+from .findings import Finding, FindingsBoard
 from .models import EXTERNAL_TOOLS, ActionRequest, Outcome
 from .pharmacist import Pharmacist, PharmacistMisconfigured, PharmacistUnavailable, delegation, signed_owner
 from .revalidate import decide
@@ -35,6 +41,9 @@ class StepState(TypedDict, total=False):
     decision: dict[str, Any]
     answer: dict[str, Any]
     review: dict[str, Any]
+    conflicts: list[dict[str, Any]]  # findings that contradict this step (shown to the user when it pauses)
+    conflicts_acknowledged: bool     # the user answered the pause; do not ask again
+    gate: str                        # "pass" | "pause", set by safety_review
     outcome: dict[str, Any]
 
 
@@ -62,8 +71,13 @@ def _alternatives(external: External, day: str, days: int = 3) -> list[dict[str,
 
 def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
                 now_ms: Callable[[], int] = lambda: int(time.time() * 1000), attempts: Attempts | None = None,
-                pharmacist: Pharmacist | None = None, safety: SafetyReviewer | None = None):
+                pharmacist: Pharmacist | None = None, safety: SafetyReviewer | None = None,
+                board: FindingsBoard | None = None):
     attempts = attempts or Attempts()
+
+    def post(finding: Finding) -> None:
+        if board is not None:
+            board.post(finding)
 
     def ask_pharmacist(request: ActionRequest) -> dict:
         # READ tool: no side effect to deduplicate, but the finished answer is stored in this step's thread, so a
@@ -79,6 +93,14 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
             raise ExternalPending(f"pharmacist unavailable: {error}") from error
         except PharmacistMisconfigured as error:
             return {"outcome": {"status": "FAILED", "reason": f"pharmacist_not_configured: {error}"}}
+        if answer["grounded"] and answer.get("interaction_mentioned"):
+            # The pharmacist found label text about combining drugs: other queued steps should know.
+            question = str(request.payload.get("question", ""))
+            post(Finding(request.account_id, request.step_key, request.plan_id, "pharmacist", "label_interaction",
+                         "moderate", f"药学问答：说明书对“{question[:40]}”有相关提醒",
+                         request.created_at_ms or now_ms(),
+                         {"citations": [{k: c.get(k) for k in ("label", "section", "excerpt")}
+                                        for c in answer.get("citations", [])[:2]]}))
         return {"outcome": {"status": "DONE", "result": answer,
                             "reason": None if answer["grounded"] else "refused_without_evidence"}}
 
@@ -94,32 +116,67 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
 
     def ask_user(state: StepState) -> dict:
         decision = state["decision"]
-        answer = interrupt({"reason": decision["reason"], "options": decision["options"]})
+        paused = decision["reason"] == conflicts.REASON
+        question = {"reason": decision["reason"], "options": decision["options"]}
+        if paused:
+            question["conflicts"] = state.get("conflicts", [])
+        answer = interrupt(question)
         update: dict[str, Any] = {"answer": answer}
+        request = dict(state["request"])
         if answer.get("decision") == "choose" and answer.get("date"):
-            request = dict(state["request"])
             request["payload"] = {**request["payload"], "date": answer["date"]}
             update["request"] = request
+        if paused and answer.get("decision") in ("confirm", "send_with_note"):
+            update["conflicts_acknowledged"] = True
+            if answer["decision"] == "send_with_note":
+                message = str(request["payload"].get("message", ""))
+                request["payload"] = {**request["payload"],
+                                      "message": conflicts.with_note(message, state.get("conflicts", []))}
+                update["request"] = request
         return update
 
     def safety_review(state: StepState) -> dict:
+        request = ActionRequest.model_validate(state["request"])
+        if request.tool in EXTERNAL_TOOLS:
+            return gate(request, state)
+        if request.tool == "record_medication" and state.get("review") is None:
+            return review_record(request)
+        return {"gate": "pass"}
+
+    def gate(request: ActionRequest, state: StepState) -> dict:
+        # Irreversible step: does anything the planner never saw contradict it? (policy in conflicts.py)
+        if board is None or state.get("conflicts_acknowledged"):
+            return {"gate": "pass"}
+        found = conflicts.detect(request, board.unseen_by(request.account_id, request.plan_id, request.step_key,
+                                                          request.created_at_ms))
+        if not found:
+            return {"gate": "pass"}
+        return {"gate": "pause", "conflicts": found,
+                "decision": {"kind": "ASK_USER", "reason": conflicts.REASON, "options": conflicts.options(found)}}
+
+    def review_record(request: ActionRequest) -> dict:
         # A medication record is compared with the user's other recent records (see safety.py). The result is kept
         # in the thread, so a step that parks later (or is re-dispatched) does not review again.
-        request = ActionRequest.model_validate(state["request"])
-        if request.tool != "record_medication" or state.get("review") is not None:
-            return {}
         if safety is None:
-            return {"review": {"status": "skipped", "reason": "not_configured"}}
+            return {"review": {"status": "skipped", "reason": "not_configured"}, "gate": "pass"}
         token = delegation.get()
         if not token:
-            return {"review": {"status": "skipped", "reason": "no_medication_access"}}
+            return {"review": {"status": "skipped", "reason": "no_medication_access"}, "gate": "pass"}
         taken_at = request.payload.get("takenAt")
         try:
             review = safety.review(str(request.payload.get("name", "")),
                                    int(taken_at) if isinstance(taken_at, (int, float)) else None, token)
         except SafetyUnavailable as error:
             raise ExternalPending(f"safety review unavailable: {error}") from error
-        return {"review": review}
+        alerts = review.get("alerts") or []
+        if alerts:
+            post(Finding(request.account_id, request.step_key, request.plan_id, "safety_review", "safety_alert",
+                         "high" if review.get("severity") == "high" else "moderate",
+                         (alerts[0].get("findings") or [{}])[0].get("summary") or f"{request.payload.get('name')} 有用药提醒",
+                         int(taken_at) if isinstance(taken_at, (int, float)) else now_ms(),
+                         {"medication": request.payload.get("name"),
+                          "alerts": [{"with": a.get("with"), "severity": a.get("severity")} for a in alerts]}))
+        return {"review": review, "gate": "pass"}
 
     def executor(state: StepState) -> dict:
         request = ActionRequest.model_validate(state["request"])
@@ -161,6 +218,9 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
     def after_ask(state: StepState) -> str:
         return "cancel" if state["answer"].get("decision") == "cancel" else "safety_review"
 
+    def after_safety(state: StepState) -> str:
+        return "ask_user" if state.get("gate") == "pause" else "executor"
+
     def after_executor(state: StepState) -> str:
         return END if state.get("outcome") else "ask_user"
 
@@ -171,7 +231,7 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
     graph.add_edge(START, "revalidate")
     graph.add_conditional_edges("revalidate", after_revalidate, ["safety_review", "ask_user", "cancel"])
     graph.add_conditional_edges("ask_user", after_ask, ["safety_review", "cancel"])
-    graph.add_edge("safety_review", "executor")
+    graph.add_conditional_edges("safety_review", after_safety, ["executor", "ask_user"])
     graph.add_conditional_edges("executor", after_executor, [END, "ask_user"])
     graph.add_edge("cancel", END)
     return graph.compile(checkpointer=checkpointer)
@@ -255,4 +315,7 @@ class StepRunner:
 
     @staticmethod
     def _needs_user(value: dict[str, Any]) -> Outcome:
-        return Outcome(status="NEEDS_USER", result={"options": value.get("options", [])}, reason=value.get("reason"))
+        result = {"options": value.get("options", [])}
+        if value.get("conflicts"):
+            result["conflicts"] = value["conflicts"]
+        return Outcome(status="NEEDS_USER", result=result, reason=value.get("reason"))
