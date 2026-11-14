@@ -6,14 +6,14 @@ import os
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 from langgraph.checkpoint.memory import InMemorySaver
 
 from . import experiment
 from .external import HttpExternal
 from .graph import StepRunner, build_graph
 from .models import ActionRequest, Outcome
-from .pharmacist import RagPharmacist
+from .pharmacist import RagPharmacist, delegation
 from .tool_ledger import InMemoryToolLedger, PostgresToolLedger
 
 
@@ -58,8 +58,17 @@ def create_app(runner: StepRunner | None = None, baseline: experiment.BaselineRu
         return {"ok": True}
 
     @app.post("/v1/actions/run", response_model=Outcome)
-    def run(body: dict[str, Any]) -> Outcome:
+    def run(body: dict[str, Any],
+            x_medsync_delegation: str | None = Header(default=None)) -> Outcome:
         request = ActionRequest.model_validate(body)
+        # Bound only for this call; the step graph reads it but never stores it.
+        bound = delegation.set(x_medsync_delegation if request.tool == "ask_pharmacist" else None)
+        try:
+            return _run(request)
+        finally:
+            delegation.reset(bound)
+
+    def _run(request: ActionRequest) -> Outcome:
         mode = request.experiment_mode
         if mode is not None:
             if not experiment.enabled() or mode not in experiment.MODES:

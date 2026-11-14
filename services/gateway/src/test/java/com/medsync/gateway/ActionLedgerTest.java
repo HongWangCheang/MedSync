@@ -80,17 +80,17 @@ class ActionLedgerTest {
     void agentTimeoutLeavesStepAcceptedAndPollReDispatches() throws Exception {
         ActionLedger fakeLedger = mock(ActionLedger.class);
         AgentClient agent = mock(AgentClient.class);
-        ActionService service = new ActionService(fakeLedger, agent, json);
+        ActionService service = new ActionService(fakeLedger, agent, mock(Delegation.class), json);
         ActionMapper.Row dispatched = row("x".repeat(64), "DISPATCHED");
         when(fakeLedger.find("acct", KEY)).thenReturn(dispatched);
-        when(agent.run(any(ObjectNode.class)))
+        when(agent.run(any(ObjectNode.class), any()))
             .thenThrow(new AgentClient.Unavailable(new RuntimeException("timeout")))
             .thenReturn(new AgentClient.Outcome("DONE", json.readTree("{\"bookingId\":\"b1\"}"), null));
         when(fakeLedger.settle(eq("acct"), eq(KEY), eq("DONE"), any(), isNull())).thenReturn(row("x".repeat(64), "DONE"));
 
         assertThat(service.status("acct", KEY).status()).isEqualTo("ACCEPTED");
         assertThat(service.status("acct", KEY).status()).isEqualTo("DONE");
-        verify(agent, times(2)).run(any(ObjectNode.class));
+        verify(agent, times(2)).run(any(ObjectNode.class), any());
     }
 
     @Test
@@ -99,7 +99,7 @@ class ActionLedgerTest {
         AgentClient agent = mock(AgentClient.class);
         when(fakeLedger.find("acct", KEY)).thenReturn(row("x".repeat(64), "DONE"));
 
-        assertThat(new ActionService(fakeLedger, agent, json).status("acct", KEY).status()).isEqualTo("DONE");
-        verify(agent, never()).run(any());
+        assertThat(new ActionService(fakeLedger, agent, mock(Delegation.class), json).status("acct", KEY).status()).isEqualTo("DONE");
+        verify(agent, never()).run(any(), any());
     }
 }

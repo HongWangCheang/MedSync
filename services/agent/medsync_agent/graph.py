@@ -24,7 +24,7 @@ from .executor import execute
 from .experiment import Attempts, rephrase
 from .external import External, Unreachable
 from .models import EXTERNAL_TOOLS, ActionRequest, Outcome
-from .pharmacist import Pharmacist, PharmacistMisconfigured, PharmacistUnavailable, owner_header
+from .pharmacist import Pharmacist, PharmacistMisconfigured, PharmacistUnavailable, delegation, signed_owner
 from .revalidate import decide
 from .tool_ledger import ToolLedger
 
@@ -64,7 +64,7 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
         try:
             answer = pharmacist.ask(str(request.payload.get("question", "")),
                                     session_id=request.payload.get("session_id") or None,
-                                    owner=owner_header(request.account_id))
+                                    owner=signed_owner(request.account_id), token=delegation.get())
         except PharmacistUnavailable as error:
             raise ExternalPending(f"pharmacist unavailable: {error}") from error
         except PharmacistMisconfigured as error:
@@ -101,7 +101,8 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
         if request.tool == "ask_pharmacist":
             return ask_pharmacist(request)
         if request.tool not in EXTERNAL_TOOLS:
-            # record_* already reached MySQL through the sync path; no external side effect here.
+            # record_* steps live in the gateway's action_ledger (the pharmacist reads them back through a delegated,
+            # read-only token); there is no external side effect to run here.
             return {"outcome": {"status": "DONE", "result": {"tool": request.tool, "accepted": True}}}
         payload = request.payload
         if request.experiment_mode:

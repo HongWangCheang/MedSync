@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medsync.gateway.DelegationMapper">
+    <resultMap id="medication" type="com.medsync.gateway.DelegationMapper$Medication">
+        <constructor>
+            <arg column="name" javaType="string"/>
+            <arg column="last_taken_at" javaType="_long"/>
+            <arg column="times_recorded" javaType="_int"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO delegated_token (token_hash, account_id, scope, expires_at)
+        VALUES (#{tokenHash}, #{accountId}, #{scope}, CURRENT_TIMESTAMP + INTERVAL #{ttlSeconds} SECOND)
+    </insert>
+
+    <select id="findAccount" resultType="string">
+        SELECT account_id FROM delegated_token
+        WHERE token_hash = #{tokenHash} AND scope = #{scope} AND expires_at &gt; CURRENT_TIMESTAMP
+    </select>
+
+    <delete id="deleteExpired">
+        DELETE FROM delegated_token WHERE expires_at &lt;= CURRENT_TIMESTAMP
+    </delete>
+
+    <!-- MedSync records "I took X" as record_medication steps; the action ledger is where they live. -->
+    <select id="recentMedications" resultMap="medication">
+        SELECT JSON_UNQUOTE(JSON_EXTRACT(request, '$.payload.name')) AS name,
+               MAX(CAST(JSON_EXTRACT(request, '$.payload.takenAt') AS UNSIGNED)) AS last_taken_at,
+               COUNT(*) AS times_recorded
+        FROM action_ledger
+        WHERE account_id = #{account} AND tool = 'record_medication' AND status = 'DONE'
+          AND created_at &gt; CURRENT_TIMESTAMP - INTERVAL #{days} DAY
+        GROUP BY name
+        ORDER BY last_taken_at DESC
+        LIMIT #{limit}
+    </select>
+</mapper>

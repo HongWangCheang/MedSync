@@ -222,3 +222,43 @@ class ExactNameTests(unittest.TestCase):
         problem, label = self.resolve("Fixture Pain")
         self.assertEqual(problem["status"], "needs_selection")
         self.assertIsNone(label)
+
+
+class MedSyncIntegrationTests(unittest.TestCase):
+    """Session ownership by signed header, and medications through a MedSync delegated token."""
+
+    def setUp(self):
+        self.index = LabelIndex(LabelSnapshot(LABELS, public=False), model=None)
+        self.addCleanup(self.index.db.close)
+
+    def test_only_a_correctly_signed_owner_is_accepted(self):
+        import hashlib
+        import hmac
+        from agent import verified_owner
+        good = "abc." + hmac.new(b"s3cret", b"abc", hashlib.sha256).hexdigest()
+        self.assertEqual(verified_owner(good, "s3cret"), "medsync:abc")
+        self.assertIsNone(verified_owner(good, "other-secret"))
+        self.assertIsNone(verified_owner("abc." + "0" * 64, "s3cret"))
+        self.assertIsNone(verified_owner(good, ""))   # no secret configured → never trust the header
+        self.assertIsNone(verified_owner(None, "s3cret"))
+
+    def test_same_owner_continues_the_session_even_though_the_token_changes(self):
+        agent = LabelAgent(self.index, model=ScriptedModel(say("first"), say("second")),
+                           medications=FakeMedications(), store=SessionStore())
+        events = dict(agent.run("hello", token="Bearer dlg_one", owner="medsync:abc"))
+        sid = events["session"]["session_id"]
+        again = dict(agent.run("again", session_id=sid, token="Bearer dlg_two", owner="medsync:abc"))
+        self.assertEqual(again["session"]["session_id"], sid)
+        other = dict(LabelAgent(self.index, model=ScriptedModel(say("x")), medications=FakeMedications(),
+                                store=agent.store).run("hi", session_id=sid, token="Bearer dlg_two",
+                                                       owner="medsync:someone-else"))
+        self.assertNotEqual(other["session"]["session_id"], sid)
+
+    def test_delegated_token_reads_the_medsync_medication_list(self):
+        from unittest import mock
+        import agent as agent_module
+        page = {"medications": [{"name": "布洛芬", "lastTakenAt": 1763100000000, "timesRecorded": 3}]}
+        with mock.patch.object(agent_module, "request_json", return_value=page) as fetch:
+            meds = agent_module.SyncServerMedications("http://gateway:8081").list("Bearer dlg_" + "x" * 43)
+        self.assertEqual(meds, [{"name": "布洛芬", "last_taken_at": 1763100000000, "times_recorded": 3}])
+        self.assertEqual(fetch.call_args.args[0], "http://gateway:8081/v1/delegated/medications")

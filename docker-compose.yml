@@ -91,6 +91,8 @@ services:
       # Pharmacist step = MedTrack's label RAG agent. Not a side effect, so it bypasses the Toxiproxy hops.
       MEDSYNC_RAG_URL: http://rag:8765
       MEDSYNC_RAG_TIMEOUT_S: "60"
+      # Signs the RAG session owner; RAG checks it with the same secret.
+      MEDSYNC_INTERNAL_SECRET: ${MEDSYNC_INTERNAL_SECRET:?set MEDSYNC_INTERNAL_SECRET in .env}
     ports:
       - "127.0.0.1:8100:8000"
     healthcheck:
@@ -137,6 +139,7 @@ services:
       MEDTRACK_SYNC_URL: http://gateway:8081
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash-lite}
+      MEDSYNC_INTERNAL_SECRET: ${MEDSYNC_INTERNAL_SECRET:?set MEDSYNC_INTERNAL_SECRET in .env}
     volumes:
       - model-cache:/app/.cache
     ports:

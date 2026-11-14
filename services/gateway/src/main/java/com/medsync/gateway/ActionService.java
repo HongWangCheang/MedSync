@@ -22,11 +22,13 @@ class ActionService {
 
     private final ActionLedger ledger;
     private final AgentClient agent;
+    private final Delegation delegation;
     private final ObjectMapper json;
 
-    ActionService(ActionLedger ledger, AgentClient agent, ObjectMapper json) {
+    ActionService(ActionLedger ledger, AgentClient agent, Delegation delegation, ObjectMapper json) {
         this.ledger = ledger;
         this.agent = agent;
+        this.delegation = delegation;
         this.json = json;
     }
 
@@ -59,8 +61,10 @@ class ActionService {
         }
         ObjectNode request = (ObjectNode) parse(row.request());
         request.put("account_id", account);
+        // Only the pharmacist gets a delegation, and only "read medications"; booking or notifying never needs one.
+        String token = "ask_pharmacist".equals(row.tool()) ? delegation.issue(account, Delegation.MEDICATIONS_READ) : null;
         try {
-            return settle(account, row, agent.run(request));
+            return settle(account, row, agent.run(request, token));
         } catch (AgentClient.Unavailable unavailable) {
             return view(row);
         }
