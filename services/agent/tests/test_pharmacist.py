@@ -74,9 +74,9 @@ class FakePharmacist:
         self.failures = failures or []
         self.gate = gate
 
-    def ask(self, question: str, session_id=None, owner=None) -> dict:
+    def ask(self, question: str, session_id=None, owner=None, token=None) -> dict:
         self.calls += 1
-        self.last = {"question": question, "session_id": session_id, "owner": owner}
+        self.last = {"question": question, "session_id": session_id, "owner": owner, "token": token}
         if self.gate:
             self.gate.wait(5)
         if self.failures:
@@ -133,30 +133,57 @@ def test_a_redispatch_while_the_answer_is_still_running_does_not_start_a_second_
     assert first["out"].status == "DONE" and pharmacist.calls == 1
 
 
-def test_follow_up_carries_the_session_and_a_per_account_owner() -> None:
+def test_follow_up_carries_the_session_owner_and_delegated_token() -> None:
     seen = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
-        seen["body"], seen["auth"] = json.loads(request.content), request.headers.get("authorization")
+        seen["body"], seen["headers"] = json.loads(request.content), request.headers
         body = sse(("session", {"session_id": "11111111-2222-3333-4444-555555555555"}),
                    ("tool_call", {"name": "search_label", "args": {}}),
                    ("tool_result", {"name": "search_label", "status": "needs_selection", "citations": []}),
                    ("answer", {"text": "请问您指的是哪一种 Advil？", "grounded": True, "citations": {}}), ("done", {}))
         return httpx.Response(200, text=body)
 
-    out = rag(handler).ask("ADVIL", session_id="11111111-2222-3333-4444-555555555555", owner="MedSync-Account abc")
+    out = rag(handler).ask("ADVIL", session_id="11111111-2222-3333-4444-555555555555", owner="o.sig",
+                           token="dlg_abc")
     assert seen["body"]["session_id"] == "11111111-2222-3333-4444-555555555555"
-    assert seen["auth"] == "MedSync-Account abc"
+    assert seen["headers"]["x-medsync-owner"] == "o.sig"
+    assert seen["headers"]["authorization"] == "Bearer dlg_abc"
     assert out["session_id"] == "11111111-2222-3333-4444-555555555555" and out["awaiting_choice"] is True
 
 
-def test_graph_passes_the_session_and_isolates_accounts() -> None:
+def test_signed_owner_is_stable_per_account_and_verifiable() -> None:
+    import hashlib
+    import hmac
+    from medsync_agent.pharmacist import signed_owner
+
+    a1, a2, b = signed_owner("alice", "s3cret"), signed_owner("alice", "s3cret"), signed_owner("bob", "s3cret")
+    assert a1 == a2 and a1 != b
+    owner, signature = a1.split(".")
+    assert hmac.compare_digest(signature, hmac.new(b"s3cret", owner.encode(), hashlib.sha256).hexdigest())
+    assert signed_owner("alice", "") is None  # no shared secret → no owner claim at all
+
+
+def test_delegated_token_reaches_the_pharmacist_but_never_the_checkpoint(monkeypatch) -> None:
+    from fastapi.testclient import TestClient
+    from medsync_agent.api import create_app
+
+    monkeypatch.setenv("MEDSYNC_INTERNAL_SECRET", "s3cret")
     pharmacist = FakePharmacist()
-    r = runner(pharmacist)
-    step = question("q9").model_dump(by_alias=True)
-    step["payload"]["session_id"] = "11111111-2222-3333-4444-555555555555"
-    r.run(ActionRequest.model_validate(step))
-    first_owner = pharmacist.last["owner"]
+    saver = InMemorySaver()
+    r = StepRunner(build_graph(InMemoryToolLedger(), FakeExternal(), saver, pharmacist=pharmacist))
+    body = question("q9").model_dump(by_alias=True)
+    body["payload"]["session_id"] = "11111111-2222-3333-4444-555555555555"
+    with TestClient(create_app(r)) as client:
+        reply = client.post("/v1/actions/run", json=body, headers={"X-MedSync-Delegation": "dlg_secret_token"})
+    assert reply.json()["status"] == "DONE"
+    assert pharmacist.last["token"] == "dlg_secret_token"
     assert pharmacist.last["session_id"] == "11111111-2222-3333-4444-555555555555"
-    r.run(ActionRequest.model_validate({**step, "account_id": "someone-else", "stepKey": "q10"}))
-    assert pharmacist.last["owner"] != first_owner and not first_owner.startswith("Bearer")
+    assert pharmacist.last["owner"].count(".") == 1
+    stored = repr(list(saver.list({"configurable": {"thread_id": "acct:q9"}})))
+    assert "dlg_secret_token" not in stored  # not in state, writes or metadata
+
+
+def test_other_tools_never_see_a_delegation(monkeypatch) -> None:
+    from medsync_agent.pharmacist import delegation
+    assert delegation.get() is None

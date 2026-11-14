@@ -35,7 +35,7 @@ mocks (模拟医院预约 / 家属通知)                         故意不去�
 ## 启动服务端
 
 ```sh
-cp .env.example .env          # 填三个数据库密码；要回答用药问题再填 GEMINI_API_KEY
+cp .env.example .env          # 填三个数据库密码和 MEDSYNC_INTERNAL_SECRET；要回答用药问题再填 GEMINI_API_KEY
 docker compose up --build -d
 python3 scripts/smoke.py      # 6 项检查：重放、409、响应丢失、Agent 不可达、号源被抢、无重复副作用
 ```
@@ -94,6 +94,8 @@ cd client
 
 **用药问答**：例如输入"布洛芬能和阿司匹林一起吃吗？"。在线时，这个问题由 `services/rag` 检索 openFDA 说明书后回答，答案里的 [S1] 会高亮，点开能看到原文摘录。找不到可引用的原文时会直接拒答。
 
+问到"我吃的药"时，药学 Agent 会读取你记录过的服药（最近 90 天）。它拿到的是网关临时签发的只读授权：有效期 2 分钟，只能读用药清单，不会被保存下来。
+
 同一个药名可能对应多个产品，这时会先反问是哪一款；直接回复产品名（例如 `ADVIL`）就会接着回答。10 分钟内的追问（例如"它一天最多吃几片？"）也会接着同一段对话。没有配置 `GEMINI_API_KEY` 时，这一步会失败并显示"药学服务未配置"。
 
 界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
@@ -101,8 +103,8 @@ cd client
 ## 测试
 
 ```sh
-cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest' test   # 11 项
-cd services/agent   && uv run pytest -q                                            # 31 项
+cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest' test   # 15 项
+cd services/agent   && uv run pytest -q                                            # 33 项
 cd services/mocks   && uv run pytest -q                                            # 4 项
 cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 18 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行

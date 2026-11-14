@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, ConfigDict, StringConstraints, model_validator
 from starlette.concurrency import run_in_threadpool
 
-from agent import LabelAgent, gemini_summarize
+from agent import LabelAgent, gemini_summarize, verified_owner
 from label_corpus import DEFAULT_CORPUS
 from label_retrieval import LabelIndex, LabelSnapshot, load_model, load_reranker
 from medtrack_server import ApiError, DEMO_LABELS, DemoLabels, MedTrack, demo_select, live_service, load_local_config, route
@@ -100,7 +100,8 @@ def create_app(index=None, legacy=None, agent=None):
     def agent_chat(request: Request, body: AgentMessage):
         """Server-sent events: session, tool_call, tool_result, then answer (or error)."""
         token = request.headers.get("authorization")
-        steps = request.app.state.agent.run(body.message, body.session_id, token)
+        owner = verified_owner(request.headers.get("x-medsync-owner"))
+        steps = request.app.state.agent.run(body.message, body.session_id, token, owner=owner)
 
         def stream():
             try:

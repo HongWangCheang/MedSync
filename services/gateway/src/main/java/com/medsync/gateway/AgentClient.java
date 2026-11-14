@@ -37,18 +37,28 @@ class AgentClient {
         this.rest = RestClient.builder().baseUrl(baseUrl).requestFactory(factory).build();
     }
 
+    /** Header carrying a delegated token for this one dispatch; kept out of the body so nothing persists it. */
+    static final String DELEGATION_HEADER = "X-MedSync-Delegation";
+
     Outcome run(ObjectNode request) {
-        return call("/v1/actions/run", request);
+        return run(request, null);
+    }
+
+    Outcome run(ObjectNode request, String delegation) {
+        return call("/v1/actions/run", request, delegation);
     }
 
     Outcome resume(String stepKey, ObjectNode decision) {
-        return call("/v1/actions/" + stepKey + "/resume", decision);
+        return call("/v1/actions/" + stepKey + "/resume", decision, null);
     }
 
-    private Outcome call(String path, ObjectNode body) {
+    private Outcome call(String path, ObjectNode body, String delegation) {
         try {
-            return rest.post().uri(path).contentType(MediaType.APPLICATION_JSON).body(body)
-                .retrieve().body(Outcome.class);
+            var spec = rest.post().uri(path).contentType(MediaType.APPLICATION_JSON).body(body);
+            if (delegation != null) {
+                spec = spec.header(DELEGATION_HEADER, delegation);
+            }
+            return spec.retrieve().body(Outcome.class);
         } catch (ResourceAccessException | HttpServerErrorException exception) {
             throw new Unavailable(exception);
         }

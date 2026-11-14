@@ -10,8 +10,11 @@ turns its SSE stream into one result and sorts failures into the two kinds the s
 
 from __future__ import annotations
 
+import contextvars
 import hashlib
+import hmac
 import json
+import os
 from typing import Any, Iterable, Iterator, Protocol
 
 import httpx
@@ -24,13 +27,23 @@ EXCERPT_CHARS = 400
 CHOICE_STATUSES = {"needs_selection", "user_must_choose"}
 
 
-def owner_header(account_id: str) -> str:
-    """Per-account identity for RAG's session store, so one account can never load another's conversation.
+OWNER_HEADER = "X-MedSync-Owner"
+# The gateway's per-dispatch delegated token ("read this user's medications"). Lives in a context variable for the
+# duration of one request so it never becomes part of the step's state, and therefore never reaches a checkpoint.
+delegation: contextvars.ContextVar[str | None] = contextvars.ContextVar("medsync_delegation", default=None)
 
-    Deliberately NOT a gateway token: RAG's `get_my_medications` forwards this header to the gateway, which rejects
-    it, so the pharmacist cannot read anyone's records until a real delegated token exists (see the plan).
+
+def signed_owner(account_id: str, secret: str | None = None) -> str | None:
+    """Session owner for RAG, signed so a caller that reaches RAG directly cannot claim someone else's conversation.
+
+    RAG used to derive the owner from the Authorization header, but that header now carries a delegated token that
+    changes on every dispatch; follow-ups need an owner that stays the same for the account.
     """
-    return "MedSync-Account " + hashlib.sha256(f"medsync-rag-owner:{account_id}".encode()).hexdigest()
+    secret = secret if secret is not None else os.environ.get("MEDSYNC_INTERNAL_SECRET", "")
+    if not secret:
+        return None
+    owner = hashlib.sha256(f"medsync-rag-owner:{account_id}".encode()).hexdigest()[:32]
+    return owner + "." + hmac.new(secret.encode(), owner.encode(), hashlib.sha256).hexdigest()
 
 
 class PharmacistUnavailable(Exception):
@@ -42,7 +55,8 @@ class PharmacistMisconfigured(Exception):
 
 
 class Pharmacist(Protocol):
-    def ask(self, question: str, session_id: str | None = None, owner: str | None = None) -> dict[str, Any]: ...
+    def ask(self, question: str, session_id: str | None = None, owner: str | None = None,
+            token: str | None = None) -> dict[str, Any]: ...
 
 
 def parse_sse(lines: Iterable[str]) -> Iterator[tuple[str, dict[str, Any]]]:
@@ -78,11 +92,12 @@ class RagPharmacist:
         self._http = httpx.Client(base_url=base_url, transport=transport,
                                   timeout=httpx.Timeout(timeout_s, connect=3.0))
 
-    def ask(self, question: str, session_id: str | None = None, owner: str | None = None) -> dict[str, Any]:
+    def ask(self, question: str, session_id: str | None = None, owner: str | None = None,
+            token: str | None = None) -> dict[str, Any]:
         tools: list[str] = []
         answer, session, awaiting = None, session_id, False
         body = {"message": question[:1000], **({"session_id": session_id} if session_id else {})}
-        headers = {"Authorization": owner} if owner else {}
+        headers = {**({OWNER_HEADER: owner} if owner else {}), **({"Authorization": f"Bearer {token}"} if token else {})}
         try:
             with self._http.stream("POST", "/v1/agent/chat", json=body, headers=headers) as response:
                 if response.status_code >= 500:

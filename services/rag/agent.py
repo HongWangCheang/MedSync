@@ -5,6 +5,7 @@ make no citation although this turn retrieved evidence, are replaced by a refusa
 """
 
 import hashlib
+import hmac
 import json
 import os
 import re
@@ -49,7 +50,8 @@ TOOLS = [{"functionDeclarations": [
                     "version if the product was already chosen.",
      "parameters": {"type": "object", "properties": {
          "question": {"type": "string", "description": "The question in English."},
-         "drug_name": {"type": "string"}, "label_id": {"type": "string"}, "version": {"type": "string"}},
+         "drug_name": {"type": "string", "description": "English brand or generic name; translate if needed."},
+         "label_id": {"type": "string"}, "version": {"type": "string"}},
          "required": ["question"]}},
     {"name": "get_my_medications",
      "description": "List the signed-in user's own medication records (name, dosage, frequency, time).",
@@ -58,7 +60,7 @@ TOOLS = [{"functionDeclarations": [
      "description": "Find passages on one drug's label that mention another drug or its ingredients. Only reports "
                     "what the label text says.",
      "parameters": {"type": "object", "properties": {
-         "drug_name": {"type": "string", "description": "Label to read."},
+         "drug_name": {"type": "string", "description": "Label to read (English brand or generic name)."},
          "other_drug": {"type": "string", "description": "Drug or ingredient to look for."},
          "question": {"type": "string", "description": "The user's concern in English, used to rank passages."},
          "label_id": {"type": "string"}, "version": {"type": "string"}},
@@ -99,6 +101,12 @@ class SyncServerMedications:
     def list(self, token):
         if not token:
             return None
+        if token.startswith("Bearer dlg_"):
+            # MedSync gateway: a short-lived delegated token that can only read this one list.
+            page = request_json(f"{self.base_url}/v1/delegated/medications", timeout=8,
+                                headers={"Authorization": token})
+            return [{"name": m.get("name", ""), "last_taken_at": m.get("lastTakenAt"),
+                     "times_recorded": m.get("timesRecorded")} for m in page.get("medications", [])]
         medications, after = [], 0
         for _ in range(100):
             page = request_json(f"{self.base_url}/v1/sync/changes?" + urlencode({"after": after, "limit": 100}),
@@ -157,6 +165,17 @@ def gemini_summarize(previous, turns):
 
 def owner_of(token):
     return hashlib.sha256(token.encode()).hexdigest() if token else "anonymous"
+
+
+def verified_owner(header, secret=None):
+    """MedSync's agent signs "<owner>.<hmac>" with a secret only it and this service share. Returns the owner if the
+    signature checks out, else None, so a client calling this service directly cannot claim another user's session."""
+    secret = os.environ.get("MEDSYNC_INTERNAL_SECRET", "") if secret is None else secret
+    if not secret or not header or header.count(".") != 1:
+        return None
+    owner, signature = header.split(".")
+    expected = hmac.new(secret.encode(), owner.encode(), hashlib.sha256).hexdigest()
+    return "medsync:" + owner if owner and hmac.compare_digest(signature, expected) else None
 
 
 class LabelAgent:
@@ -306,9 +325,12 @@ class LabelAgent:
             return False, "uncited_answer", cited
         return True, None, cited
 
-    def run(self, message, session_id=None, token=None):
-        """Yields (event, data) pairs. The final answer is only emitted after citation validation."""
-        owner = owner_of(token)
+    def run(self, message, session_id=None, token=None, owner=None):
+        """Yields (event, data) pairs. The final answer is only emitted after citation validation.
+
+        `owner` is a verified caller identity (see verified_owner); without one the session belongs to the token.
+        """
+        owner = owner or owner_of(token)
         session = self.store.load(session_id, owner) if session_id else None
         if session is None:
             session = Session(str(uuid.uuid4()), owner)

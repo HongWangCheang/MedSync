@@ -51,3 +51,14 @@ CREATE TABLE IF NOT EXISTS action_ledger (
     KEY action_ledger_plan (account_id, plan_id),
     FOREIGN KEY (account_id) REFERENCES sync_account (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+-- MedSync: short-lived, single-scope tokens the gateway hands to the agent for one dispatch (e.g. "read this user's
+-- medications" for the pharmacist). Never valid on the normal sync/actions endpoints, never stored in plain text.
+CREATE TABLE IF NOT EXISTS delegated_token (
+    token_hash CHAR(64) PRIMARY KEY,
+    account_id CHAR(36) NOT NULL,
+    scope VARCHAR(32) NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    KEY delegated_token_expiry (expires_at),
+    FOREIGN KEY (account_id) REFERENCES sync_account (id) ON DELETE CASCADE
+) ENGINE=InnoDB;
