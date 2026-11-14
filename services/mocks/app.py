@@ -34,12 +34,14 @@ class BookingIn(BaseModel):
     date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
     note: str = ""
     ref: str
+    trace: str = ""  # evaluation episode id; survives baselines that change ref on every retry
 
 
 class NotifyIn(BaseModel):
     to: str
     message: str
     ref: str
+    trace: str = ""
 
 
 class SlotSet(BaseModel):
@@ -134,6 +136,16 @@ def side_effects() -> dict:
         }
 
 
+@app.get("/metrics/trace/{trace}")
+def by_trace(trace: str) -> dict:
+    """Side effects caused by one evaluation episode, however many refs (step keys) the system under test used."""
+    with _lock:
+        bookings = [b for b in _bookings if b["trace"] == trace]
+        notifications = [n for n in _notifications if n["trace"] == trace]
+        return {"bookings": len(bookings), "notifications": len(notifications),
+                "refs": sorted({e["ref"] for e in bookings + notifications})}
+
+
 @app.post("/admin/slots/{date}")
 def set_slot(date: str, body: SlotSet) -> dict:
     """Lets a scenario change the world while a step waits in the offline queue (e.g. the slot gets taken)."""
@@ -150,6 +162,13 @@ def set_fault(body: FaultSet) -> dict:
     with _lock:
         _faults[body.path] = {"delay_s": body.delay_s, "remaining": body.count}
         return {"faults": _faults}
+
+
+@app.post("/admin/faults/clear")
+def clear_faults() -> dict:
+    with _lock:
+        _faults.clear()
+        return {"ok": True}
 
 
 @app.post("/admin/reset")

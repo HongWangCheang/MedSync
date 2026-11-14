@@ -35,3 +35,10 @@ def test_lost_response_fault_commits_before_the_delay() -> None:
     client.post("/notify", json={"to": "d", "message": "m", "ref": "r1"})
     assert client.get("/metrics/side_effects").json()["notifications"] == 1
     assert client.post("/admin/faults", json={"path": "/notify", "delay_s": 0.2}).status_code == 200
+
+
+def test_effects_are_counted_per_trace_across_refs() -> None:
+    client.post("/hospital/bookings", json={**booking("k1"), "trace": "ep1"})
+    client.post("/hospital/bookings", json={**booking("k2"), "trace": "ep1"})
+    got = client.get("/metrics/trace/ep1").json()
+    assert got["bookings"] == 2 and got["refs"] == ["k1", "k2"]

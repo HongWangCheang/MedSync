@@ -27,7 +27,7 @@ class ActionLedgerTest {
 
     private ActionLedger.Submit submit(String payload) throws Exception {
         return new ActionLedger.Submit(KEY, "plan-1", 0, "book_appointment", "IRREVERSIBLE",
-            json.readTree("{\"department\":\"cardiology\"}"), json.readTree(payload), json.readTree("{}"), 1L, null);
+            json.readTree("{\"department\":\"cardiology\"}"), json.readTree(payload), json.readTree("{}"), 1L, null, null);
     }
 
     private ActionMapper.Row row(String fingerprint, String status) {
@@ -72,7 +72,7 @@ class ActionLedgerTest {
     @Test
     void rejectsMalformedStepKey() throws Exception {
         var bad = new ActionLedger.Submit("not-a-key", "plan-1", 0, "book_appointment", "IRREVERSIBLE",
-            json.readTree("{}"), json.readTree("{}"), json.readTree("{}"), 1L, null);
+            json.readTree("{}"), json.readTree("{}"), json.readTree("{}"), 1L, null, null);
         assertThatThrownBy(() -> ledger.record("acct", bad)).hasMessageContaining("400");
     }
 

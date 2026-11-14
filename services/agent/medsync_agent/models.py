@@ -38,6 +38,7 @@ class ActionRequest(BaseModel):
     preconditions: dict[str, Any] = {}
     created_at_ms: int = 0
     expires_at_ms: int | None = None
+    experiment_mode: str | None = None  # comparison experiment only; see experiment.py
 
 
 class Outcome(BaseModel):

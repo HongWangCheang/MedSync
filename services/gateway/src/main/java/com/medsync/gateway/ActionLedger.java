@@ -29,7 +29,9 @@ class ActionLedger {
 
     record Submit(String stepKey, String planId, int stepIndex, String tool, String toolClass,
                   JsonNode identityArgs, JsonNode payload, JsonNode preconditions, long createdAtMs,
-                  Long expiresAtMs) {}
+                  Long expiresAtMs, String experimentMode) {}
+    /** Comparison-experiment baselines; the agent only honours them when MEDSYNC_EXPERIMENTS=1. */
+    static final Set<String> EXPERIMENT_MODES = Set.of("naive", "request_id", "args_hash", "full");
     record Recorded(ActionMapper.Row row, boolean created) {}
 
     private final AccountMapper accounts;
@@ -84,7 +86,8 @@ class ActionLedger {
         if (input == null || input.stepKey() == null || !input.stepKey().matches("[0-9a-f]{64}") ||
                 input.planId() == null || input.planId().isBlank() || input.planId().length() > 64 ||
                 input.stepIndex() < 0 || input.tool() == null || !TOOLS.contains(input.tool()) ||
-                input.payload() == null || !input.payload().isObject()) {
+                input.payload() == null || !input.payload().isObject() ||
+                (input.experimentMode() != null && !EXPERIMENT_MODES.contains(input.experimentMode()))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid action");
         }
     }

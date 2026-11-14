@@ -1,0 +1,14 @@
+# Overlay for the comparison experiment:
+#   docker compose -f docker-compose.yml -f eval/compose.experiment.yml up -d --build
+# Enables the baseline modes and shortens timeouts so ~300 fault episodes finish in about 20 minutes.
+services:
+  agent:
+    environment:
+      MEDSYNC_EXPERIMENTS: "1"
+      # Ablation: MEDSYNC_EXPERIMENT_REPHRASE=0 docker compose ... up -d agent  (retries resend identical arguments)
+      MEDSYNC_EXPERIMENT_REPHRASE: ${MEDSYNC_EXPERIMENT_REPHRASE:-1}
+      MEDSYNC_EXTERNAL_TIMEOUT_S: "1"
+  gateway:
+    environment:
+      MEDSYNC_AGENT_READ_TIMEOUT: 2s
+      MEDTRACK_RATE_LIMIT: "100000"

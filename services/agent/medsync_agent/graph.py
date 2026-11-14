@@ -20,6 +20,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.types import Command, interrupt
 
 from .executor import execute
+from .experiment import Attempts, rephrase
 from .external import External, Unreachable
 from .models import EXTERNAL_TOOLS, ActionRequest, Outcome
 from .revalidate import decide
@@ -49,7 +50,9 @@ def _alternatives(external: External, day: str, days: int = 3) -> list[dict[str,
 
 
 def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
-                now_ms: Callable[[], int] = lambda: int(time.time() * 1000)):
+                now_ms: Callable[[], int] = lambda: int(time.time() * 1000), attempts: Attempts | None = None):
+    attempts = attempts or Attempts()
+
     def revalidate(state: StepState) -> dict:
         request = ActionRequest.model_validate(state["request"])
         world: dict[str, Any] = {}
@@ -80,7 +83,11 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
             # record_* already reached MySQL through the sync path; ask_pharmacist is wired to the RAG service in
             # phase 1 week 2. Neither creates an external side effect here.
             return {"outcome": {"status": "DONE", "result": {"tool": request.tool, "accepted": True}}}
-        result = execute(request.step_key, request.tool, request.payload, ledger, external)
+        payload = request.payload
+        if request.experiment_mode:
+            # Same simulated LLM re-planning as the baselines: arguments are reworded on every re-execution.
+            payload = rephrase(request.tool, payload, attempts.next(request.step_key))
+        result = execute(request.step_key, request.tool, payload, ledger, external)
         if result.status == "PENDING":
             raise ExternalPending(result.reason)
         if result.status == "REJECTED":
