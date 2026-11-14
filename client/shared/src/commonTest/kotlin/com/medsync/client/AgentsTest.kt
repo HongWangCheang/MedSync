@@ -22,7 +22,7 @@ class AgentsTest {
         assertEquals("\"消化内科\"", routed.steps[2].payload["department"].toString())
         assertEquals("\"2026-11-18\"", routed.steps[2].payload["date"].toString())
         assertEquals(listOf(1), routed.steps[2].dependsOn)
-        assertEquals(listOf(1), routed.steps[3].dependsOn)
+        assertEquals(listOf(0, 1), routed.steps[3].dependsOn)  // the message also waits for the record's review
     }
 
     @Test

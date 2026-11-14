@@ -27,8 +27,10 @@ object RuleRouter {
     fun route(text: String, today: LocalDate, nowMs: Long): Routed {
         val steps = mutableListOf<StepDraft>()
         var symptomIndex: Int? = null
+        var medicationIndex: Int? = null
 
         medication(text)?.let { name ->
+            medicationIndex = steps.size
             steps += StepDraft("record_medication", buildJsonObject {
                 put("name", name); put("takenAt", nowMs); put("note", text)
             })
@@ -55,9 +57,11 @@ object RuleRouter {
         }
         val relative = relatives.firstOrNull { it in text }
         if (relative != null && listOf("告诉", "通知", "跟", "说一声").any { it in text }) {
+            // The message also waits for the medication record: the server's safety review of that record has to
+            // be on the findings board before the message is checked against it (agent conflicts.py).
             steps += StepDraft("notify_family", buildJsonObject {
                 put("to", relative); put("message", text)
-            }, dependsOn = after)
+            }, dependsOn = (listOfNotNull(medicationIndex) + after).sorted())
         }
         val asks = listOf("能不能", "可不可以", "能一起", "一起吃", "副作用", "怎么吃", "吃多少", "吗", "？", "?")
             .any { it in text }

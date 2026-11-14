@@ -138,6 +138,20 @@ private fun ActionCard(
             }
             Text(meta.joinToString(" · "), style = MaterialTheme.typography.labelSmall)
             if (state == ActionState.NEEDS_USER) {
+                val found = remember(action.resultJson) { conflicts(action.resultJson) }
+                if (found.isNotEmpty()) {
+                    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+                        modifier = Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("已暂停：联网后的审核结论和这一步冲突", style = MaterialTheme.typography.labelLarge)
+                            found.forEach { c ->
+                                Text((if (c.str("severity") == "high") "⚠ " else "• ") + (c.str("summary") ?: ""),
+                                    style = MaterialTheme.typography.bodyMedium)
+                                c.str("why")?.let { Text(it, style = MaterialTheme.typography.labelSmall) }
+                            }
+                        }
+                    }
+                }
                 Spacer(Modifier.height(4.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     val options = remember(action.resultJson) { options(action.resultJson) }
@@ -241,6 +255,11 @@ private fun SafetyView(review: SafetyReview, onAsk: (String) -> Unit) {
     }
 }
 
+/** Findings that paused this step (agent conflicts.py), if that is why it needs the user. */
+private fun conflicts(resultJson: String?): List<JsonObject> = runCatching {
+    Json.parseToJsonElement(resultJson!!).jsonObject["conflicts"]!!.jsonArray.map { it.jsonObject }
+}.getOrDefault(emptyList())
+
 private fun options(resultJson: String?): List<JsonObject> = runCatching {
     Json.parseToJsonElement(resultJson!!).jsonObject["options"]!!.jsonArray.map { it.jsonObject }
 }.getOrDefault(emptyList())
@@ -278,12 +297,14 @@ private fun reasonLabel(reason: String): String = when (reason) {
     "parent_not_done" -> "前一步没有完成"
     "replayed", "reconciled" -> "已去重（$reason）"
     "safety_alert_high" -> "安全审核：高风险提醒"
+    "conflict_with_later_finding" -> "联网后发现用药提醒，已暂停等你确认"
     "safety_alert_moderate" -> "安全审核：有提醒"
     else -> reason
 }
 
 private fun optionLabel(option: JsonObject): String = when (option["decision"]?.jsonPrimitive?.contentOrNull) {
     "choose" -> "改约 ${option.str("date")}"
+    "send_with_note" -> "附上提醒再发"
     "confirm" -> "仍然执行"
     "cancel" -> "取消"
     else -> option.toString()
