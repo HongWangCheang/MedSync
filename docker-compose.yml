@@ -88,6 +88,9 @@ services:
       MEDSYNC_PG_DSN: postgresql://medsync:${POSTGRES_PASSWORD}@postgres:5432/medsync
       MEDSYNC_EXTERNAL_URL: http://toxiproxy:19000
       MEDSYNC_EXTERNAL_TIMEOUT_S: "5"
+      # Pharmacist step = MedTrack's label RAG agent. Not a side effect, so it bypasses the Toxiproxy hops.
+      MEDSYNC_RAG_URL: http://rag:8765
+      MEDSYNC_RAG_TIMEOUT_S: "60"
     ports:
       - "127.0.0.1:8100:8000"
     healthcheck:
@@ -124,14 +127,16 @@ services:
       retries: 20
       start_period: 20s
 
-  # Optional: MedTrack's label RAG + pharmacist agent. `docker compose --profile rag up -d rag`
+  # MedTrack's label RAG + Gemini agent, used by the agent's ask_pharmacist step. Needs GEMINI_API_KEY in .env to
+  # answer; without it the step fails with "pharmacist_not_configured: missing_key" instead of hanging.
+  # First start downloads ~130 MB of embedding/reranker weights into the model-cache volume.
   rag:
-    profiles: ["rag"]
     build: ./services/rag
     restart: unless-stopped
     environment:
       MEDTRACK_SYNC_URL: http://gateway:8081
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash-lite}
     volumes:
       - model-cache:/app/.cache
     ports:

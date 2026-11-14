@@ -13,6 +13,7 @@ from . import experiment
 from .external import HttpExternal
 from .graph import StepRunner, build_graph
 from .models import ActionRequest, Outcome
+from .pharmacist import RagPharmacist
 from .tool_ledger import InMemoryToolLedger, PostgresToolLedger
 
 
@@ -21,9 +22,11 @@ def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
                             float(os.environ.get("MEDSYNC_EXTERNAL_TIMEOUT_S", "5")))
     attempts = experiment.Attempts()
     baseline = experiment.BaselineRunner(external, attempts)
+    rag_url = os.environ.get("MEDSYNC_RAG_URL")
+    pharmacist = RagPharmacist(rag_url, float(os.environ.get("MEDSYNC_RAG_TIMEOUT_S", "60"))) if rag_url else None
     dsn = os.environ.get("MEDSYNC_PG_DSN")
     if not dsn:
-        graph = build_graph(InMemoryToolLedger(), external, InMemorySaver(), attempts=attempts)
+        graph = build_graph(InMemoryToolLedger(), external, InMemorySaver(), attempts=attempts, pharmacist=pharmacist)
         return StepRunner(graph), None, baseline
     from langgraph.checkpoint.postgres import PostgresSaver
     from psycopg.rows import dict_row
@@ -33,7 +36,7 @@ def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
                           kwargs={"autocommit": True, "prepare_threshold": 0, "row_factory": dict_row})
     checkpointer = PostgresSaver(pool)
     checkpointer.setup()
-    graph = build_graph(PostgresToolLedger(pool), external, checkpointer, attempts=attempts)
+    graph = build_graph(PostgresToolLedger(pool), external, checkpointer, attempts=attempts, pharmacist=pharmacist)
     return StepRunner(graph), pool, baseline
 
 

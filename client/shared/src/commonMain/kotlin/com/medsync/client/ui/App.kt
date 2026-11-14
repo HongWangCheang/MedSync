@@ -32,6 +32,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import com.medsync.client.agents.PharmacistAnswer
 import com.medsync.client.app.MedSyncController
 import com.medsync.client.data.ActionEntity
 import com.medsync.client.outbox.ActionState
@@ -111,6 +117,9 @@ private fun ActionCard(action: ActionEntity, onDecision: (JsonObject?) -> Unit) 
                 AssistChip(onClick = {}, label = { Text(stateLabel(state)) })
             }
             Text(summary(action.tool, payload), style = MaterialTheme.typography.bodyMedium)
+            if (action.tool == "ask_pharmacist" && state == ActionState.DONE) {
+                PharmacistAnswer.parse(action.resultJson)?.let { AnswerView(it) }
+            }
             val meta = buildList {
                 if (action.attempt > 0) add("重试 ${action.attempt} 次")
                 action.reason?.let { add(reasonLabel(it)) }
@@ -129,6 +138,42 @@ private fun ActionCard(action: ActionEntity, onDecision: (JsonObject?) -> Unit) 
                     }
                 }
             }
+        }
+    }
+}
+
+/** The answer with [S1] markers highlighted; each source opens to show its label excerpt. */
+@Composable
+private fun AnswerView(answer: PharmacistAnswer) {
+    val container = if (answer.grounded) MaterialTheme.colorScheme.secondaryContainer
+        else MaterialTheme.colorScheme.surfaceVariant
+    Card(colors = CardDefaults.cardColors(containerColor = container), modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            if (!answer.grounded) {
+                Text("没有找到可引用的说明书原文，所以不作回答", style = MaterialTheme.typography.labelMedium)
+            }
+            Text(buildAnnotatedString {
+                answer.segments().forEach { (text, cite) ->
+                    if (cite) withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)) {
+                        append(text)
+                    } else append(text)
+                }
+            }, style = MaterialTheme.typography.bodyMedium)
+            answer.citations.forEach { c ->
+                var open by remember(c.id) { mutableStateOf(false) }
+                Column(Modifier.fillMaxWidth().clickable { open = !open }) {
+                    Text("${c.id} · ${c.label} · ${c.section}", style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary)
+                    if (open) {
+                        Text("“${c.excerpt}”", style = MaterialTheme.typography.bodySmall)
+                        c.url?.let { Text(it, style = MaterialTheme.typography.labelSmall) }
+                    }
+                }
+            }
+            if (answer.awaitingChoice) {
+                Text("直接回复产品名即可，例如“ADVIL”，会接着这个问题回答。", style = MaterialTheme.typography.labelMedium)
+            }
+            Text("仅摘录说明书原文，不能代替医生或药师的建议。", style = MaterialTheme.typography.labelSmall)
         }
     }
 }
@@ -162,6 +207,9 @@ private fun stateLabel(state: ActionState): String = when (state) {
 
 private fun reasonLabel(reason: String): String = when (reason) {
     "slot_full" -> "原定日期号源已满"
+    "refused_without_evidence" -> "没有找到依据，已拒答"
+    "pharmacist_not_configured" -> "药学服务未配置"
+    "pharmacist_not_configured: missing_key" -> "药学服务未配置（服务器缺少 Gemini 密钥）"
     "expired" -> "排队时间过长，请确认是否仍要执行"
     "tool_changed" -> "功能已更新，请重新确认"
     "parent_not_done" -> "前一步没有完成"

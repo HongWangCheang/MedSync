@@ -204,6 +204,12 @@ class LabelAgent:
             # version, which is enough to pick a candidate without needing its opaque label_id.
             candidates = [c for c in candidates if c["version"] == version]
         if len(candidates) > 1:
+            # Name search is a substring match, so "ADVIL" also returns "ADVIL COLD AND SINUS". A name the user typed
+            # exactly wins; if the exact matches are versions of one label, the newest version is the current one.
+            exact = [c for c in candidates if c["name"].casefold().strip() == drug_name.casefold().strip()]
+            if exact and len({c["id"] for c in exact}) == 1:
+                candidates = [max(exact, key=lambda c: int(c["version"]) if c["version"].isdigit() else -1)]
+        if len(candidates) > 1:
             self.turn_blocked.update((c["id"], c["version"]) for c in candidates)
             return {"status": "needs_selection", "candidates": [
                 {"label_id": c["id"], "version": c["version"], "name": c["name"], "manufacturer": c["manufacturer"]}

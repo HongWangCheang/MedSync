@@ -1,5 +1,6 @@
 package com.medsync.client.app
 
+import com.medsync.client.agents.PharmacistAnswer
 import com.medsync.client.agents.RedFlag
 import com.medsync.client.agents.RedFlagDetector
 import com.medsync.client.agents.RuleRouter
@@ -11,6 +12,7 @@ import com.medsync.client.outbox.ActionEvent
 import com.medsync.client.outbox.ActionState
 import com.medsync.client.outbox.ActionStateMachine
 import com.medsync.client.outbox.Planner
+import com.medsync.client.outbox.StepDraft
 import com.medsync.client.sync.DrainReport
 import com.medsync.client.sync.GatewayApi
 import com.medsync.client.sync.KtorGatewayApi
@@ -28,6 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlin.time.Clock
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
@@ -67,7 +70,18 @@ class MedSyncController(
         redFlag.value = RedFlagDetector.detect(input)
         val now = clock()
         val today = Instant.fromEpochMilliseconds(now).toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val routed = RuleRouter.route(input, today, now)
+        val conversation = PharmacistAnswer.followUp(dao.all(), now)
+        var routed = RuleRouter.route(input, today, now)
+        if (routed.steps.isEmpty() && conversation?.awaitingChoice == true) {
+            // The pharmacist asked "which product?"; a bare reply like "ADVIL" answers that question.
+            routed = RuleRouter.Routed(listOf(StepDraft("ask_pharmacist", JsonObject(mapOf(
+                "question" to JsonPrimitive(input))))), question = true)
+        }
+        if (routed.question && conversation != null) {
+            val step = routed.steps.single()
+            routed = routed.copy(steps = listOf(step.copy(payload = JsonObject(
+                step.payload + ("session_id" to JsonPrimitive(conversation.sessionId))))))
+        }
         when {
             routed.steps.isEmpty() -> notice.value = if (redFlag.value != null) null
                 else "没有识别出要做的事。可以试试：“我吃了布洛芬，有点胃疼，帮我约周三复诊”"
