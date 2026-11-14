@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medsync.gateway.SessionMapper">
+    <resultMap id="active" type="com.medsync.gateway.SessionMapper$ActiveSession">
+        <constructor>
+            <arg column="account_id" javaType="string"/>
+            <arg column="ttl_seconds" javaType="_long"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO sync_session (token_hash, account_id, expires_at)
+        VALUES (#{tokenHash}, #{accountId}, CURRENT_TIMESTAMP + INTERVAL 7 DAY)
+    </insert>
+
+    <select id="findActive" resultMap="active">
+        SELECT account_id, TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP, expires_at) AS ttl_seconds
+        FROM sync_session
+        WHERE token_hash = #{tokenHash} AND expires_at &gt; CURRENT_TIMESTAMP
+    </select>
+</mapper>

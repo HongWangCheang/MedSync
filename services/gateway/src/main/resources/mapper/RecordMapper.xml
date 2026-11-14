@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medsync.gateway.RecordMapper">
+    <resultMap id="receipt" type="com.medsync.gateway.RecordMapper$RequestReceipt">
+        <constructor>
+            <arg column="fingerprint" javaType="string"/>
+            <arg column="revision" javaType="_long"/>
+        </constructor>
+    </resultMap>
+
+    <resultMap id="row" type="com.medsync.gateway.RecordMapper$Row">
+        <constructor>
+            <arg column="record_id" javaType="string"/>
+            <arg column="kind" javaType="string"/>
+            <arg column="body" javaType="string"/>
+            <arg column="revision" javaType="_long"/>
+        </constructor>
+    </resultMap>
+
+    <select id="findRequest" resultMap="receipt">
+        SELECT fingerprint, revision FROM sync_request WHERE account_id = #{account} AND request_id = #{requestId}
+    </select>
+
+    <select id="countRecord" resultType="int">
+        SELECT COUNT(*) FROM sync_record WHERE account_id = #{account} AND record_id = #{recordId}
+    </select>
+
+    <insert id="insertRecord">
+        INSERT INTO sync_record (account_id, record_id, kind, body, revision)
+        VALUES (#{account}, #{recordId}, #{kind}, #{body}, #{revision})
+    </insert>
+
+    <insert id="insertRequest">
+        INSERT INTO sync_request (account_id, request_id, fingerprint, revision)
+        VALUES (#{account}, #{requestId}, #{fingerprint}, #{revision})
+    </insert>
+
+    <!-- Fetches limit + 1 rows so the caller can tell whether another page exists. -->
+    <select id="changesAfter" resultMap="row">
+        SELECT record_id, kind, body, revision FROM sync_record
+        WHERE account_id = #{account} AND revision &gt; #{after}
+        ORDER BY revision
+        LIMIT #{limit}
+    </select>
+</mapper>

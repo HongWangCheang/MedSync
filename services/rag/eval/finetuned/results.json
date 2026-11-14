@@ -1,0 +1,3025 @@
+{
+  "metadata": {
+    "labels": 48,
+    "passages": 917,
+    "repeats": 3,
+    "platform": "Darwin arm64, Python 3.12.16",
+    "corpus_sha256": "9e3c9778b8a003c4107369554f8310c62f0a7e4ee48021a0da57af0bc51d865f",
+    "questions_sha256": "5e22d2123ca0c076eedbfea723de93d6e48c6649c16a1fd491c3884bede5a516"
+  },
+  "metrics": {
+    "keyword": {
+      "recall_at_5": 0.75,
+      "citation_accuracy": 0.9090909090909091,
+      "correct_citations": 10,
+      "total_citations": 11,
+      "p95_ms": 1.486,
+      "selected_label_p95_ms": 1.434708,
+      "passed": 28,
+      "by_category": {
+        "answerable": 10,
+        "same_name": 6,
+        "no_match": 6,
+        "insufficient_evidence": 6
+      }
+    },
+    "hybrid": {
+      "recall_at_5": 0.953125,
+      "citation_accuracy": 0.6538461538461539,
+      "correct_citations": 17,
+      "total_citations": 26,
+      "p95_ms": 4.949792,
+      "selected_label_p95_ms": 4.973708,
+      "passed": 33,
+      "by_category": {
+        "answerable": 17,
+        "same_name": 6,
+        "no_match": 6,
+        "insufficient_evidence": 4
+      }
+    },
+    "rerank": {
+      "recall_at_5": 0.9375,
+      "citation_accuracy": 0.8571428571428571,
+      "correct_citations": 18,
+      "total_citations": 21,
+      "p95_ms": 196.390208,
+      "selected_label_p95_ms": 197.711084,
+      "passed": 36,
+      "by_category": {
+        "answerable": 18,
+        "same_name": 6,
+        "no_match": 6,
+        "insufficient_evidence": 6
+      }
+    }
+  },
+  "questions": {
+    "Q01": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "storage_and_handling:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.314375,
+          1.069792,
+          1.022625
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1",
+          "active_ingredient:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "stop_use:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.435708,
+          4.299792,
+          4.556833
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1",
+          "warnings:1:1",
+          "purpose:1:1",
+          "keep_out_of_reach_of_children:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          93.212875,
+          93.633667,
+          94.153792
+        ]
+      }
+    },
+    "Q02": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.361167,
+          1.255375,
+          1.211916
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "inactive_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "purpose:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.231083,
+          4.266459,
+          4.159709
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "do_not_use:1:1",
+          "inactive_ingredient:1:1",
+          "warnings:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          89.851666,
+          90.232292,
+          90.38525
+        ]
+      }
+    },
+    "Q03": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "warnings:1:1",
+          "do_not_use:1:1",
+          "active_ingredient:1:1",
+          "warnings:1:2",
+          "ask_doctor:1:1"
+        ],
+        "citations": [
+          "warnings:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.505375,
+          1.339125,
+          1.317917
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "do_not_use:1:1",
+          "warnings:1:1",
+          "warnings:1:2",
+          "ask_doctor:1:1"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          5.074125,
+          4.852208,
+          5.664625
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "do_not_use:1:1",
+          "warnings:1:1",
+          "warnings:1:2",
+          "active_ingredient:1:1",
+          "ask_doctor_or_pharmacist:1:1"
+        ],
+        "citations": [
+          "do_not_use:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          97.66625,
+          96.894416,
+          96.604667
+        ]
+      }
+    },
+    "Q04": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          1.111834,
+          1.019208,
+          1.063125
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "stop_use:1:1",
+          "inactive_ingredient:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "indications_and_usage:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.622167,
+          4.474792,
+          4.387625
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "stop_use:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "purpose:1:1",
+          "indications_and_usage:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          94.279625,
+          93.97475,
+          94.452292
+        ]
+      }
+    },
+    "Q05": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          1.175125,
+          1.137458,
+          1.030792
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:1",
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "ask_doctor:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.327834,
+          4.058875,
+          4.213917
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "warnings:1:1",
+          "warnings:1:2",
+          "keep_out_of_reach_of_children:1:1",
+          "inactive_ingredient:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          104.190791,
+          103.254375,
+          103.211125
+        ]
+      }
+    },
+    "Q06": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "inactive_ingredient:1:1",
+          "stop_use:1:1",
+          "warnings:1:3"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.299875,
+          1.090667,
+          1.208917
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "inactive_ingredient:1:1",
+          "warnings:1:3",
+          "stop_use:1:1",
+          "active_ingredient:1:1",
+          "storage_and_handling:1:1"
+        ],
+        "citations": [
+          "inactive_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.121292,
+          3.990584,
+          4.249583
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "inactive_ingredient:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "warnings:1:2",
+          "warnings:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          102.210083,
+          102.814167,
+          102.794584
+        ]
+      }
+    },
+    "Q07": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "purpose:1:1",
+          "indications_and_usage:1:1",
+          "stop_use:1:1",
+          "warnings:1:3"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.268417,
+          1.151083,
+          1.072458
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "purpose:1:1",
+          "indications_and_usage:1:1",
+          "stop_use:1:1",
+          "warnings:1:3",
+          "warnings:1:2"
+        ],
+        "citations": [
+          "purpose:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.267458,
+          4.375875,
+          4.930125
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "purpose:1:1",
+          "warnings:1:3",
+          "stop_use:1:1",
+          "indications_and_usage:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          104.061291,
+          103.352542,
+          103.109667
+        ]
+      }
+    },
+    "Q08": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "storage_and_handling:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.21825,
+          1.122417,
+          1.160292
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "active_ingredient:1:1",
+          "when_using:1:1",
+          "inactive_ingredient:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.351084,
+          4.368292,
+          4.617291
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "active_ingredient:1:1",
+          "warnings:1:1",
+          "inactive_ingredient:1:1",
+          "when_using:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          83.42375,
+          83.509041,
+          83.770459
+        ]
+      }
+    },
+    "Q09": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:2",
+          "keep_out_of_reach_of_children:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          1.314583,
+          1.145458,
+          1.174917
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:2",
+          "keep_out_of_reach_of_children:1:1",
+          "stop_use:1:1",
+          "warnings:1:1",
+          "storage_and_handling:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          5.019584,
+          4.949792,
+          5.022125
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "stop_use:1:1",
+          "warnings:1:1",
+          "indications_and_usage:1:1",
+          "pregnancy_or_breast_feeding:1:1",
+          "ask_doctor:1:1"
+        ],
+        "citations": [
+          "stop_use:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          88.011709,
+          87.932167,
+          87.78225
+        ]
+      }
+    },
+    "Q10": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "do_not_use:1:1",
+          "stop_use:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          1.303375,
+          1.199458,
+          1.253542
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "do_not_use:1:1",
+          "stop_use:1:1",
+          "warnings:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.674708,
+          4.686375,
+          4.668709
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "do_not_use:1:1",
+          "warnings:1:1",
+          "when_using:1:1",
+          "stop_use:1:1"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          85.793,
+          86.061959,
+          86.16
+        ]
+      }
+    },
+    "Q11": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:3:1",
+          "active_ingredient:4:1",
+          "active_ingredient:1:1",
+          "active_ingredient:2:1",
+          "inactive_ingredient:3:1"
+        ],
+        "citations": [
+          "active_ingredient:3:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.341125,
+          1.118417,
+          1.056542
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "inactive_ingredient:3:1",
+          "inactive_ingredient:4:1",
+          "active_ingredient:3:1",
+          "active_ingredient:4:1",
+          "inactive_ingredient:1:2"
+        ],
+        "citations": [
+          "inactive_ingredient:3:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.5,
+        "passed": false,
+        "latency_ms": [
+          4.453542,
+          4.39775,
+          4.68775
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:3:1",
+          "active_ingredient:4:1",
+          "inactive_ingredient:3:1",
+          "inactive_ingredient:4:1",
+          "active_ingredient:1:1"
+        ],
+        "citations": [
+          "active_ingredient:3:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          196.390208,
+          201.15225,
+          194.226084
+        ]
+      }
+    },
+    "Q12": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:2"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          1.314833,
+          1.09875,
+          1.330291
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:2",
+          "stop_use:1:1",
+          "warnings:1:5",
+          "warnings:1:4",
+          "warnings:1:3"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          4.54625,
+          4.818125,
+          4.687084
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "do_not_use:1:1",
+          "warnings:1:3",
+          "warnings:1:2",
+          "ask_doctor_or_pharmacist:1:1",
+          "pregnancy_or_breast_feeding:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          197.711084,
+          197.929959,
+          197.629291
+        ]
+      }
+    },
+    "Q13": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "stop_use:1:1",
+          "warnings:1:4"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.409125,
+          1.337417,
+          1.217958
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "stop_use:1:1",
+          "warnings:1:4",
+          "inactive_ingredient:1:1",
+          "inactive_ingredient:1:2",
+          "inactive_ingredient:2:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.320625,
+          4.277917,
+          4.553792
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "stop_use:1:1",
+          "warnings:1:4",
+          "inactive_ingredient:3:1",
+          "warnings:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [
+          "stop_use:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          192.821083,
+          193.109375,
+          193.088541
+        ]
+      }
+    },
+    "Q14": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "ask_doctor_or_pharmacist:1:1",
+          "warnings:1:4"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          1.385792,
+          1.26275,
+          1.374875
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:4",
+          "ask_doctor_or_pharmacist:1:1",
+          "storage_and_handling:1:1",
+          "indications_and_usage:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.663125,
+          4.338959,
+          4.339833
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "indications_and_usage:1:1",
+          "warnings:1:1",
+          "purpose:1:1",
+          "warnings:1:3"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          122.759917,
+          122.187875,
+          122.666875
+        ]
+      }
+    },
+    "Q15": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "pregnancy_or_breast_feeding:1:1",
+          "warnings:1:1",
+          "warnings:1:5"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.297375,
+          1.201666,
+          1.141041
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "warnings:1:1",
+          "pregnancy_or_breast_feeding:1:1",
+          "warnings:1:5"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.56425,
+          4.5735,
+          4.973708
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "warnings:1:1",
+          "pregnancy_or_breast_feeding:1:1",
+          "warnings:1:5"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          123.647166,
+          123.824541,
+          124.06675
+        ]
+      }
+    },
+    "Q16": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.321416,
+          1.0745,
+          1.219292
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1",
+          "active_ingredient:1:1",
+          "purpose:1:1",
+          "ask_doctor:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.743333,
+          4.698042,
+          4.84675
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1",
+          "purpose:1:1",
+          "do_not_use:1:1",
+          "active_ingredient:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          97.291292,
+          97.123209,
+          97.497084
+        ]
+      }
+    },
+    "Q17": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.53725,
+          1.265417,
+          1.186625
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "inactive_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "purpose:1:1",
+          "active_ingredient:1:1",
+          "indications_and_usage:1:1"
+        ],
+        "citations": [
+          "inactive_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.509709,
+          4.464125,
+          4.503792
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "inactive_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "purpose:1:1",
+          "active_ingredient:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "inactive_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          96.566542,
+          96.925041,
+          97.042
+        ]
+      }
+    },
+    "Q18": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "other_safety_information:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.208667,
+          1.04975,
+          1.260167
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "other_safety_information:1:1",
+          "inactive_ingredient:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "active_ingredient:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "other_safety_information:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.250458,
+          4.236458,
+          4.476708
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "other_safety_information:1:1",
+          "inactive_ingredient:1:1",
+          "purpose:1:1",
+          "do_not_use:1:1",
+          "active_ingredient:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          45.7685,
+          45.545542,
+          45.918083
+        ]
+      }
+    },
+    "Q19": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          1.240666,
+          1.051042,
+          0.988209
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "purpose:1:1",
+          "active_ingredient:1:1",
+          "inactive_ingredient:1:1",
+          "when_using:1:1",
+          "indications_and_usage:1:1"
+        ],
+        "citations": [
+          "purpose:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.141,
+          4.250167,
+          4.402792
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "purpose:1:1",
+          "inactive_ingredient:1:1",
+          "other_safety_information:1:1",
+          "do_not_use:1:1",
+          "indications_and_usage:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          44.131541,
+          43.752792,
+          44.21825
+        ]
+      }
+    },
+    "Q20": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "keep_out_of_reach_of_children:1:1",
+          "storage_and_handling:1:1",
+          "warnings:1:2",
+          "stop_use:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.2885,
+          1.11975,
+          1.246667
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "warnings:1:2",
+          "keep_out_of_reach_of_children:1:1",
+          "stop_use:1:1",
+          "inactive_ingredient:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.546209,
+          4.517833,
+          4.504792
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "when_using:1:1",
+          "purpose:1:1",
+          "do_not_use:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          93.538583,
+          93.690083,
+          93.762708
+        ]
+      }
+    },
+    "Q21": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          1.135667,
+          1.077583,
+          1.021292
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "when_using:1:1",
+          "warnings:1:2",
+          "inactive_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "indications_and_usage:1:1"
+        ],
+        "citations": [
+          "when_using:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.096291,
+          3.893459,
+          4.131375
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "when_using:1:1",
+          "warnings:1:2",
+          "do_not_use:1:1",
+          "indications_and_usage:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          84.99675,
+          85.430333,
+          85.321917
+        ]
+      }
+    },
+    "Q22": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "when_using:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.218792,
+          1.054958,
+          1.145584
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "when_using:1:1",
+          "warnings:1:1",
+          "inactive_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.441333,
+          4.247125,
+          4.078583
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "when_using:1:1",
+          "warnings:1:1",
+          "inactive_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "indications_and_usage:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          92.711333,
+          93.044709,
+          92.533125
+        ]
+      }
+    },
+    "Q23": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "do_not_use:1:1",
+          "ask_doctor_or_pharmacist:1:1",
+          "ask_doctor:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.396083,
+          1.309792,
+          1.571875
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "ask_doctor:1:1",
+          "do_not_use:1:1",
+          "warnings:1:1",
+          "storage_and_handling:1:1"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.420291,
+          4.621416,
+          4.534167
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "do_not_use:1:1",
+          "warnings:1:1",
+          "ask_doctor:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          92.869791,
+          93.101375,
+          93.276292
+        ]
+      }
+    },
+    "Q24": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "purpose:1:1",
+          "active_ingredient:1:1",
+          "indications_and_usage:1:1"
+        ],
+        "citations": [
+          "purpose:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.296458,
+          1.111791,
+          1.05475
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "purpose:1:1",
+          "indications_and_usage:1:1",
+          "when_using:1:1",
+          "inactive_ingredient:1:1"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.326084,
+          4.369125,
+          4.725125
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "purpose:1:1",
+          "inactive_ingredient:1:1",
+          "indications_and_usage:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          73.912875,
+          73.742,
+          73.826292
+        ]
+      }
+    },
+    "Q25": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "keep_out_of_reach_of_children:1:1",
+          "storage_and_handling:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.4285,
+          1.14775,
+          1.242958
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "warnings:1:2",
+          "stop_use:1:1",
+          "inactive_ingredient:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.486125,
+          4.227167,
+          4.112583
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "do_not_use:1:1",
+          "warnings:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          94.242709,
+          94.132458,
+          94.388833
+        ]
+      }
+    },
+    "Q26": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "ask_doctor:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.320583,
+          1.168833,
+          1.053666
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "ask_doctor:1:1",
+          "indications_and_usage:1:1",
+          "warnings:1:2",
+          "warnings:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "ask_doctor:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.424792,
+          4.362167,
+          4.781875
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "warnings:1:2",
+          "ask_doctor:1:1",
+          "warnings:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          94.181,
+          94.166875,
+          94.138875
+        ]
+      }
+    },
+    "Q27": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.309417,
+          1.040459,
+          1.172583
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1",
+          "purpose:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.173084,
+          4.296333,
+          4.214042
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "purpose:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "warnings:1:1",
+          "inactive_ingredient:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          87.946542,
+          88.293791,
+          88.594167
+        ]
+      }
+    },
+    "Q28": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.342375,
+          1.137125,
+          1.127917
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "warnings:1:1",
+          "storage_and_handling:1:1",
+          "purpose:1:1",
+          "keep_out_of_reach_of_children:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.146375,
+          4.379833,
+          4.417
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:1",
+          "indications_and_usage:1:1",
+          "do_not_use:1:1",
+          "stop_use:1:1",
+          "keep_out_of_reach_of_children:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          86.510958,
+          86.804417,
+          86.236
+        ]
+      }
+    },
+    "Q29": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "keep_out_of_reach_of_children:1:1",
+          "warnings:1:4",
+          "storage_and_handling:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.327209,
+          1.310125,
+          1.25325
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "warnings:1:4",
+          "keep_out_of_reach_of_children:1:1",
+          "inactive_ingredient:1:1",
+          "pregnancy_or_breast_feeding:1:1"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.498875,
+          4.386958,
+          4.34125
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "purpose:1:1",
+          "inactive_ingredient:1:1",
+          "do_not_use:1:1",
+          "stop_use:1:2"
+        ],
+        "citations": [
+          "storage_and_handling:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          119.574208,
+          119.616959,
+          119.919666
+        ]
+      }
+    },
+    "Q30": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "stop_use:1:1",
+          "warnings:1:1",
+          "warnings:1:3",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.578875,
+          1.352542,
+          1.306917
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "warnings:1:3",
+          "stop_use:1:1",
+          "stop_use:1:2",
+          "warnings:1:1"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.763042,
+          4.855541,
+          4.865583
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "warnings:1:3",
+          "warnings:1:1",
+          "stop_use:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          123.759292,
+          123.128,
+          121.289416
+        ]
+      }
+    },
+    "Q31": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "inactive_ingredient:1:1",
+          "stop_use:1:1",
+          "warnings:1:5"
+        ],
+        "citations": [
+          "active_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.381458,
+          1.191625,
+          1.179625
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "inactive_ingredient:1:1",
+          "active_ingredient:1:1",
+          "stop_use:1:1",
+          "warnings:1:5",
+          "storage_and_handling:1:1"
+        ],
+        "citations": [
+          "inactive_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          4.495792,
+          4.291334,
+          4.471416
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "inactive_ingredient:1:1",
+          "active_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "warnings:1:1",
+          "warnings:1:3"
+        ],
+        "citations": [
+          "inactive_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          109.045709,
+          108.083959,
+          108.8065
+        ]
+      }
+    },
+    "Q32": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "how_supplied:1:2",
+          "how_supplied:1:1",
+          "dosage_forms_and_strengths:1:1",
+          "description:1:2"
+        ],
+        "citations": [
+          "how_supplied:1:2"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.434708,
+          1.264334,
+          1.62925
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "how_supplied:1:2",
+          "how_supplied:1:1",
+          "dosage_forms_and_strengths:1:1",
+          "description:1:2",
+          "description:1:3"
+        ],
+        "citations": [
+          "how_supplied:1:2"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.562459,
+          5.244458,
+          4.433959
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "how_supplied:1:2",
+          "how_supplied:1:1",
+          "description:1:2",
+          "dosage_forms_and_strengths:1:1",
+          "description:1:1"
+        ],
+        "citations": [
+          "how_supplied:1:2"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          377.862542,
+          376.958417,
+          368.0075
+        ]
+      }
+    },
+    "Q33": {
+      "keyword": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "21c39261-4b98-bc43-e063-6394a90a4eb8/2",
+          "22d94fd9-9488-a812-e063-6394a90a7ffc/11"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.619875,
+          1.515291,
+          1.486
+        ]
+      },
+      "hybrid": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "21c39261-4b98-bc43-e063-6394a90a4eb8/2",
+          "22d94fd9-9488-a812-e063-6394a90a7ffc/11"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.277833,
+          1.258625,
+          1.272875
+        ]
+      },
+      "rerank": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "21c39261-4b98-bc43-e063-6394a90a4eb8/2",
+          "22d94fd9-9488-a812-e063-6394a90a7ffc/11"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.181916,
+          1.181083,
+          1.433833
+        ]
+      }
+    },
+    "Q34": {
+      "keyword": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "4526b265-424f-3e71-e063-6294a90a21a8/19",
+          "4526be49-a72d-1db7-e063-6394a90a1937/16",
+          "4526c253-b571-1d84-e063-6394a90ae3f9/16",
+          "4cd9cec2-0e06-99a3-e063-6394a90a1943/4"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.261917,
+          1.21125,
+          1.212125
+        ]
+      },
+      "hybrid": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "4526b265-424f-3e71-e063-6294a90a21a8/19",
+          "4526be49-a72d-1db7-e063-6394a90a1937/16",
+          "4526c253-b571-1d84-e063-6394a90ae3f9/16",
+          "4cd9cec2-0e06-99a3-e063-6394a90a1943/4"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.188125,
+          1.152625,
+          1.297041
+        ]
+      },
+      "rerank": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "4526b265-424f-3e71-e063-6294a90a21a8/19",
+          "4526be49-a72d-1db7-e063-6394a90a1937/16",
+          "4526c253-b571-1d84-e063-6394a90ae3f9/16",
+          "4cd9cec2-0e06-99a3-e063-6394a90a1943/4"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.166125,
+          1.154834,
+          1.284708
+        ]
+      }
+    },
+    "Q35": {
+      "keyword": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "352ebcfd-07bb-a60e-e063-6394a90a5d70/18",
+          "4526da60-c33b-fb4a-e063-6294a90a8692/2",
+          "4526df19-7a6e-0f19-e063-6394a90a3954/2",
+          "45370735-3f9c-a7f8-e063-6294a90aa0c6/8",
+          "f5db88bd-8ea6-0df0-e053-2995a90a18b4/3"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.2645,
+          1.139875,
+          1.2785
+        ]
+      },
+      "hybrid": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "352ebcfd-07bb-a60e-e063-6394a90a5d70/18",
+          "4526da60-c33b-fb4a-e063-6294a90a8692/2",
+          "4526df19-7a6e-0f19-e063-6394a90a3954/2",
+          "45370735-3f9c-a7f8-e063-6294a90aa0c6/8",
+          "f5db88bd-8ea6-0df0-e053-2995a90a18b4/3"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.247708,
+          1.326,
+          1.180458
+        ]
+      },
+      "rerank": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "352ebcfd-07bb-a60e-e063-6394a90a5d70/18",
+          "4526da60-c33b-fb4a-e063-6294a90a8692/2",
+          "4526df19-7a6e-0f19-e063-6394a90a3954/2",
+          "45370735-3f9c-a7f8-e063-6294a90aa0c6/8",
+          "f5db88bd-8ea6-0df0-e053-2995a90a18b4/3"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.150041,
+          1.144666,
+          1.357291
+        ]
+      }
+    },
+    "Q36": {
+      "keyword": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "322eb217-089d-e92d-e063-6394a90a6566/8",
+          "500a1503-02c8-cc05-e063-6394a90a24fb/14",
+          "d1013fc5-5b6e-4db9-98c5-6d8a205a1c8f/3"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.192417,
+          1.158542,
+          1.160042
+        ]
+      },
+      "hybrid": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "322eb217-089d-e92d-e063-6394a90a6566/8",
+          "500a1503-02c8-cc05-e063-6394a90a24fb/14",
+          "d1013fc5-5b6e-4db9-98c5-6d8a205a1c8f/3"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.156708,
+          1.181917,
+          16.031125
+        ]
+      },
+      "rerank": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "322eb217-089d-e92d-e063-6394a90a6566/8",
+          "500a1503-02c8-cc05-e063-6394a90a24fb/14",
+          "d1013fc5-5b6e-4db9-98c5-6d8a205a1c8f/3"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.430208,
+          1.212542,
+          1.193583
+        ]
+      }
+    },
+    "Q37": {
+      "keyword": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "5d190a09-ce01-a20f-e063-6294a90a9003/17",
+          "5d19143c-93be-ae16-e063-6294a90a19a6/18",
+          "5d2e31f7-3e0b-ece1-e063-6394a90a5394/3"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.242209,
+          1.350334,
+          1.217
+        ]
+      },
+      "hybrid": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "5d190a09-ce01-a20f-e063-6294a90a9003/17",
+          "5d19143c-93be-ae16-e063-6294a90a19a6/18",
+          "5d2e31f7-3e0b-ece1-e063-6394a90a5394/3"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.196792,
+          1.158291,
+          1.156791
+        ]
+      },
+      "rerank": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "5d190a09-ce01-a20f-e063-6294a90a9003/17",
+          "5d19143c-93be-ae16-e063-6294a90a19a6/18",
+          "5d2e31f7-3e0b-ece1-e063-6394a90a5394/3"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.254375,
+          1.30825,
+          1.178584
+        ]
+      }
+    },
+    "Q38": {
+      "keyword": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "040d1b88-235a-aa09-e063-6394a90adbad/1",
+          "81569d26-e9b3-4c1d-ac34-8a4cf5b4a98b/37"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.168292,
+          1.150458,
+          1.151875
+        ]
+      },
+      "hybrid": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "040d1b88-235a-aa09-e063-6394a90adbad/1",
+          "81569d26-e9b3-4c1d-ac34-8a4cf5b4a98b/37"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.133666,
+          1.230833,
+          1.189667
+        ]
+      },
+      "rerank": {
+        "status": "needs_selection",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [
+          "040d1b88-235a-aa09-e063-6394a90adbad/1",
+          "81569d26-e9b3-4c1d-ac34-8a4cf5b4a98b/37"
+        ],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.103333,
+          1.100042,
+          1.113125
+        ]
+      }
+    },
+    "Q39": {
+      "keyword": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.2065,
+          1.237917,
+          1.122834
+        ]
+      },
+      "hybrid": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.214708,
+          1.123625,
+          1.15825
+        ]
+      },
+      "rerank": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.146208,
+          1.3125,
+          1.117083
+        ]
+      }
+    },
+    "Q40": {
+      "keyword": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.180333,
+          1.349292,
+          1.161166
+        ]
+      },
+      "hybrid": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.118791,
+          1.24875,
+          1.126834
+        ]
+      },
+      "rerank": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.155125,
+          1.208459,
+          1.14925
+        ]
+      }
+    },
+    "Q41": {
+      "keyword": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.145625,
+          1.183459,
+          1.097
+        ]
+      },
+      "hybrid": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.105625,
+          1.076333,
+          1.090375
+        ]
+      },
+      "rerank": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.115917,
+          1.243959,
+          1.120917
+        ]
+      }
+    },
+    "Q42": {
+      "keyword": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.166375,
+          1.118042,
+          1.107125
+        ]
+      },
+      "hybrid": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.123542,
+          1.253209,
+          1.164583
+        ]
+      },
+      "rerank": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.139375,
+          1.130042,
+          1.122417
+        ]
+      }
+    },
+    "Q43": {
+      "keyword": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.175084,
+          1.252458,
+          1.153083
+        ]
+      },
+      "hybrid": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.144208,
+          1.124167,
+          1.099875
+        ]
+      },
+      "rerank": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.155167,
+          1.194833,
+          1.099166
+        ]
+      }
+    },
+    "Q44": {
+      "keyword": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.192333,
+          1.145791,
+          1.149625
+        ]
+      },
+      "hybrid": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.089667,
+          1.272708,
+          1.110167
+        ]
+      },
+      "rerank": {
+        "status": "no_match",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.099625,
+          1.061958,
+          1.121459
+        ]
+      }
+    },
+    "Q45": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.015125,
+          1.023542,
+          0.931917
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "inactive_ingredient:1:1",
+          "active_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "purpose:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [
+          "inactive_ingredient:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": false,
+        "latency_ms": [
+          4.118167,
+          4.303667,
+          4.158334
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:1",
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          89.818916,
+          90.214875,
+          90.187167
+        ]
+      }
+    },
+    "Q46": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.090667,
+          0.965667,
+          0.940417
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "inactive_ingredient:1:1",
+          "active_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "do_not_use:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          4.395083,
+          4.616125,
+          4.310125
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "storage_and_handling:1:1",
+          "warnings:1:2",
+          "purpose:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          105.181208,
+          105.4025,
+          105.06625
+        ]
+      }
+    },
+    "Q47": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "active_ingredient:3:1",
+          "active_ingredient:4:1",
+          "inactive_ingredient:3:1",
+          "inactive_ingredient:4:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.175084,
+          1.325125,
+          1.082791
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "active_ingredient:3:1",
+          "inactive_ingredient:3:1",
+          "active_ingredient:1:1",
+          "active_ingredient:4:1",
+          "inactive_ingredient:4:1"
+        ],
+        "citations": [
+          "active_ingredient:3:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": false,
+        "latency_ms": [
+          4.341583,
+          4.263209,
+          4.162375
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "active_ingredient:3:1",
+          "active_ingredient:4:1",
+          "inactive_ingredient:3:1",
+          "inactive_ingredient:4:1",
+          "active_ingredient:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          194.89925,
+          195.548791,
+          195.757166
+        ]
+      }
+    },
+    "Q48": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.281583,
+          1.151958,
+          1.098541
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "purpose:1:1",
+          "inactive_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "active_ingredient:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          4.455959,
+          4.505084,
+          4.2465
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "ask_doctor:1:1",
+          "purpose:1:1",
+          "warnings:1:1",
+          "inactive_ingredient:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          96.673083,
+          97.642333,
+          97.215541
+        ]
+      }
+    },
+    "Q49": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.25225,
+          1.332375,
+          1.093792
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "storage_and_handling:1:1",
+          "inactive_ingredient:1:1",
+          "stop_use:1:1",
+          "warnings:1:3",
+          "purpose:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          4.268875,
+          4.205916,
+          4.169
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "warnings:1:3",
+          "stop_use:1:1",
+          "storage_and_handling:1:1",
+          "indications_and_usage:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          116.923708,
+          117.681417,
+          117.149625
+        ]
+      }
+    },
+    "Q50": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "active_ingredient:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          1.236416,
+          1.154083,
+          1.142709
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "purpose:1:1",
+          "indications_and_usage:1:1",
+          "inactive_ingredient:1:1",
+          "keep_out_of_reach_of_children:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          4.947375,
+          4.909,
+          4.781458
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "active_ingredient:1:1",
+          "keep_out_of_reach_of_children:1:1",
+          "warnings:1:1",
+          "purpose:1:1",
+          "do_not_use:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          97.4545,
+          97.457625,
+          97.284417
+        ]
+      }
+    }
+  }
+}

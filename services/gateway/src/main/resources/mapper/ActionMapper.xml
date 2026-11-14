@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medsync.gateway.ActionMapper">
+    <resultMap id="row" type="com.medsync.gateway.ActionMapper$Row">
+        <constructor>
+            <arg column="step_key" javaType="string"/>
+            <arg column="plan_id" javaType="string"/>
+            <arg column="step_index" javaType="_int"/>
+            <arg column="tool" javaType="string"/>
+            <arg column="fingerprint" javaType="string"/>
+            <arg column="request" javaType="string"/>
+            <arg column="status" javaType="string"/>
+            <arg column="result" javaType="string"/>
+            <arg column="reason" javaType="string"/>
+        </constructor>
+    </resultMap>
+
+    <select id="find" resultMap="row">
+        SELECT step_key, plan_id, step_index, tool, fingerprint, request, status, result, reason
+        FROM action_ledger WHERE account_id = #{account} AND step_key = #{stepKey}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO action_ledger (account_id, step_key, plan_id, step_index, tool, fingerprint, request, status)
+        VALUES (#{account}, #{stepKey}, #{planId}, #{stepIndex}, #{tool}, #{fingerprint}, #{request}, #{status})
+    </insert>
+
+    <update id="updateOutcome">
+        UPDATE action_ledger SET status = #{status}, result = #{result}, reason = #{reason}
+        WHERE account_id = #{account} AND step_key = #{stepKey}
+          AND status IN ('RECEIVED', 'DISPATCHED', 'NEEDS_USER')
+    </update>
+</mapper>

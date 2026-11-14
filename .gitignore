@@ -1,0 +1,30 @@
+.env
+.DS_Store
+.idea/
+*.iml
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+# Java / Kotlin
+target/
+.gradle/
+.kotlin/
+**/build/
+!src/**/build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+# Xcode
+xcuserdata/
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+# RAG service caches and fine-tune artefacts
+services/rag/.cache/
+services/rag/finetune/models/
+services/rag/finetune/.venv/

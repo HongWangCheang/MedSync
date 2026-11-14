@@ -1,0 +1,401 @@
+[
+  {
+    "id": "V01",
+    "category": "answerable",
+    "request": {
+      "question": "Which compound does each tablet contain, and how much?",
+      "label_id": "0e8487fc-3e0e-bbfc-e063-6394a90a3073",
+      "version": "7"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "active_ingredient:1:1"
+    ],
+    "gold_excerpt": "Famotidine 20 mg"
+  },
+  {
+    "id": "V02",
+    "category": "answerable",
+    "request": {
+      "question": "When should I stop and see a physician about my reflux?",
+      "label_id": "0e8487fc-3e0e-bbfc-e063-6394a90a3073",
+      "version": "7"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "stop_use:1:1"
+    ],
+    "gold_excerpt": "continues or worsens"
+  },
+  {
+    "id": "V03",
+    "category": "answerable",
+    "request": {
+      "question": "I already take prescriptions; what should I check with a pharmacist?",
+      "label_id": "0e8487fc-3e0e-bbfc-e063-6394a90a3073",
+      "version": "7"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "ask_doctor_or_pharmacist:1:1"
+    ],
+    "gold_excerpt": "may interact"
+  },
+  {
+    "id": "V04",
+    "category": "answerable",
+    "request": {
+      "question": "What kind of medicine is this classed as?",
+      "label_id": "0e8487fc-3e0e-bbfc-e063-6394a90a3073",
+      "version": "7"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "purpose:1:1"
+    ],
+    "gold_excerpt": "Acid reducer"
+  },
+  {
+    "id": "V05",
+    "category": "answerable",
+    "request": {
+      "question": "Can I combine it with other acetaminophen-containing drugs?",
+      "label_id": "1599c55d-8de5-cc14-e063-6394a90aba82",
+      "version": "4"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "do_not_use:1:1"
+    ],
+    "gold_excerpt": "any other drug containing acetaminophen"
+  },
+  {
+    "id": "V06",
+    "category": "answerable",
+    "request": {
+      "question": "Is it okay to drive after taking it?",
+      "label_id": "1599c55d-8de5-cc14-e063-6394a90aba82",
+      "version": "4"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "when_using:1:1",
+      "warnings:1:4"
+    ],
+    "gold_excerpt": "caution when driving"
+  },
+  {
+    "id": "V07",
+    "category": "answerable",
+    "request": {
+      "question": "How long can congestion go on before I should consult a doctor?",
+      "label_id": "1599c55d-8de5-cc14-e063-6394a90aba82",
+      "version": "4"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "stop_use:1:1"
+    ],
+    "gold_excerpt": "lasts more than 7 days"
+  },
+  {
+    "id": "V08",
+    "category": "answerable",
+    "request": {
+      "question": "What room temperature range should it be kept at?",
+      "label_id": "1599c55d-8de5-cc14-e063-6394a90aba82",
+      "version": "4"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "68-77"
+  },
+  {
+    "id": "V09",
+    "category": "answerable",
+    "request": {
+      "question": "Is this suitable for toddlers?",
+      "label_id": "1c84eb20-fec8-4d59-a3df-013359c16572",
+      "version": "5"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "do_not_use:1:1",
+      "warnings:1:1"
+    ],
+    "gold_excerpt": "children under 2 years"
+  },
+  {
+    "id": "V10",
+    "category": "answerable",
+    "request": {
+      "question": "How quickly will I notice it working?",
+      "label_id": "1c84eb20-fec8-4d59-a3df-013359c16572",
+      "version": "5"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "relief the first day"
+  },
+  {
+    "id": "V11",
+    "category": "answerable",
+    "request": {
+      "question": "What should I do if my eyesight changes?",
+      "label_id": "1c84eb20-fec8-4d59-a3df-013359c16572",
+      "version": "5"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "stop_use:1:2"
+    ],
+    "gold_excerpt": "changes to your vision"
+  },
+  {
+    "id": "V12",
+    "category": "answerable",
+    "request": {
+      "question": "Is the active ingredient a steroid?",
+      "label_id": "1c84eb20-fec8-4d59-a3df-013359c16572",
+      "version": "5"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "active_ingredient:1:1"
+    ],
+    "gold_excerpt": "glucocorticoid"
+  },
+  {
+    "id": "V13",
+    "category": "answerable",
+    "request": {
+      "question": "Who should check with a doctor first because of eye conditions?",
+      "label_id": "1c84eb20-fec8-4d59-a3df-013359c16572",
+      "version": "5"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "ask_doctor:1:1"
+    ],
+    "gold_excerpt": "glaucoma"
+  },
+  {
+    "id": "V14",
+    "category": "answerable",
+    "request": {
+      "question": "What is the most I can take in one day?",
+      "label_id": "21acd9d2-84aa-3a95-e063-6394a90af438",
+      "version": "3"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "warnings:1:1"
+    ],
+    "gold_excerpt": "6 caplets in 24 hours"
+  },
+  {
+    "id": "V15",
+    "category": "answerable",
+    "request": {
+      "question": "How many milligrams of the main ingredient are in each caplet?",
+      "label_id": "21acd9d2-84aa-3a95-e063-6394a90af438",
+      "version": "3"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "active_ingredient:1:1"
+    ],
+    "gold_excerpt": "650 mg"
+  },
+  {
+    "id": "V16",
+    "category": "answerable",
+    "request": {
+      "question": "I am on a blood thinner. What should I do before using it?",
+      "label_id": "21acd9d2-84aa-3a95-e063-6394a90af438",
+      "version": "3"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "ask_doctor_or_pharmacist:1:1"
+    ],
+    "gold_excerpt": "warfarin"
+  },
+  {
+    "id": "V17",
+    "category": "answerable",
+    "request": {
+      "question": "When should I stop if my temperature does not come down?",
+      "label_id": "21acd9d2-84aa-3a95-e063-6394a90af438",
+      "version": "3"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "stop_use:1:1"
+    ],
+    "gold_excerpt": "fever gets worse or lasts more than 3 days"
+  },
+  {
+    "id": "V18",
+    "category": "answerable",
+    "request": {
+      "question": "Which dyes are used in it?",
+      "label_id": "21c39261-4b98-bc43-e063-6394a90a4eb8",
+      "version": "2"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "inactive_ingredient:1:1"
+    ],
+    "gold_excerpt": "red no. 40"
+  },
+  {
+    "id": "V19",
+    "category": "answerable",
+    "request": {
+      "question": "What should I do if the seal under the cap is torn?",
+      "label_id": "21c39261-4b98-bc43-e063-6394a90a4eb8",
+      "version": "2"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "foil inner seal"
+  },
+  {
+    "id": "V20",
+    "category": "answerable",
+    "request": {
+      "question": "Who should talk to a doctor first because of an organ condition?",
+      "label_id": "21c39261-4b98-bc43-e063-6394a90a4eb8",
+      "version": "2"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "ask_doctor:1:1"
+    ],
+    "gold_excerpt": "liver disease"
+  },
+  {
+    "id": "V21",
+    "category": "answerable",
+    "request": {
+      "question": "Can I keep it in the fridge?",
+      "label_id": "040d1b88-235a-aa09-e063-6394a90adbad",
+      "version": "1"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "how_supplied:1:2"
+    ],
+    "gold_excerpt": "Do not refrigerate"
+  },
+  {
+    "id": "V22",
+    "category": "answerable",
+    "request": {
+      "question": "Which places on the body must it not be injected into?",
+      "label_id": "040d1b88-235a-aa09-e063-6394a90adbad",
+      "version": "1"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "warnings_and_cautions:1:1"
+    ],
+    "gold_excerpt": "into buttock"
+  },
+  {
+    "id": "V23",
+    "category": "answerable",
+    "request": {
+      "question": "Which other medicines can strengthen its effects?",
+      "label_id": "040d1b88-235a-aa09-e063-6394a90adbad",
+      "version": "1"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "drug_interactions:1:2"
+    ],
+    "gold_excerpt": "tricyclic antidepressants"
+  },
+  {
+    "id": "V24",
+    "category": "answerable",
+    "request": {
+      "question": "What should a caregiver do with a young child's leg during the shot?",
+      "label_id": "040d1b88-235a-aa09-e063-6394a90adbad",
+      "version": "1"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "warnings_and_cautions:1:1",
+      "information_for_patients:1:3"
+    ],
+    "gold_excerpt": "firmly in place"
+  },
+  {
+    "id": "V25",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "What color is the bottle cap?",
+      "label_id": "0e8487fc-3e0e-bbfc-e063-6394a90a3073",
+      "version": "7"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "V26",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "Which celebrity endorses this spray?",
+      "label_id": "1c84eb20-fec8-4d59-a3df-013359c16572",
+      "version": "5"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "V27",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "How many units were recalled in 2019?",
+      "label_id": "21acd9d2-84aa-3a95-e063-6394a90af438",
+      "version": "3"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "V28",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "What is the retail price in Sydney?",
+      "label_id": "040d1b88-235a-aa09-e063-6394a90adbad",
+      "version": "1"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "V29",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "Which hospital ran a trial of this last year?",
+      "label_id": "1599c55d-8de5-cc14-e063-6394a90aba82",
+      "version": "4"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "V30",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "Which flavor of chewing gum pairs well with it?",
+      "label_id": "21c39261-4b98-bc43-e063-6394a90a4eb8",
+      "version": "2"
+    },
+    "expected": "no_evidence"
+  }
+]

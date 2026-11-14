@@ -1,0 +1,143 @@
+# MedSync local stack. Every hop goes through Toxiproxy so faults can be injected per hop:
+#
+#   device ──① 127.0.0.1:18081──▶ toxiproxy ──▶ gateway:8081
+#   gateway ──② toxiproxy:18000──▶ agent:8000
+#   agent ──③ toxiproxy:19000──▶ mocks:9000 (simulated hospital + notifications)
+#
+#   cp .env.example .env && docker compose up --build -d
+#   python3 chaos/toxic.py list
+#
+# Host ports avoid MedTrack's (8081, 8765) so both stacks can run side by side.
+name: medsync
+
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: medsync
+      MYSQL_USER: medsync
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set MYSQL_PASSWORD in .env}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "volatile-ttl"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: medsync
+      POSTGRES_USER: medsync
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "medsync", "-d", "medsync"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:2.13.0
+    restart: unless-stopped
+    command: ["-host=0.0.0.0", "-config=/config/toxiproxy.json"]
+    volumes:
+      - ./chaos/toxiproxy.json:/config/toxiproxy.json:ro
+    ports:
+      - "127.0.0.1:8474:8474"   # control API (chaos/toxic.py)
+      - "18081:18081"           # hop ①: devices and emulators connect here (Android emulator: 10.0.2.2:18081)
+
+  mocks:
+    build: ./services/mocks
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9100:9000"   # direct, fault-free access for the evaluation's ground-truth reads
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:9000/health', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 10
+
+  agent:
+    build: ./services/agent
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mocks:
+        condition: service_healthy
+      toxiproxy:
+        condition: service_started
+    environment:
+      MEDSYNC_PG_DSN: postgresql://medsync:${POSTGRES_PASSWORD}@postgres:5432/medsync
+      MEDSYNC_EXTERNAL_URL: http://toxiproxy:19000
+      MEDSYNC_EXTERNAL_TIMEOUT_S: "5"
+    ports:
+      - "127.0.0.1:8100:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+      start_period: 15s
+
+  gateway:
+    build: ./services/gateway
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      agent:
+        condition: service_healthy
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      MEDTRACK_SYNC_DB_URL: jdbc:mysql://mysql:3306/medsync?sslMode=DISABLED&allowPublicKeyRetrieval=true
+      MEDTRACK_SYNC_DB_USER: medsync
+      MEDTRACK_SYNC_DB_PASSWORD: ${MYSQL_PASSWORD}
+      MEDTRACK_REDIS_HOST: redis
+      MEDSYNC_AGENT_URL: http://toxiproxy:18000
+      MEDSYNC_AGENT_READ_TIMEOUT: 10s
+    ports:
+      - "127.0.0.1:8091:8081"   # direct, bypassing hop ① faults (debugging only)
+    healthcheck:
+      test: ["CMD", "nc", "-z", "127.0.0.1", "8081"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  # Optional: MedTrack's label RAG + pharmacist agent. `docker compose --profile rag up -d rag`
+  rag:
+    profiles: ["rag"]
+    build: ./services/rag
+    restart: unless-stopped
+    environment:
+      MEDTRACK_SYNC_URL: http://gateway:8081
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    volumes:
+      - model-cache:/app/.cache
+    ports:
+      - "127.0.0.1:8775:8765"
+
+volumes:
+  mysql-data:
+  postgres-data:
+  model-cache:

@@ -1,0 +1,9 @@
+.venv/
+.cache/
+__pycache__/
+*.pyc
+eval/results.json
+eval/agent_results.json
+.env.local
+finetune/.venv/
+finetune/models/

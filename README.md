@@ -1,0 +1,93 @@
+# MedSync
+
+弱网环境下端云协同的用药管理多智能体系统。客户端是一套 Kotlin Multiplatform 代码，覆盖 **Android、iOS 和桌面（macOS / Windows / Linux）**。
+
+核心问题：Agent 有副作用的操作，在**断网、超时、重试、进程被杀、LLM 重新推理**时，要做到端到端**只执行一次**；排队期间情况变了的动作，要能被拦下来。
+
+```
+客户端 (Android / iOS / 桌面，KMP 共享代码)
+  路由 Agent · 危险信号 Agent · Room outbox（step_key 在规划时生成并落库）
+        │ ① Toxiproxy :18081
+        ▼
+gateway (Spring Boot + MyBatis + MySQL + Redis)        action_ledger：同 key 同内容→重放，同 key 不同内容→409
+        │ ② Toxiproxy :18000
+        ▼
+agent (FastAPI + LangGraph + Postgres)                 一个 step = 一个 LangGraph 线程；revalidate → executor
+        │ ③ Toxiproxy :19000                           tool_ledger：INTENT → COMMITTED，结果不明时先按 step_key 查
+        ▼
+mocks (模拟医院预约 / 家属通知)                         故意不去重；/metrics/side_effects 是评测的唯一依据
+```
+
+## 目录
+
+| 目录 | 内容 |
+|---|---|
+| [client/](client/) | KMP 客户端：`shared`（业务逻辑 + Compose UI）、`androidApp`、`iosApp`、`desktopApp` |
+| [services/gateway/](services/gateway/) | 同步网关，在 MedTrack sync-server 基础上新增 `action_ledger` 和 `/v1/actions` |
+| [services/agent/](services/agent/) | Agent 服务：LangGraph 图、tool ledger、MCP Server |
+| [services/mocks/](services/mocks/) | 模拟外部系统，带副作用计数和"提交后响应丢失"故障 |
+| [services/rag/](services/rag/) | 从 MedTrack 拷贝的说明书 RAG（可选，`--profile rag`） |
+| [chaos/](chaos/) | Toxiproxy 三跳配置和故障注入脚本 |
+| [scripts/smoke.py](scripts/smoke.py) | 端到端冒烟测试 |
+| [docs/开发计划.md](docs/开发计划.md) | 分阶段开发计划 |
+
+## 启动服务端
+
+```sh
+cp .env.example .env          # 填三个数据库密码
+docker compose up --build -d
+python3 scripts/smoke.py      # 6 项检查：重放、409、响应丢失、Agent 不可达、号源被抢、无重复副作用
+```
+
+| 地址 | 用途 |
+|---|---|
+| `127.0.0.1:18081` | 客户端入口（经过 Toxiproxy 第①跳）。Android 模拟器用 `10.0.2.2:18081` |
+| `127.0.0.1:8474` | Toxiproxy 控制 API，`python3 chaos/toxic.py list` |
+| `127.0.0.1:9100` | mocks，直连无故障，评测用来读真实副作用 |
+| `127.0.0.1:8091` / `8100` | gateway / agent 直连，仅调试 |
+
+端口避开了 MedTrack（8081、8765），两套可以同时运行。
+
+### 故障注入
+
+```sh
+python3 chaos/toxic.py down gateway_agent          # 第②跳断开
+python3 chaos/toxic.py latency device_gateway 3000 # 第①跳慢网
+python3 chaos/toxic.py reset agent_external        # 第③跳连接被重置
+python3 chaos/toxic.py clear
+# "医院已提交、响应丢失"：Toxiproxy 无法只针对单个接口，所以这个故障由 mocks 提供
+curl -X POST 127.0.0.1:9100/admin/faults -H 'Content-Type: application/json' \
+     -d '{"path": "/hospital/bookings", "delay_s": 8}'
+```
+
+## 运行客户端
+
+需要 JDK 21。
+
+```sh
+cd client
+./gradlew :desktopApp:run                 # 桌面端（macOS / Windows / Linux）
+./gradlew :androidApp:installDebug        # Android（先启动模拟器）
+./gradlew :desktopApp:packageDistributionForCurrentOS   # 打包 .dmg / .msi / .deb
+./gradlew :shared:jvmTest                 # 共享逻辑的单元测试
+```
+
+**iOS**：需要完整的 Xcode（只有 Command Line Tools 不够）。用 Xcode 打开 `client/iosApp/iosApp.xcodeproj` 运行即可，构建时会自动调用 Gradle 编译 `shared` 框架。真机运行需要在 `client/iosApp/Configuration/Config.xcconfig` 里填 `TEAM_ID`。
+
+界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
+
+## 测试
+
+```sh
+cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest' test   # 11 项
+cd services/agent   && uv run pytest -q                                            # 14 项
+cd services/mocks   && uv run pytest -q                                            # 3 项
+cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 14 项
+python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
+cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 1 项：真实 Ktor 客户端 → 三跳 → mocks
+```
+
+## 来源
+
+- `services/gateway`、`services/rag` 拷贝自 MedTrack，网关的包名改成了 `com.medsync.gateway`。
+- `client/` 基于 JetBrains 官方 [Kotlin/KMP-App-Template](https://github.com/Kotlin/KMP-App-Template)（Apache 2.0，见 `client/LICENSE`），去掉了 Web 端和示例代码。

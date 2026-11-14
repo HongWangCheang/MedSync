@@ -1,0 +1,8 @@
+# Training only. The serving app (backend/requirements.txt) runs the exported ONNX with fastembed and needs none of these.
+torch==2.15.0
+sentence-transformers==6.3.0
+datasets==5.2.0
+accelerate==1.15.0
+onnx==1.23.2
+onnxscript==0.7.2
+fastembed==0.9.1

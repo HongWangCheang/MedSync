@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.medsync.gateway.AccountMapper">
+    <resultMap id="account" type="com.medsync.gateway.AccountMapper$Account">
+        <constructor>
+            <arg column="id" javaType="string"/>
+            <arg column="password_hash" javaType="string"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO sync_account (id, username, password_hash) VALUES (#{id}, #{username}, #{passwordHash})
+    </insert>
+
+    <select id="findByUsername" resultMap="account">
+        SELECT id, password_hash FROM sync_account WHERE username = #{username}
+    </select>
+
+    <select id="lockRevision" resultType="long">
+        SELECT revision FROM sync_account WHERE id = #{id} FOR UPDATE
+    </select>
+
+    <update id="updateRevision">
+        UPDATE sync_account SET revision = #{revision} WHERE id = #{id}
+    </update>
+</mapper>

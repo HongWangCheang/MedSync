@@ -1,0 +1,651 @@
+[
+  {
+    "id": "Q01",
+    "category": "answerable",
+    "request": {
+      "question": "What temperature does the label say to store it at?",
+      "label_id": "22d94fd9-9488-a812-e063-6394a90a7ffc",
+      "version": "11"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "68-77"
+  },
+  {
+    "id": "Q02",
+    "category": "answerable",
+    "request": {
+      "question": "Which substance is in each tablet?",
+      "label_id": "22d94fd9-9488-a812-e063-6394a90a7ffc",
+      "version": "11"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "active_ingredient:1:1"
+    ],
+    "gold_excerpt": "Acetaminophen 500 mg"
+  },
+  {
+    "id": "Q03",
+    "category": "answerable",
+    "request": {
+      "question": "Does the carton mention using a second acetaminophen product?",
+      "label_id": "22d94fd9-9488-a812-e063-6394a90a7ffc",
+      "version": "11"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "do_not_use:1:1"
+    ],
+    "gold_excerpt": "with any other drug containing acetaminophen"
+  },
+  {
+    "id": "Q04",
+    "category": "answerable",
+    "request": {
+      "question": "What does the label say about an elevated temperature that persists?",
+      "label_id": "22d94fd9-9488-a812-e063-6394a90a7ffc",
+      "version": "11"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "stop_use:1:1"
+    ],
+    "gold_excerpt": "fever gets worse"
+  },
+  {
+    "id": "Q05",
+    "category": "answerable",
+    "request": {
+      "question": "How does the carton describe damaged packaging?",
+      "label_id": "49576408-6940-93c6-e063-6394a90a6fa8",
+      "version": "10"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "blister unit is torn or broken"
+  },
+  {
+    "id": "Q06",
+    "category": "answerable",
+    "request": {
+      "question": "Which section mentions the red coloring?",
+      "label_id": "49576408-6940-93c6-e063-6394a90a6fa8",
+      "version": "10"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "inactive_ingredient:1:1"
+    ],
+    "gold_excerpt": "red no. 40"
+  },
+  {
+    "id": "Q07",
+    "category": "answerable",
+    "request": {
+      "question": "Is this labeled to bring down a fever?",
+      "label_id": "49576408-6940-93c6-e063-6394a90a6fa8",
+      "version": "10"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "purpose:1:1"
+    ],
+    "gold_excerpt": "fever reducer"
+  },
+  {
+    "id": "Q08",
+    "category": "answerable",
+    "request": {
+      "question": "What is the recommended storage temperature range on this label?",
+      "label_id": "10e39c07-0913-c1b0-e063-6394a90aff82",
+      "version": "1"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "68-77"
+  },
+  {
+    "id": "Q09",
+    "category": "answerable",
+    "request": {
+      "question": "What does the label say if the problem gets worse or persists for a week?",
+      "label_id": "10e39c07-0913-c1b0-e063-6394a90aff82",
+      "version": "1"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "stop_use:1:1"
+    ],
+    "gold_excerpt": "more than 7 days"
+  },
+  {
+    "id": "Q10",
+    "category": "answerable",
+    "request": {
+      "question": "Is this described as a pain reliever applied to the skin?",
+      "label_id": "10e39c07-0913-c1b0-e063-6394a90aff82",
+      "version": "1"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "purpose:1:1"
+    ],
+    "gold_excerpt": "Topical analgesic"
+  },
+  {
+    "id": "Q11",
+    "category": "answerable",
+    "request": {
+      "question": "Which active ingredient is listed for the caplets?",
+      "label_id": "5f675a2c-cd5d-ac5f-e063-6294a90abdc7",
+      "version": "39"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "active_ingredient:1:1",
+      "active_ingredient:3:1"
+    ],
+    "gold_excerpt": "Caplets (in each caplet) Ibuprofen 200"
+  },
+  {
+    "id": "Q12",
+    "category": "answerable",
+    "request": {
+      "question": "What does the package say about the time around a cardiac operation?",
+      "label_id": "5f675a2c-cd5d-ac5f-e063-6294a90abdc7",
+      "version": "39"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "do_not_use:1:1"
+    ],
+    "gold_excerpt": "heart surgery"
+  },
+  {
+    "id": "Q13",
+    "category": "answerable",
+    "request": {
+      "question": "Where does the label mention dark stools?",
+      "label_id": "5f675a2c-cd5d-ac5f-e063-6294a90abdc7",
+      "version": "39"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "stop_use:1:1"
+    ],
+    "gold_excerpt": "bloody or black stools"
+  },
+  {
+    "id": "Q14",
+    "category": "answerable",
+    "request": {
+      "question": "What does the package say about damp conditions and extreme warmth?",
+      "label_id": "4526be49-a72d-1db7-e063-6394a90a1937",
+      "version": "16"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "Avoid high humidity"
+  },
+  {
+    "id": "Q15",
+    "category": "answerable",
+    "request": {
+      "question": "What amount of naproxen sodium is stated per tablet?",
+      "label_id": "4526be49-a72d-1db7-e063-6394a90a1937",
+      "version": "16"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "active_ingredient:1:1"
+    ],
+    "gold_excerpt": "Naproxen sodium 220 mg"
+  },
+  {
+    "id": "Q16",
+    "category": "answerable",
+    "request": {
+      "question": "How does the label distinguish the two flavors for people with PKU?",
+      "label_id": "4526df19-7a6e-0f19-e063-6394a90a3954",
+      "version": "2"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "bubblegum flavor contains phenylalanine"
+  },
+  {
+    "id": "Q17",
+    "category": "answerable",
+    "request": {
+      "question": "What drug class or purpose does the chewable label list?",
+      "label_id": "4526df19-7a6e-0f19-e063-6394a90a3954",
+      "version": "2"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "purpose:1:1"
+    ],
+    "gold_excerpt": "Antihistamine"
+  },
+  {
+    "id": "Q18",
+    "category": "answerable",
+    "request": {
+      "question": "Where does the label mention the seal being damaged?",
+      "label_id": "45370735-3f9c-a7f8-e063-6294a90aa0c6",
+      "version": "8"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "other_safety_information:1:1"
+    ],
+    "gold_excerpt": "open or torn"
+  },
+  {
+    "id": "Q19",
+    "category": "answerable",
+    "request": {
+      "question": "Which substance provides the intended effect?",
+      "label_id": "45370735-3f9c-a7f8-e063-6294a90aa0c6",
+      "version": "8"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "active_ingredient:1:1"
+    ],
+    "gold_excerpt": "Loratadine 5 mg"
+  },
+  {
+    "id": "Q20",
+    "category": "answerable",
+    "request": {
+      "question": "Does the label mention keeping it away from light and dampness?",
+      "label_id": "41a5a9a1-61a6-f771-e063-6294a90aed87",
+      "version": "6"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "protect from light"
+  },
+  {
+    "id": "Q21",
+    "category": "answerable",
+    "request": {
+      "question": "Does the package mention becoming sleepy?",
+      "label_id": "41a5a9a1-61a6-f771-e063-6294a90aed87",
+      "version": "6"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "when_using:1:1"
+    ],
+    "gold_excerpt": "drowsiness may occur"
+  },
+  {
+    "id": "Q22",
+    "category": "answerable",
+    "request": {
+      "question": "What does the package say about operating a car?",
+      "label_id": "21716a1f-3636-bdde-e063-6394a90aab01",
+      "version": "10"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "when_using:1:1"
+    ],
+    "gold_excerpt": "driving a motor vehicle"
+  },
+  {
+    "id": "Q23",
+    "category": "answerable",
+    "request": {
+      "question": "Is a drippy nose mentioned among the uses?",
+      "label_id": "21716a1f-3636-bdde-e063-6394a90aab01",
+      "version": "10"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "indications_and_usage:1:1"
+    ],
+    "gold_excerpt": "runny nose"
+  },
+  {
+    "id": "Q24",
+    "category": "answerable",
+    "request": {
+      "question": "Which component is described as a skin protectant?",
+      "label_id": "399004db-8df3-c030-e063-6294a90a260b",
+      "version": "8"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "purpose:1:1",
+      "active_ingredient:1:1"
+    ],
+    "gold_excerpt": "Zinc acetate 0.1% Skin protectant"
+  },
+  {
+    "id": "Q25",
+    "category": "answerable",
+    "request": {
+      "question": "Does it say to keep the box?",
+      "label_id": "4a227807-355e-b37d-e063-6394a90a7639",
+      "version": "20"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "keep the carton"
+  },
+  {
+    "id": "Q26",
+    "category": "answerable",
+    "request": {
+      "question": "Does the label mention discomfort from sour stomach?",
+      "label_id": "4a227807-355e-b37d-e063-6394a90a7639",
+      "version": "20"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "indications_and_usage:1:1"
+    ],
+    "gold_excerpt": "sour stomach"
+  },
+  {
+    "id": "Q27",
+    "category": "answerable",
+    "request": {
+      "question": "Does the packaging say to protect it from moisture?",
+      "label_id": "5d19143c-93be-ae16-e063-6294a90a19a6",
+      "version": "18"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "protect from moisture"
+  },
+  {
+    "id": "Q28",
+    "category": "answerable",
+    "request": {
+      "question": "Does the label promise relief straight away?",
+      "label_id": "5d19143c-93be-ae16-e063-6294a90a19a6",
+      "version": "18"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "indications_and_usage:1:1"
+    ],
+    "gold_excerpt": "not intended for immediate relief"
+  },
+  {
+    "id": "Q29",
+    "category": "answerable",
+    "request": {
+      "question": "Does the label discuss keeping it in a fridge or freezer?",
+      "label_id": "85fd731d-433f-4eba-aad8-6eda4550138e",
+      "version": "11"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "storage_and_handling:1:1"
+    ],
+    "gold_excerpt": "do not refrigerate or freeze"
+  },
+  {
+    "id": "Q30",
+    "category": "answerable",
+    "request": {
+      "question": "How does the label describe stuffiness of the nose in its uses?",
+      "label_id": "85fd731d-433f-4eba-aad8-6eda4550138e",
+      "version": "11"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "indications_and_usage:1:1"
+    ],
+    "gold_excerpt": "nasal congestion"
+  },
+  {
+    "id": "Q31",
+    "category": "answerable",
+    "request": {
+      "question": "Which compound appears in the active ingredient list?",
+      "label_id": "22ecca9c-274b-73c3-e063-6394a90a2a66",
+      "version": "9"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "active_ingredient:1:1"
+    ],
+    "gold_excerpt": "Ibuprofen 100 mg"
+  },
+  {
+    "id": "Q32",
+    "category": "answerable",
+    "request": {
+      "question": "Which passage gives the tablet storage temperature?",
+      "label_id": "dd011a82-7356-4b83-86c4-b21cd9138fc6",
+      "version": "8"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "how_supplied:1:2"
+    ],
+    "gold_excerpt": "controlled room temperature"
+  },
+  {
+    "id": "Q33",
+    "category": "same_name",
+    "request": {
+      "question": "What does the label say about storage?",
+      "drug_name": "Tylenol Extra Strength"
+    },
+    "expected": "needs_selection",
+    "candidate_keys": [
+      "21c39261-4b98-bc43-e063-6394a90a4eb8/2",
+      "22d94fd9-9488-a812-e063-6394a90a7ffc/11"
+    ]
+  },
+  {
+    "id": "Q34",
+    "category": "same_name",
+    "request": {
+      "question": "What does the label say about storage?",
+      "drug_name": "Aleve"
+    },
+    "expected": "needs_selection",
+    "candidate_keys": [
+      "4526b265-424f-3e71-e063-6294a90a21a8/19",
+      "4526be49-a72d-1db7-e063-6394a90a1937/16",
+      "4526c253-b571-1d84-e063-6394a90ae3f9/16",
+      "4cd9cec2-0e06-99a3-e063-6394a90a1943/4"
+    ]
+  },
+  {
+    "id": "Q35",
+    "category": "same_name",
+    "request": {
+      "question": "What does the label say about storage?",
+      "drug_name": "Claritin"
+    },
+    "expected": "needs_selection",
+    "candidate_keys": [
+      "352ebcfd-07bb-a60e-e063-6394a90a5d70/18",
+      "4526da60-c33b-fb4a-e063-6294a90a8692/2",
+      "4526df19-7a6e-0f19-e063-6394a90a3954/2",
+      "45370735-3f9c-a7f8-e063-6294a90aa0c6/8",
+      "f5db88bd-8ea6-0df0-e053-2995a90a18b4/3"
+    ]
+  },
+  {
+    "id": "Q36",
+    "category": "same_name",
+    "request": {
+      "question": "What does the label say about storage?",
+      "drug_name": "Childrens Zyrtec"
+    },
+    "expected": "needs_selection",
+    "candidate_keys": [
+      "322eb217-089d-e92d-e063-6394a90a6566/8",
+      "500a1503-02c8-cc05-e063-6394a90a24fb/14",
+      "d1013fc5-5b6e-4db9-98c5-6d8a205a1c8f/3"
+    ]
+  },
+  {
+    "id": "Q37",
+    "category": "same_name",
+    "request": {
+      "question": "What does the label say about storage?",
+      "drug_name": "Prilosec OTC"
+    },
+    "expected": "needs_selection",
+    "candidate_keys": [
+      "5d190a09-ce01-a20f-e063-6294a90a9003/17",
+      "5d19143c-93be-ae16-e063-6294a90a19a6/18",
+      "5d2e31f7-3e0b-ece1-e063-6394a90a5394/3"
+    ]
+  },
+  {
+    "id": "Q38",
+    "category": "same_name",
+    "request": {
+      "question": "What does the label say about storage?",
+      "drug_name": "EpiPen"
+    },
+    "expected": "needs_selection",
+    "candidate_keys": [
+      "040d1b88-235a-aa09-e063-6394a90adbad/1",
+      "81569d26-e9b3-4c1d-ac34-8a4cf5b4a98b/37"
+    ]
+  },
+  {
+    "id": "Q39",
+    "category": "no_match",
+    "request": {
+      "question": "Which active ingredient is listed?",
+      "drug_name": "MedTrack Sample QZX"
+    },
+    "expected": "no_match"
+  },
+  {
+    "id": "Q40",
+    "category": "no_match",
+    "request": {
+      "question": "Which active ingredient is listed?",
+      "drug_name": "Novaplex Demo Capsule"
+    },
+    "expected": "no_match"
+  },
+  {
+    "id": "Q41",
+    "category": "no_match",
+    "request": {
+      "question": "Which active ingredient is listed?",
+      "drug_name": "Tylenollzz"
+    },
+    "expected": "no_match"
+  },
+  {
+    "id": "Q42",
+    "category": "no_match",
+    "request": {
+      "question": "Which active ingredient is listed?",
+      "drug_name": "ZZ001 Impossible Label"
+    },
+    "expected": "no_match"
+  },
+  {
+    "id": "Q43",
+    "category": "no_match",
+    "request": {
+      "question": "Which active ingredient is listed?",
+      "drug_name": "Sample Blue Widget"
+    },
+    "expected": "no_match"
+  },
+  {
+    "id": "Q44",
+    "category": "no_match",
+    "request": {
+      "question": "Which active ingredient is listed?",
+      "drug_name": "Glucophage"
+    },
+    "expected": "no_match"
+  },
+  {
+    "id": "Q45",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "Which warehouse delivered this specific bottle?",
+      "label_id": "22d94fd9-9488-a812-e063-6394a90a7ffc",
+      "version": "11"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "Q46",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "What is the barcode on the individual box I bought today?",
+      "label_id": "49576408-6940-93c6-e063-6394a90a6fa8",
+      "version": "10"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "Q47",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "How many caplets did the store in Melbourne sell yesterday?",
+      "label_id": "5f675a2c-cd5d-ac5f-e063-6294a90abdc7",
+      "version": "39"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "Q48",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "Does the label give a batch-specific carbon emissions figure?",
+      "label_id": "4a227807-355e-b37d-e063-6394a90a7639",
+      "version": "20"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "Q49",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "How much does this cost in Melbourne this week?",
+      "label_id": "85fd731d-433f-4eba-aad8-6eda4550138e",
+      "version": "11"
+    },
+    "expected": "no_evidence"
+  },
+  {
+    "id": "Q50",
+    "category": "insufficient_evidence",
+    "request": {
+      "question": "Does the label report outcomes in a randomized trial of this tablet versus placebo?",
+      "label_id": "22d94fd9-9488-a812-e063-6394a90a7ffc",
+      "version": "11"
+    },
+    "expected": "no_evidence"
+  }
+]

@@ -1,0 +1,56 @@
+package com.medsync.gateway;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.time.Duration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClient;
+
+/**
+ * Hop ② (gateway → agent). The agent keys its LangGraph thread and tool ledger on step_key, so calling it again for
+ * the same step is safe: that is what lets the gateway simply re-dispatch on a timeout instead of guessing.
+ */
+@Component
+class AgentClient {
+    record Outcome(String status, JsonNode result, String reason) {}
+
+    /** Network failure, timeout or 5xx: the step may or may not have run; the caller re-dispatches later. */
+    static class Unavailable extends RuntimeException {
+        Unavailable(Throwable cause) {
+            super(cause);
+        }
+    }
+
+    private final RestClient rest;
+
+    AgentClient(@Value("${medsync.agent.url}") String baseUrl,
+                @Value("${medsync.agent.connect-timeout}") Duration connectTimeout,
+                @Value("${medsync.agent.read-timeout}") Duration readTimeout) {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(connectTimeout);
+        factory.setReadTimeout(readTimeout);
+        this.rest = RestClient.builder().baseUrl(baseUrl).requestFactory(factory).build();
+    }
+
+    Outcome run(ObjectNode request) {
+        return call("/v1/actions/run", request);
+    }
+
+    Outcome resume(String stepKey, ObjectNode decision) {
+        return call("/v1/actions/" + stepKey + "/resume", decision);
+    }
+
+    private Outcome call(String path, ObjectNode body) {
+        try {
+            return rest.post().uri(path).contentType(MediaType.APPLICATION_JSON).body(body)
+                .retrieve().body(Outcome.class);
+        } catch (ResourceAccessException | HttpServerErrorException exception) {
+            throw new Unavailable(exception);
+        }
+    }
+}
