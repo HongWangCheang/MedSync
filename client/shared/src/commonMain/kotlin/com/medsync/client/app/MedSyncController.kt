@@ -95,6 +95,16 @@ class MedSyncController(
         }
     }
 
+    /** The user tapped one of the products the pharmacist offered. */
+    fun choose(answer: PharmacistAnswer, choice: com.medsync.client.agents.Choice) = scope.launch {
+        if (_offline.value) {
+            notice.value = "用药问答需要联网检索说明书。"
+            return@launch
+        }
+        dao.insertAll(Planner.plan(listOf(PharmacistAnswer.choiceStep(choice, answer.sessionId)), deviceId(), clock()))
+        drain()
+    }
+
     fun setOffline(value: Boolean) {
         _offline.value = value
         if (!value) syncNow()

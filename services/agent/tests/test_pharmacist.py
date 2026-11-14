@@ -74,9 +74,10 @@ class FakePharmacist:
         self.failures = failures or []
         self.gate = gate
 
-    def ask(self, question: str, session_id=None, owner=None, token=None) -> dict:
+    def ask(self, question: str, session_id=None, owner=None, token=None, selection=None) -> dict:
         self.calls += 1
-        self.last = {"question": question, "session_id": session_id, "owner": owner, "token": token}
+        self.last = {"question": question, "session_id": session_id, "owner": owner, "token": token,
+                     "selection": selection}
         if self.gate:
             self.gate.wait(5)
         if self.failures:
@@ -187,3 +188,34 @@ def test_delegated_token_reaches_the_pharmacist_but_never_the_checkpoint(monkeyp
 def test_other_tools_never_see_a_delegation(monkeypatch) -> None:
     from medsync_agent.pharmacist import delegation
     assert delegation.get() is None
+
+
+def test_candidates_become_choices_and_a_selection_is_forwarded() -> None:
+    seen = {}
+    candidates = [{"label_id": "a1", "version": "2", "name": "Tylenol Extra Strength", "manufacturer": "Kenvue"},
+                  {"label_id": "b2", "version": "11", "name": "TYLENOL Extra Strength", "manufacturer": "Kenvue"}]
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["body"] = json.loads(request.content)
+        return httpx.Response(200, text=sse(
+            ("session", {"session_id": "11111111-2222-3333-4444-555555555555"}),
+            ("tool_result", {"name": "search_label", "status": "needs_selection", "citations": [],
+                             "candidates": candidates}),
+            ("answer", {"text": "请问是哪一款？", "grounded": True, "citations": {}})))
+
+    out = rag(handler).ask("Tylenol 能喝酒吗", selection={"label_id": "b2", "version": "11", "extra": "x"})
+    assert seen["body"]["selection"] == {"label_id": "b2", "version": "11"}
+    assert out["awaiting_choice"] and [c["label_id"] for c in out["choices"]] == ["a1", "b2"]
+
+
+def test_graph_forwards_only_a_well_formed_selection() -> None:
+    pharmacist = FakePharmacist()
+    r = runner(pharmacist)
+    step = question("q20").model_dump(by_alias=True)
+    step["payload"]["selection"] = {"label_id": "b2", "version": "11", "evil": "<script>"}
+    r.run(ActionRequest.model_validate(step))
+    assert pharmacist.last["selection"] == {"label_id": "b2", "version": "11"}
+    step = question("q21").model_dump(by_alias=True)
+    step["payload"]["selection"] = "b2"
+    r.run(ActionRequest.model_validate(step))
+    assert pharmacist.last["selection"] is None

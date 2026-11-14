@@ -56,7 +56,7 @@ class PharmacistMisconfigured(Exception):
 
 class Pharmacist(Protocol):
     def ask(self, question: str, session_id: str | None = None, owner: str | None = None,
-            token: str | None = None) -> dict[str, Any]: ...
+            token: str | None = None, selection: dict[str, str] | None = None) -> dict[str, Any]: ...
 
 
 def parse_sse(lines: Iterable[str]) -> Iterator[tuple[str, dict[str, Any]]]:
@@ -75,7 +75,7 @@ def parse_sse(lines: Iterable[str]) -> Iterator[tuple[str, dict[str, Any]]]:
 
 
 def summarize(answer: dict[str, Any], tools: list[str], session_id: str | None = None,
-              awaiting_choice: bool = False) -> dict[str, Any]:
+              awaiting_choice: bool = False, choices: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     """What the device stores and shows: the answer, whether it is grounded, and short excerpts of each source."""
     citations = [
         {"id": cid, "label": c.get("label_name"), "section": c.get("section"),
@@ -84,7 +84,10 @@ def summarize(answer: dict[str, Any], tools: list[str], session_id: str | None =
     ]
     return {"answer": answer.get("text", ""), "grounded": bool(answer.get("grounded")),
             "refusal_reason": answer.get("refusal_reason"), "citations": citations, "tools": tools,
-            "session_id": session_id, "awaiting_choice": awaiting_choice}
+            "session_id": session_id, "awaiting_choice": awaiting_choice,
+            # Exact products the user can tap; each carries label_id + version so the pick is unambiguous.
+            "choices": [{k: c.get(k) for k in ("label_id", "version", "name", "manufacturer")} for c in choices or []]
+            if awaiting_choice else []}
 
 
 class RagPharmacist:
@@ -93,10 +96,12 @@ class RagPharmacist:
                                   timeout=httpx.Timeout(timeout_s, connect=3.0))
 
     def ask(self, question: str, session_id: str | None = None, owner: str | None = None,
-            token: str | None = None) -> dict[str, Any]:
+            token: str | None = None, selection: dict[str, str] | None = None) -> dict[str, Any]:
         tools: list[str] = []
-        answer, session, awaiting = None, session_id, False
-        body = {"message": question[:1000], **({"session_id": session_id} if session_id else {})}
+        answer, session, awaiting, choices = None, session_id, False, []
+        body = {"message": question[:1000], **({"session_id": session_id} if session_id else {}),
+                **({"selection": {"label_id": selection["label_id"], "version": selection["version"]}}
+                   if selection else {})}
         headers = {**({OWNER_HEADER: owner} if owner else {}), **({"Authorization": f"Bearer {token}"} if token else {})}
         try:
             with self._http.stream("POST", "/v1/agent/chat", json=body, headers=headers) as response:
@@ -111,6 +116,8 @@ class RagPharmacist:
                         tools.append(str(data.get("name")))
                     elif event == "tool_result":
                         awaiting = awaiting or data.get("status") in CHOICE_STATUSES
+                        if data.get("candidates"):
+                            choices = data["candidates"]  # the latest ambiguity is the one the answer asks about
                     elif event == "answer":
                         answer = data
                     elif event == "error":
@@ -121,4 +128,4 @@ class RagPharmacist:
         if answer is None:
             raise PharmacistUnavailable("stream ended without an answer")
         # Only a turn that ended without citations is still waiting on the choice; a later tool call may resolve it.
-        return summarize(answer, tools, session, awaiting and not answer.get("citations"))
+        return summarize(answer, tools, session, awaiting and not answer.get("citations"), choices)

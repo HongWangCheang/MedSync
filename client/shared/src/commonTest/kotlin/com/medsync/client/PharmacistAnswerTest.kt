@@ -55,4 +55,22 @@ class PharmacistAnswerTest {
         assertNull(PharmacistAnswer.followUp(listOf(answered(1_000, waiting)), nowMs = 1_000 + 11 * 60_000))
         assertNull(PharmacistAnswer.followUp(listOf(answered(1_000, """{"answer": "x", "grounded": true}""")), 2_000))
     }
+
+    @Test
+    fun choicesBecomeAnExactFollowUpStep() {
+        val json = """{"answer": "请问是哪一款？", "grounded": true, "citations": [], "awaiting_choice": true,
+            "session_id": "11111111-2222-3333-4444-555555555555",
+            "choices": [{"label_id": "a1", "version": "2", "name": "Tylenol Extra Strength", "manufacturer": "Kenvue"},
+                        {"label_id": "b2", "version": "11", "name": "TYLENOL Extra Strength", "manufacturer": null},
+                        {"name": "missing id is dropped"}]}"""
+        val answer = PharmacistAnswer.parse(json)!!
+        assertEquals(listOf("a1", "b2"), answer.choices.map { it.labelId })
+        assertEquals("Tylenol Extra Strength · Kenvue · 版本 2", answer.choices[0].title)
+        assertEquals("TYLENOL Extra Strength · 版本 11", answer.choices[1].title)
+
+        val step = PharmacistAnswer.choiceStep(answer.choices[1], answer.sessionId)
+        assertEquals("ask_pharmacist", step.tool)
+        assertEquals("\"11111111-2222-3333-4444-555555555555\"", step.payload["session_id"].toString())
+        assertEquals("""{"label_id":"b2","version":"11"}""", step.payload["selection"].toString())
+    }
 }

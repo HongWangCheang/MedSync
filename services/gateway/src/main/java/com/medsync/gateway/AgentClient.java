@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 /**
  * Hop ② (gateway → agent). The agent keys its LangGraph thread and tool ledger on step_key, so calling it again for
@@ -59,7 +59,12 @@ class AgentClient {
                 spec = spec.header(DELEGATION_HEADER, delegation);
             }
             return spec.retrieve().body(Outcome.class);
-        } catch (ResourceAccessException | HttpServerErrorException exception) {
+        } catch (HttpClientErrorException rejected) {
+            throw rejected;  // the agent refused this request; retrying the same body will not help
+        } catch (RestClientException exception) {
+            // Connection refused, 5xx, and also a timeout while reading the body (headers already arrived, e.g. a
+            // pooled connection whose upstream died when the agent restarted). All mean "outcome unknown": the step
+            // stays DISPATCHED and the next poll re-dispatches, which the agent deduplicates by step_key.
             throw new Unavailable(exception);
         }
     }
