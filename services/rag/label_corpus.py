@@ -31,6 +31,8 @@ SECTIONS = {
     "how_supplied": "How supplied",
     "pregnancy_or_breast_feeding": "Pregnancy or breast-feeding",
     "when_using": "When using this product",
+    # OTC "Directions" and prescription "Dosage and administration" both live in this openFDA field.
+    "dosage_and_administration": "Directions / dosage and administration",
 }
 METADATA = ("brand_name", "generic_name", "manufacturer_name", "dosage_form",
             "route", "product_ndc", "substance_name")
