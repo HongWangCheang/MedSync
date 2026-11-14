@@ -14,6 +14,7 @@ from .external import HttpExternal
 from .graph import StepRunner, build_graph
 from .models import ActionRequest, Outcome
 from .pharmacist import RagPharmacist, delegation
+from .safety import DELEGATED_TOOLS, RagSafetyReviewer
 from .tool_ledger import InMemoryToolLedger, PostgresToolLedger
 
 
@@ -24,9 +25,11 @@ def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
     baseline = experiment.BaselineRunner(external, attempts)
     rag_url = os.environ.get("MEDSYNC_RAG_URL")
     pharmacist = RagPharmacist(rag_url, float(os.environ.get("MEDSYNC_RAG_TIMEOUT_S", "60"))) if rag_url else None
+    safety = RagSafetyReviewer(rag_url, float(os.environ.get("MEDSYNC_SAFETY_TIMEOUT_S", "15"))) if rag_url else None
     dsn = os.environ.get("MEDSYNC_PG_DSN")
     if not dsn:
-        graph = build_graph(InMemoryToolLedger(), external, InMemorySaver(), attempts=attempts, pharmacist=pharmacist)
+        graph = build_graph(InMemoryToolLedger(), external, InMemorySaver(), attempts=attempts, pharmacist=pharmacist,
+                            safety=safety)
         return StepRunner(graph), None, baseline
     from langgraph.checkpoint.postgres import PostgresSaver
     from psycopg.rows import dict_row
@@ -36,7 +39,8 @@ def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
                           kwargs={"autocommit": True, "prepare_threshold": 0, "row_factory": dict_row})
     checkpointer = PostgresSaver(pool)
     checkpointer.setup()
-    graph = build_graph(PostgresToolLedger(pool), external, checkpointer, attempts=attempts, pharmacist=pharmacist)
+    graph = build_graph(PostgresToolLedger(pool), external, checkpointer, attempts=attempts, pharmacist=pharmacist,
+                        safety=safety)
     return StepRunner(graph), pool, baseline
 
 
@@ -62,7 +66,7 @@ def create_app(runner: StepRunner | None = None, baseline: experiment.BaselineRu
             x_medsync_delegation: str | None = Header(default=None)) -> Outcome:
         request = ActionRequest.model_validate(body)
         # Bound only for this call; the step graph reads it but never stores it.
-        bound = delegation.set(x_medsync_delegation if request.tool == "ask_pharmacist" else None)
+        bound = delegation.set(x_medsync_delegation if request.tool in DELEGATED_TOOLS else None)
         try:
             return _run(request)
         finally:

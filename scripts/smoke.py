@@ -116,7 +116,30 @@ def main() -> int:
         ok = done["status"] == "DONE" and bookings_for(s4["stepKey"]) == 1
     results.append(check("asks the user, books the chosen alternative once", ok, v.get("reason") or v["status"]))
 
-    metrics = http("GET", f"{MOCKS}/metrics/side_effects")[1]
+    print("5. safety review of medication records (gateway → agent → RAG → gateway's delegated list)")
+    now = int(time.time() * 1000)
+
+    def record(name: str, minutes_ago: int = 0) -> dict:
+        s = step("record_medication", {"name": name, "takenAt": now - minutes_ago * 60_000, "note": ""},
+                 toolClass="WRITE_IDEMPOTENT")
+        return http("POST", f"{GATEWAY}/v1/actions", s, token, timeout=60)[1]
+
+    first = record("华法林", minutes_ago=60)
+    results.append(check("first record has nothing to compare with", first["status"] == "DONE"
+                         and not first["result"]["safety"]["alerts"], json.dumps(first["result"]["safety"].get("status"))))
+    second = record("布洛芬")
+    safety = (second.get("result") or {}).get("safety") or {}
+    alert = next((a for a in safety.get("alerts", []) if a["with"] == "华法林"), None)
+    excerpt = alert["findings"][0]["citation"]["excerpt"] if alert else ""
+    results.append(check("ibuprofen after warfarin raises a cited alert", second["status"] == "DONE"
+                         and second["reason"] == "safety_alert_moderate" and "anticoagulant" in excerpt,
+                         second.get("reason") or second["status"]))
+    record("泰诺", minutes_ago=30)
+    dup = record("FLONASE Headache and Allergy Relief")
+    results.append(check("same ingredient twice in a day is graded high", dup.get("reason") == "safety_alert_high",
+                         dup.get("reason") or dup["status"]))
+
+    metrics =http("GET", f"{MOCKS}/metrics/side_effects")[1]
     dupes = sum(len(v) for v in metrics["duplicated"].values())
     results.append(check("no duplicated side effects overall", dupes == 0, json.dumps(metrics["duplicated"])))
     print(f"\n{sum(results)}/{len(results)} checks passed · side effects: {metrics['bookings']} bookings, "

@@ -98,15 +98,19 @@ cd client
 
 同一个药名可能对应多个产品，这时会先反问是哪一款，并把候选产品列成按钮（标明厂商和版本）；点一下就会接着回答，也可以直接回复产品名。10 分钟内的追问（例如"它一天最多吃几片？"）也会接着同一段对话。没有配置 `GEMINI_API_KEY` 时，这一步会失败并显示"药学服务未配置"。
 
+**安全审核**：每条服药记录同步到服务器时，会和你最近一周记录过的其他药对照一遍（例如先记了"华法林"，再记"布洛芬"）。依据只有 openFDA 说明书原文，不调用大模型：一种药的说明书在"禁用 / 用药前咨询医生或药师 / 药物相互作用 / 警告"里提到另一种药的成分或类别（如"blood thinning (anticoagulant)"），或者两种产品 24 小时内含有相同成分（如两种都含对乙酰氨基酚），就在这条记录下方提醒，点开能看到引用的原文，还可以一键转给药学 Agent 追问。药已经吃了，所以只提醒、不拦截；认不出的药名会列为"未检查"，没有提醒也不代表可以一起吃。审核服务暂时连不上时，这条记录会在服务器排队，恢复后补做审核，不会跳过。评测见 [services/rag/eval/safety/REPORT.md](services/rag/eval/safety/REPORT.md)。
+
 界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
 
 ## 测试
 
 ```sh
 cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest,AgentClientTest' test   # 20 项
-cd services/agent   && uv run pytest -q                                            # 35 项
+cd services/agent   && uv run pytest -q                                            # 42 项
+cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 60 项
+cd services/rag     && .venv/bin/python -B evaluate_safety.py                      # 相互作用提醒评测，32 个用例
 cd services/mocks   && uv run pytest -q                                            # 4 项
-cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 19 项
+cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 22 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
 cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 2 项：真实 Ktor 客户端 → 三跳 → mocks / RAG
 ```

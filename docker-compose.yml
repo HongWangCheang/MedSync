@@ -91,6 +91,8 @@ services:
       # Pharmacist step = MedTrack's label RAG agent. Not a side effect, so it bypasses the Toxiproxy hops.
       MEDSYNC_RAG_URL: http://rag:8765
       MEDSYNC_RAG_TIMEOUT_S: "60"
+      # Safety review of medication records (same RAG service, no model call, so a much shorter timeout).
+      MEDSYNC_SAFETY_TIMEOUT_S: "15"
       # Signs the RAG session owner; RAG checks it with the same secret.
       MEDSYNC_INTERNAL_SECRET: ${MEDSYNC_INTERNAL_SECRET:?set MEDSYNC_INTERNAL_SECRET in .env}
     ports:

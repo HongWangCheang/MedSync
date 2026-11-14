@@ -8,10 +8,11 @@ from typing import Annotated, Literal
 
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import JSONResponse, StreamingResponse
-from pydantic import BaseModel, ConfigDict, StringConstraints, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 from starlette.concurrency import run_in_threadpool
 
 from agent import LabelAgent, gemini_summarize, verified_owner
+from safety_review import SafetyChecker
 from label_corpus import DEFAULT_CORPUS
 from label_retrieval import LabelIndex, LabelSnapshot, load_model, load_reranker
 from medtrack_server import ApiError, DEMO_LABELS, DemoLabels, MedTrack, demo_select, live_service, load_local_config, route
@@ -33,6 +34,12 @@ class AgentMessage(BaseModel):
     message: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=1000)]
     session_id: Annotated[str, StringConstraints(pattern=r"^[0-9a-f-]{36}$")] | None = None
     selection: Selection | None = None  # a candidate the user tapped after a needs_selection answer
+
+
+class SafetyRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    medication: DrugName
+    taken_at: Annotated[int, Field(ge=0)] | None = None  # when the user took it (epoch ms); defaults to now
 
 
 def sse(event, data):
@@ -70,6 +77,7 @@ def create_app(index=None, legacy=None, agent=None):
     async def lifespan(app):
         app.state.index = index or await run_in_threadpool(build_index)
         app.state.agent = agent or LabelAgent(app.state.index, summarize=gemini_summarize)
+        app.state.safety = SafetyChecker(app.state.index)
         if legacy is not None:
             app.state.legacy = legacy
         elif os.getenv("MEDTRACK_SYNTHETIC_LABELS") == "1":
@@ -120,6 +128,19 @@ def create_app(index=None, legacy=None, agent=None):
             yield sse("done", {})
 
         return StreamingResponse(stream(), media_type="text/event-stream", headers={"Cache-Control": "no-store"})
+
+    @app.post("/v1/safety/review")
+    def safety_review(request: Request, body: SafetyRequest):
+        """Interaction review of one newly recorded medication against the caller's other recent records.
+
+        Deterministic (no model): alerts only where label text supports them, each with the passage it came from.
+        The medication list is read with the caller's own token (a MedSync delegated token in practice).
+        """
+        token = request.headers.get("authorization")
+        if not token:
+            raise ApiError(401, "not_signed_in", "A medication list token is required.")
+        medications = request.app.state.agent.medications.list(token) or []
+        return request.app.state.safety.review(body.medication, medications, body.taken_at)
 
     @app.get("/labels", include_in_schema=False)
     def legacy_labels(request: Request, q: str = ""):
