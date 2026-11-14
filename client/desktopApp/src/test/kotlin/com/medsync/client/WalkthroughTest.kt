@@ -14,6 +14,9 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.DesktopComposeUiTest
 import androidx.room.Room
+import com.medsync.client.agents.FallbackRouter
+import com.medsync.client.agents.OnDeviceRouter
+import com.medsync.client.agents.RuleBasedRouter
 import com.medsync.client.app.MedSyncController
 import com.medsync.client.data.MedSyncDatabase
 import com.medsync.client.data.buildDatabase
@@ -41,10 +44,10 @@ class WalkthroughTest {
     private val mocks = System.getenv("MEDSYNC_MOCKS") ?: "http://127.0.0.1:9100"
     private val out = File("build/walkthrough").apply { mkdirs() }
 
-    private fun controller(): MedSyncController {
+    private fun controller(router: OnDeviceRouter = RuleBasedRouter): MedSyncController {
         val file = File.createTempFile("walkthrough", ".db").apply { delete(); deleteOnExit() }
         val db = buildDatabase(Room.databaseBuilder<MedSyncDatabase>(name = file.absolutePath))
-        return MedSyncController(db, gateway, CoroutineScope(SupervisorJob() + Dispatchers.Default))
+        return MedSyncController(db, gateway, CoroutineScope(SupervisorJob() + Dispatchers.Default), router = router)
     }
 
     private fun post(url: String, body: String = "{}") {
@@ -95,6 +98,30 @@ class WalkthroughTest {
         // The card shows the date actually booked, not the one planned offline.
         onNodeWithText("全科 · $chosen").assertExists()
         shot("3-rescheduled")
+    }
+
+    @Test
+    fun onDeviceModelPlansACompoundSentence() = runDesktopComposeUiTest(width = 760, height = 1100) {
+        assumeTrue(System.getenv("MEDSYNC_WALKTHROUGH") == "1")
+        val model = LiteRtRouter()
+        assumeTrue("model file missing", model.available)
+        post("$mocks/admin/reset")
+        kotlinx.coroutines.runBlocking { model.warmUp() }  // as main() does at startup; loading takes ~7 s
+        val router = FallbackRouter(model)
+        val app = controller(router)
+        setContent { App(app) }
+
+        toggleOffline()  // the model runs on the device: no network needed to plan
+        say("吃了二甲双胍和降压药，有点乏力，告诉儿子")
+        waitForText("已保存在本机", timeoutMs = 60_000)
+        shot("9-on-device-model-plan")
+        assertTrue("answered by ${router.lastSource}: ${router.lastFailure}", router.lastSource == model.name)
+        // Two medication records (the rules only ever catch the first drug), a symptom, a message.
+        onNodeWithText("药物：二甲双胍").assertExists()
+        onNodeWithText("药物：降压药").assertExists()
+        onNodeWithText("症状：乏力", substring = true).assertExists()
+        onNodeWithText("发给儿子", substring = true).assertExists()
+        model.close()
     }
 
     @Test

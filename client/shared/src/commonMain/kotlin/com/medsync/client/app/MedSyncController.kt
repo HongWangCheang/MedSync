@@ -3,6 +3,8 @@ package com.medsync.client.app
 import com.medsync.client.agents.PharmacistAnswer
 import com.medsync.client.agents.RedFlag
 import com.medsync.client.agents.RedFlagDetector
+import com.medsync.client.agents.OnDeviceRouter
+import com.medsync.client.agents.RuleBasedRouter
 import com.medsync.client.agents.RuleRouter
 import com.medsync.client.data.ActionEntity
 import com.medsync.client.data.KvEntity
@@ -42,6 +44,8 @@ class MedSyncController(
     private val scope: CoroutineScope,
     private val clock: () -> Long = { Clock.System.now().toEpochMilliseconds() },
     api: GatewayApi? = null,
+    /** On-device router: rules by default; a platform can pass a model with rule fallback ([FallbackRouter]). */
+    private val router: OnDeviceRouter = RuleBasedRouter,
 ) {
     private val dao = db.actions()
     private val kv = db.kv()
@@ -71,7 +75,9 @@ class MedSyncController(
         val now = clock()
         val today = Instant.fromEpochMilliseconds(now).toLocalDateTime(TimeZone.currentSystemDefault()).date
         val conversation = PharmacistAnswer.followUp(dao.all(), now)
-        var routed = RuleRouter.route(input, today, now)
+        if (router !== RuleBasedRouter) notice.value = "本机模型理解中…"
+        var routed = router.route(input, today, now)
+        if (notice.value == "本机模型理解中…") notice.value = null
         if (routed.steps.isEmpty() && conversation?.awaitingChoice == true) {
             // The pharmacist asked "which product?"; a bare reply like "ADVIL" answers that question.
             routed = RuleRouter.Routed(listOf(StepDraft("ask_pharmacist", JsonObject(mapOf(
@@ -152,11 +158,13 @@ object MedSyncApp {
     var controller: MedSyncController? = null
         private set
 
-    fun init(builder: RoomDatabase.Builder<MedSyncDatabase>, gatewayUrl: String): MedSyncController =
+    fun init(builder: RoomDatabase.Builder<MedSyncDatabase>, gatewayUrl: String,
+             router: OnDeviceRouter = RuleBasedRouter): MedSyncController =
         controller ?: MedSyncController(
             db = buildDatabase(builder),
             gatewayUrl = gatewayUrl,
             scope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
+            router = router,
         ).also {
             controller = it
             it.startLoop()

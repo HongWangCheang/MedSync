@@ -119,6 +119,8 @@ cd client
 <img src="docs/screenshots/8-sent-with-note.png" width="32%">
 </p>
 
+**端侧路由**：桌面端如果在 `~/.medsync/models/` 里找到 Qwen3-0.6B（LiteRT-LM 格式，328 MB），就用它在本机理解用户的话，不需要联网；模型不可用、超时或出错时自动退回规则路由。在 210 句中文评测集的 test 部分，整句完全正确率 87%（规则 48%），在 Apple M4 Pro 的 CPU 上每句 p50 约 2 秒。方法、结果和局限见 [eval/routing/README.md](eval/routing/README.md)。没有在 Android 真机上测过。
+
 界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
 
 ## 测试
@@ -129,10 +131,11 @@ cd services/agent   && uv run pytest -q                                         
 cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 60 项
 cd services/rag     && .venv/bin/python -B evaluate_safety.py                      # 相互作用提醒评测，32 个用例
 cd services/mocks   && uv run pytest -q                                            # 4 项
-cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 22 项
+cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 29 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
 cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 2 项：真实 Ktor 客户端 → 三跳 → mocks / RAG
-cd client && MEDSYNC_WALKTHROUGH=1 ./gradlew :desktopApp:test   # 桌面端界面走查：点按钮、打字，截图存到 desktopApp/build/walkthrough
+cd client && MEDSYNC_WALKTHROUGH=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*WalkthroughTest*'   # 桌面端界面走查，截图存到 desktopApp/build/walkthrough
+cd client && MEDSYNC_ROUTING_EVAL=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*RoutingEvalTest*' && python3 ../eval/routing/score.py   # 端侧路由评测
 ```
 
 ## 来源

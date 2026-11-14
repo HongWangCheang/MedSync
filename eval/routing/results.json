@@ -1,0 +1,1677 @@
+{
+ "qwen3-0.6b": {
+  "dev": {
+   "n": 131,
+   "exact": 0.9312977099236641,
+   "selection": 0.9312977099236641,
+   "per_tool": {
+    "record_medication": {
+     "precision": 1.0,
+     "recall": 0.9811320754716981,
+     "f1": 0.9904761904761905,
+     "support": 53
+    },
+    "record_symptom": {
+     "precision": 1.0,
+     "recall": 0.875,
+     "f1": 0.9333333333333333,
+     "support": 40
+    },
+    "book_appointment": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "support": 29
+    },
+    "notify_family": {
+     "precision": 1.0,
+     "recall": 0.8947368421052632,
+     "f1": 0.9444444444444444,
+     "support": 19
+    },
+    "ask_pharmacist": {
+     "precision": 1.0,
+     "recall": 0.9545454545454546,
+     "f1": 0.9767441860465117,
+     "support": 22
+    }
+   },
+   "args": {
+    "date": {
+     "accuracy": 1.0,
+     "n": 24
+    },
+    "department": {
+     "accuracy": 1.0,
+     "n": 21
+    },
+    "drug_name": {
+     "accuracy": 0.9807692307692307,
+     "n": 52
+    },
+    "relative": {
+     "accuracy": 1.0,
+     "n": 17
+    },
+    "symptom": {
+     "accuracy": 1.0,
+     "n": 35
+    }
+   },
+   "by_group": {
+    "book": 1.0,
+    "combo": 0.8,
+    "med": 1.0,
+    "multi": 1.0,
+    "none": 1.0,
+    "notify": 0.8461538461538461,
+    "question": 0.9545454545454546,
+    "symptom": 0.9
+   },
+   "latency_ms": {
+    "p50": 1920.15,
+    "p95": 4041.534
+   },
+   "failures": [
+    {
+     "id": "symptom-26",
+     "text": "胸口闷闷的",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-31",
+     "text": "腰疼",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "notify-12",
+     "text": "告诉我妈我在吃药了",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "notify-16",
+     "text": "告诉哥哥别担心",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "combo-16",
+     "text": "吃了布洛芬，头还是疼",
+     "expected": [
+      "record_medication",
+      "record_symptom"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-22",
+     "text": "吃了华法林和阿司匹林，告诉儿子",
+     "expected": [
+      "record_medication",
+      "record_medication",
+      "notify_family"
+     ],
+     "got": [
+      "record_medication",
+      "notify_family"
+     ],
+     "args": [
+      "drug_name: expected 华法林 / got 阿司匹林"
+     ]
+    },
+    {
+     "id": "combo-23",
+     "text": "早上吃了降压药，现在头晕想吐",
+     "expected": [
+      "record_medication",
+      "record_symptom",
+      "record_symptom"
+     ],
+     "got": [
+      "record_medication",
+      "record_symptom"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-32",
+     "text": "腰疼，帮我挂下周二骨科",
+     "expected": [
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": []
+    },
+    {
+     "id": "question-03",
+     "text": "这个药饭前吃还是饭后吃",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    }
+   ]
+  },
+  "test": {
+   "n": 79,
+   "exact": 0.8734177215189873,
+   "selection": 0.9113924050632911,
+   "per_tool": {
+    "record_medication": {
+     "precision": 1.0,
+     "recall": 0.9285714285714286,
+     "f1": 0.962962962962963,
+     "support": 28
+    },
+    "record_symptom": {
+     "precision": 0.8846153846153846,
+     "recall": 0.9583333333333334,
+     "f1": 0.9199999999999999,
+     "support": 24
+    },
+    "book_appointment": {
+     "precision": 0.95,
+     "recall": 1.0,
+     "f1": 0.9743589743589743,
+     "support": 19
+    },
+    "notify_family": {
+     "precision": 1.0,
+     "recall": 0.9285714285714286,
+     "f1": 0.962962962962963,
+     "support": 14
+    },
+    "ask_pharmacist": {
+     "precision": 1.0,
+     "recall": 0.8571428571428571,
+     "f1": 0.923076923076923,
+     "support": 14
+    }
+   },
+   "args": {
+    "date": {
+     "accuracy": 0.9473684210526315,
+     "n": 19
+    },
+    "department": {
+     "accuracy": 1.0,
+     "n": 10
+    },
+    "drug_name": {
+     "accuracy": 1.0,
+     "n": 26
+    },
+    "relative": {
+     "accuracy": 0.9230769230769231,
+     "n": 13
+    },
+    "symptom": {
+     "accuracy": 0.9565217391304348,
+     "n": 23
+    }
+   },
+   "by_group": {
+    "book": 0.9166666666666666,
+    "combo": 0.9166666666666666,
+    "med": 0.9166666666666666,
+    "multi": 0.75,
+    "none": 1.0,
+    "notify": 0.625,
+    "question": 0.8571428571428571,
+    "symptom": 0.9166666666666666
+   },
+   "latency_ms": {
+    "p50": 1963.609,
+    "p95": 4069.129
+   },
+   "failures": [
+    {
+     "id": "med-20",
+     "text": "刚喝了止咳糖浆",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [
+      "record_symptom"
+     ],
+     "args": []
+    },
+    {
+     "id": "multi-10",
+     "text": "吃了头孢和止咳糖浆",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication",
+      "record_symptom"
+     ],
+     "args": []
+    },
+    {
+     "id": "symptom-09",
+     "text": "浑身没劲",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-29",
+     "text": "约一下周二复诊",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "date: expected 2026-11-17 / got 2026-11-24"
+     ]
+    },
+    {
+     "id": "notify-04",
+     "text": "给我妈发个消息说我很好",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [
+      "notify_family"
+     ],
+     "args": [
+      "relative: expected None / got 妈"
+     ]
+    },
+    {
+     "id": "notify-05",
+     "text": "告诉爸爸明天去复诊",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": []
+    },
+    {
+     "id": "notify-09",
+     "text": "给女儿发微信，说我头不晕了",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [
+      "record_symptom",
+      "notify_family"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-09",
+     "text": "拉肚子，帮我约明天消化科，再告诉老婆",
+     "expected": [
+      "record_symptom",
+      "book_appointment",
+      "notify_family"
+     ],
+     "got": [
+      "record_symptom",
+      "book_appointment",
+      "notify_family"
+     ],
+     "args": [
+      "symptom: expected 腹泻 / got 肚子"
+     ]
+    },
+    {
+     "id": "question-09",
+     "text": "阿托伐他汀晚上吃好还是早上吃好",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "question-15",
+     "text": "感冒药里有没有对乙酰氨基酚",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    }
+   ]
+  }
+ },
+ "rules": {
+  "dev": {
+   "n": 131,
+   "exact": 0.5267175572519084,
+   "selection": 0.6335877862595419,
+   "per_tool": {
+    "record_medication": {
+     "precision": 0.975,
+     "recall": 0.7358490566037735,
+     "f1": 0.8387096774193549,
+     "support": 53
+    },
+    "record_symptom": {
+     "precision": 0.92,
+     "recall": 0.575,
+     "f1": 0.7076923076923077,
+     "support": 40
+    },
+    "book_appointment": {
+     "precision": 1.0,
+     "recall": 0.7586206896551724,
+     "f1": 0.8627450980392156,
+     "support": 29
+    },
+    "notify_family": {
+     "precision": 1.0,
+     "recall": 0.7894736842105263,
+     "f1": 0.8823529411764706,
+     "support": 19
+    },
+    "ask_pharmacist": {
+     "precision": 0.9375,
+     "recall": 0.6818181818181818,
+     "f1": 0.7894736842105263,
+     "support": 22
+    }
+   },
+   "args": {
+    "date": {
+     "accuracy": 1.0,
+     "n": 19
+    },
+    "department": {
+     "accuracy": 0.3333333333333333,
+     "n": 15
+    },
+    "drug_name": {
+     "accuracy": 0.7692307692307693,
+     "n": 39
+    },
+    "relative": {
+     "accuracy": 1.0,
+     "n": 15
+    },
+    "symptom": {
+     "accuracy": 1.0,
+     "n": 23
+    }
+   },
+   "by_group": {
+    "book": 0.3684210526315789,
+    "combo": 0.4,
+    "med": 0.65,
+    "multi": 0.0,
+    "none": 0.8888888888888888,
+    "notify": 0.6923076923076923,
+    "question": 0.6818181818181818,
+    "symptom": 0.45
+   },
+   "latency_ms": {
+    "p50": 0.019,
+    "p95": 0.099
+   },
+   "failures": [
+    {
+     "id": "med-06",
+     "text": "打了胰岛素",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "med-07",
+     "text": "用了一下氟替卡松喷剂",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "med-11",
+     "text": "刚刚把优甲乐吃了",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 优甲乐 / got 未注明药物"
+     ]
+    },
+    {
+     "id": "med-12",
+     "text": "已经吃药了，吃的是奥美拉唑",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "med-13",
+     "text": "二甲双胍吃过了",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 二甲双胍 / got 了"
+     ]
+    },
+    {
+     "id": "med-18",
+     "text": "今天的钙片吃了",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 钙片 / got 未注明药物"
+     ]
+    },
+    {
+     "id": "med-27",
+     "text": "吃了 Tylenol",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected Tylenol / got 未注明药物"
+     ]
+    },
+    {
+     "id": "multi-01",
+     "text": "吃了布洛芬和奥美拉唑",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "multi-02",
+     "text": "早上吃了华法林、阿托伐他汀",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 华法林 / got 华法林、阿托伐他汀"
+     ]
+    },
+    {
+     "id": "multi-03",
+     "text": "刚吃了泰诺，还吃了一片氯雷他定",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "multi-06",
+     "text": "我吃了感冒灵和布洛芬",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "multi-07",
+     "text": "服用了优甲乐，之后又吃了钙片",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 优甲乐 / got 钙片"
+     ]
+    },
+    {
+     "id": "multi-08",
+     "text": "吃了舍曲林以及维生素D",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 舍曲林 / got 舍曲林以及维生素D"
+     ]
+    },
+    {
+     "id": "multi-11",
+     "text": "吃了布洛芬、泰诺和阿司匹林",
+     "expected": [
+      "record_medication",
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 布洛芬 / got 布洛芬、泰诺"
+     ]
+    },
+    {
+     "id": "multi-12",
+     "text": "午饭后吃了二甲双胍和阿托伐他汀",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "none-12",
+     "text": "没有头疼，也没有发烧",
+     "expected": [],
+     "got": [
+      "record_symptom"
+     ],
+     "args": []
+    },
+    {
+     "id": "symptom-03",
+     "text": "胃不舒服",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-11",
+     "text": "拉肚子",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-12",
+     "text": "手臂上起了疹子",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-21",
+     "text": "感觉心跳很快",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-22",
+     "text": "喉咙痛",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-23",
+     "text": "有点发热",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-26",
+     "text": "胸口闷闷的",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-27",
+     "text": "吃完饭肚子痛",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-28",
+     "text": "身上痒还起了红疹",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-31",
+     "text": "腰疼",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-32",
+     "text": "关节疼得厉害",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-02",
+     "text": "预约周三消化内科",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 消化内科 / got 全科"
+     ]
+    },
+    {
+     "id": "book-03",
+     "text": "挂个下周一心内科的号",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-07",
+     "text": "帮我预约下周三的呼吸科",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 呼吸内科 / got 全科"
+     ]
+    },
+    {
+     "id": "book-08",
+     "text": "约个皮肤科，明天",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 皮肤科 / got 全科"
+     ]
+    },
+    {
+     "id": "book-12",
+     "text": "帮我约内分泌科复查，周三",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 内分泌科 / got 全科"
+     ]
+    },
+    {
+     "id": "book-13",
+     "text": "挂一个眼科的号",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-18",
+     "text": "帮我约下周二的消化科",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 消化内科 / got 全科"
+     ]
+    },
+    {
+     "id": "book-21",
+     "text": "我想挂心血管内科，11月25日",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-22",
+     "text": "约个神经科的号，周四",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 神经内科 / got 全科"
+     ]
+    },
+    {
+     "id": "book-27",
+     "text": "可不可以帮我挂周三呼吸内科",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "ask_pharmacist"
+     ],
+     "args": []
+    },
+    {
+     "id": "book-28",
+     "text": "帮我挂个号看看皮肤",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-31",
+     "text": "帮我约个明天上午的骨科",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 骨科 / got 全科"
+     ]
+    },
+    {
+     "id": "notify-11",
+     "text": "跟姐姐说一声我没事",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "notify-12",
+     "text": "告诉我妈我在吃药了",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "notify-16",
+     "text": "告诉哥哥别担心",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "notify-18",
+     "text": "给老公打个招呼说我出门了",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "combo-08",
+     "text": "吃了二甲双胍和降压药，有点乏力，告诉儿子",
+     "expected": [
+      "record_medication",
+      "record_medication",
+      "record_symptom",
+      "notify_family"
+     ],
+     "got": [
+      "record_medication",
+      "record_symptom",
+      "notify_family"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-12",
+     "text": "起疹子了，约皮肤科下周一",
+     "expected": [
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 皮肤科 / got 全科"
+     ]
+    },
+    {
+     "id": "combo-13",
+     "text": "吃了阿莫西林，还是嗓子疼",
+     "expected": [
+      "record_medication",
+      "record_symptom"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-16",
+     "text": "吃了布洛芬，头还是疼",
+     "expected": [
+      "record_medication",
+      "record_symptom"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-17",
+     "text": "我头晕，帮我挂明天的号",
+     "expected": [
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [
+      "record_symptom"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-18",
+     "text": "吃了感冒药，发烧还没退，约周四全科",
+     "expected": [
+      "record_medication",
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [
+      "record_medication",
+      "record_symptom",
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 全科 / got 呼吸内科"
+     ]
+    },
+    {
+     "id": "combo-21",
+     "text": "头痛三天了，吃了布洛芬没用，帮我约神经科",
+     "expected": [
+      "record_symptom",
+      "record_medication",
+      "book_appointment"
+     ],
+     "got": [
+      "record_medication",
+      "record_symptom",
+      "book_appointment"
+     ],
+     "args": [
+      "drug_name: expected 布洛芬 / got 布洛芬没用"
+     ]
+    },
+    {
+     "id": "combo-22",
+     "text": "吃了华法林和阿司匹林，告诉儿子",
+     "expected": [
+      "record_medication",
+      "record_medication",
+      "notify_family"
+     ],
+     "got": [
+      "record_medication",
+      "notify_family"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-23",
+     "text": "早上吃了降压药，现在头晕想吐",
+     "expected": [
+      "record_medication",
+      "record_symptom",
+      "record_symptom"
+     ],
+     "got": [
+      "record_medication",
+      "record_symptom"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-26",
+     "text": "乏力，帮我约内分泌科",
+     "expected": [
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [
+      "record_symptom",
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 内分泌科 / got 全科"
+     ]
+    },
+    {
+     "id": "combo-28",
+     "text": "吃过阿托伐他汀，肌肉疼，约下周一复诊",
+     "expected": [
+      "record_medication",
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [
+      "record_medication",
+      "book_appointment"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-32",
+     "text": "腰疼，帮我挂下周二骨科",
+     "expected": [
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "question-02",
+     "text": "泰诺一天最多吃几片",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "question-03",
+     "text": "这个药饭前吃还是饭后吃",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "question-07",
+     "text": "奥美拉唑要吃多久",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "question-11",
+     "text": "小孩发烧能吃对乙酰氨基酚吗",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [
+      "record_symptom"
+     ],
+     "args": []
+    },
+    {
+     "id": "question-17",
+     "text": "优甲乐和钙片要隔多久吃",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "question-28",
+     "text": "吃了泰诺还能吃感冒灵吗",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "question-33",
+     "text": "硝苯地平有哪些禁忌",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    }
+   ]
+  },
+  "test": {
+   "n": 79,
+   "exact": 0.4810126582278481,
+   "selection": 0.5822784810126582,
+   "per_tool": {
+    "record_medication": {
+     "precision": 0.8695652173913043,
+     "recall": 0.7142857142857143,
+     "f1": 0.7843137254901961,
+     "support": 28
+    },
+    "record_symptom": {
+     "precision": 1.0,
+     "recall": 0.5416666666666666,
+     "f1": 0.7027027027027027,
+     "support": 24
+    },
+    "book_appointment": {
+     "precision": 0.9411764705882353,
+     "recall": 0.8421052631578947,
+     "f1": 0.8888888888888888,
+     "support": 19
+    },
+    "notify_family": {
+     "precision": 1.0,
+     "recall": 0.7142857142857143,
+     "f1": 0.8333333333333333,
+     "support": 14
+    },
+    "ask_pharmacist": {
+     "precision": 1.0,
+     "recall": 0.5714285714285714,
+     "f1": 0.7272727272727273,
+     "support": 14
+    }
+   },
+   "args": {
+    "date": {
+     "accuracy": 0.9375,
+     "n": 16
+    },
+    "department": {
+     "accuracy": 0.5,
+     "n": 10
+    },
+    "drug_name": {
+     "accuracy": 0.7,
+     "n": 20
+    },
+    "relative": {
+     "accuracy": 1.0,
+     "n": 10
+    },
+    "symptom": {
+     "accuracy": 1.0,
+     "n": 13
+    }
+   },
+   "by_group": {
+    "book": 0.3333333333333333,
+    "combo": 0.5833333333333334,
+    "med": 0.4166666666666667,
+    "multi": 0.0,
+    "none": 1.0,
+    "notify": 0.375,
+    "question": 0.5714285714285714,
+    "symptom": 0.5
+   },
+   "latency_ms": {
+    "p50": 0.02,
+    "p95": 0.092
+   },
+   "failures": [
+    {
+     "id": "med-04",
+     "text": "刚才喝了一包感冒灵",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "med-05",
+     "text": "晚饭后吃过降压药了",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 降压药 / got 降压药了"
+     ]
+    },
+    {
+     "id": "med-15",
+     "text": "我把阿莫西林吃了",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 阿莫西林 / got 未注明药物"
+     ]
+    },
+    {
+     "id": "med-19",
+     "text": "吃完了今天的氯雷他定",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "med-20",
+     "text": "刚喝了止咳糖浆",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "med-24",
+     "text": "吃过对乙酰氨基酚了",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 对乙酰氨基酚 / got 对乙酰氨基酚了"
+     ]
+    },
+    {
+     "id": "med-30",
+     "text": "刚滴了眼药水",
+     "expected": [
+      "record_medication"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "multi-04",
+     "text": "二甲双胍和降压药都吃了",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 二甲双胍 / got 未注明药物"
+     ]
+    },
+    {
+     "id": "multi-05",
+     "text": "吃了阿司匹林跟氯吡格雷",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 阿司匹林 / got 阿司匹林跟氯吡格雷"
+     ]
+    },
+    {
+     "id": "multi-09",
+     "text": "刚吃了两种药：奥美拉唑、法莫替丁",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": [
+      "drug_name: expected 奥美拉唑 / got 两种药：奥美拉唑、法莫替丁"
+     ]
+    },
+    {
+     "id": "multi-10",
+     "text": "吃了头孢和止咳糖浆",
+     "expected": [
+      "record_medication",
+      "record_medication"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "symptom-09",
+     "text": "浑身没劲",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-10",
+     "text": "晚上睡不着",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-14",
+     "text": "嗓子疼",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-15",
+     "text": "头有点晕乎乎的",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-19",
+     "text": "一直反胃",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "symptom-20",
+     "text": "咳了一晚上",
+     "expected": [
+      "record_symptom"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-04",
+     "text": "约11月20号的神经内科",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 神经内科 / got 全科"
+     ]
+    },
+    {
+     "id": "book-05",
+     "text": "帮我挂后天的号",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-10",
+     "text": "这周四帮我挂个号",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-14",
+     "text": "下周五去骨科复诊，帮我约一下",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 骨科 / got 全科"
+     ]
+    },
+    {
+     "id": "book-20",
+     "text": "帮忙预约耳鼻喉科，后天",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 耳鼻喉科 / got 全科"
+     ]
+    },
+    {
+     "id": "book-24",
+     "text": "礼拜五挂个号",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "book-29",
+     "text": "约一下周二复诊",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "date: expected 2026-11-17 / got 2026-11-24"
+     ]
+    },
+    {
+     "id": "book-30",
+     "text": "预约11月30号骨科",
+     "expected": [
+      "book_appointment"
+     ],
+     "got": [
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 骨科 / got 全科"
+     ]
+    },
+    {
+     "id": "notify-04",
+     "text": "给我妈发个消息说我很好",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "notify-05",
+     "text": "告诉爸爸明天去复诊",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [
+      "book_appointment",
+      "notify_family"
+     ],
+     "args": []
+    },
+    {
+     "id": "notify-09",
+     "text": "给女儿发微信，说我头不晕了",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "notify-10",
+     "text": "让儿子知道我在等检查结果",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "notify-14",
+     "text": "发消息给老伴，说检查结果正常",
+     "expected": [
+      "notify_family"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "combo-05",
+     "text": "吃了华法林，牙龈出血，帮我约后天的号",
+     "expected": [
+      "record_medication",
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [
+      "record_medication",
+      "book_appointment"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-09",
+     "text": "拉肚子，帮我约明天消化科，再告诉老婆",
+     "expected": [
+      "record_symptom",
+      "book_appointment",
+      "notify_family"
+     ],
+     "got": [
+      "book_appointment",
+      "notify_family"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-24",
+     "text": "咳嗽，喉咙痛，约后天呼吸内科",
+     "expected": [
+      "record_symptom",
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [
+      "record_symptom",
+      "book_appointment"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-25",
+     "text": "吃了氯雷他定，还在起疹子，跟老公说一声",
+     "expected": [
+      "record_medication",
+      "record_symptom",
+      "notify_family"
+     ],
+     "got": [
+      "record_medication",
+      "notify_family"
+     ],
+     "args": []
+    },
+    {
+     "id": "combo-30",
+     "text": "吃了优甲乐，心跳很快，预约周三内分泌科",
+     "expected": [
+      "record_medication",
+      "record_symptom",
+      "book_appointment"
+     ],
+     "got": [
+      "record_medication",
+      "book_appointment"
+     ],
+     "args": [
+      "department: expected 内分泌科 / got 心血管内科"
+     ]
+    },
+    {
+     "id": "question-05",
+     "text": "吃了头孢能喝酒吗",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "question-09",
+     "text": "阿托伐他汀晚上吃好还是早上吃好",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "question-10",
+     "text": "吃了布洛芬多久能再吃一次",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "question-15",
+     "text": "感冒药里有没有对乙酰氨基酚",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    },
+    {
+     "id": "question-20",
+     "text": "漏吃了一次降压药怎么办",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [
+      "record_medication"
+     ],
+     "args": []
+    },
+    {
+     "id": "question-25",
+     "text": "法莫替丁和奥美拉唑有什么区别",
+     "expected": [
+      "ask_pharmacist"
+     ],
+     "got": [],
+     "args": []
+    }
+   ]
+  }
+ }
+}
