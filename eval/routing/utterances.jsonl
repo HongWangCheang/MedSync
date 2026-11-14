@@ -1,0 +1,211 @@
+{"today": "2026-11-16", "conventions": "Builds eval/routing/utterances.jsonl. Labels = what a careful assistant should do, not what the rules do.\n\ntoday = 2026-11-16 (Monday). Conventions: 周X = the next X from today (today itself → next week); 下周X = X in the next\ncalendar week; department only checked when the user names it; date only checked when the user states one."}
+{"id": "med-01", "group": "med", "split": "dev", "text": "我刚吃了两片泰诺", "expect": [{"tool": "record_medication", "name": "泰诺"}]}
+{"id": "med-02", "group": "med", "split": "dev", "text": "早上吃了布洛芬", "expect": [{"tool": "record_medication", "name": "布洛芬"}]}
+{"id": "med-03", "group": "med", "split": "dev", "text": "服用了阿托伐他汀", "expect": [{"tool": "record_medication", "name": "阿托伐他汀"}]}
+{"id": "med-04", "group": "med", "split": "test", "text": "刚才喝了一包感冒灵", "expect": [{"tool": "record_medication", "name": "感冒灵"}]}
+{"id": "med-05", "group": "med", "split": "test", "text": "晚饭后吃过降压药了", "expect": [{"tool": "record_medication", "name": "降压药"}]}
+{"id": "med-06", "group": "med", "split": "dev", "text": "打了胰岛素", "expect": [{"tool": "record_medication", "name": "胰岛素"}]}
+{"id": "med-07", "group": "med", "split": "dev", "text": "用了一下氟替卡松喷剂", "expect": [{"tool": "record_medication", "name": "氟替卡松"}]}
+{"id": "med-08", "group": "med", "split": "dev", "text": "我吃了Advil", "expect": [{"tool": "record_medication", "name": "Advil"}]}
+{"id": "med-09", "group": "med", "split": "test", "text": "吃了一粒Zyrtec", "expect": [{"tool": "record_medication", "name": "Zyrtec"}]}
+{"id": "med-10", "group": "med", "split": "test", "text": "中午服了一片华法林", "expect": [{"tool": "record_medication", "name": "华法林"}]}
+{"id": "med-11", "group": "med", "split": "dev", "text": "刚刚把优甲乐吃了", "expect": [{"tool": "record_medication", "name": "优甲乐"}]}
+{"id": "med-12", "group": "med", "split": "dev", "text": "已经吃药了，吃的是奥美拉唑", "expect": [{"tool": "record_medication", "name": "奥美拉唑"}]}
+{"id": "med-13", "group": "med", "split": "dev", "text": "二甲双胍吃过了", "expect": [{"tool": "record_medication", "name": "二甲双胍"}]}
+{"id": "med-14", "group": "med", "split": "test", "text": "睡前吃了半片安眠药", "expect": [{"tool": "record_medication", "name": "安眠药"}]}
+{"id": "med-15", "group": "med", "split": "test", "text": "我把阿莫西林吃了", "expect": [{"tool": "record_medication", "name": "阿莫西林"}]}
+{"id": "med-16", "group": "med", "split": "dev", "text": "吃了点止痛药", "expect": [{"tool": "record_medication", "name": "止痛药"}]}
+{"id": "med-17", "group": "med", "split": "dev", "text": "按时吃了舍曲林", "expect": [{"tool": "record_medication", "name": "舍曲林"}]}
+{"id": "med-18", "group": "med", "split": "dev", "text": "今天的钙片吃了", "expect": [{"tool": "record_medication", "name": "钙片"}]}
+{"id": "med-19", "group": "med", "split": "test", "text": "吃完了今天的氯雷他定", "expect": [{"tool": "record_medication", "name": "氯雷他定"}]}
+{"id": "med-20", "group": "med", "split": "test", "text": "刚喝了止咳糖浆", "expect": [{"tool": "record_medication", "name": "止咳糖浆"}]}
+{"id": "med-21", "group": "med", "split": "dev", "text": "吃了三片维生素C", "expect": [{"tool": "record_medication", "name": "维生素C"}]}
+{"id": "med-22", "group": "med", "split": "dev", "text": "我吃了法莫替丁", "expect": [{"tool": "record_medication", "name": "法莫替丁"}]}
+{"id": "med-23", "group": "med", "split": "dev", "text": "服用了一片阿司匹林肠溶片", "expect": [{"tool": "record_medication", "name": "阿司匹林"}]}
+{"id": "med-24", "group": "med", "split": "test", "text": "吃过对乙酰氨基酚了", "expect": [{"tool": "record_medication", "name": "对乙酰氨基酚"}]}
+{"id": "med-25", "group": "med", "split": "test", "text": "刚吃了一颗苯海拉明", "expect": [{"tool": "record_medication", "name": "苯海拉明"}]}
+{"id": "med-26", "group": "med", "split": "dev", "text": "上午吃了芬必得", "expect": [{"tool": "record_medication", "name": "芬必得"}]}
+{"id": "med-27", "group": "med", "split": "dev", "text": "吃了 Tylenol", "expect": [{"tool": "record_medication", "name": "Tylenol"}]}
+{"id": "med-28", "group": "med", "split": "dev", "text": "吃了一片萘普生", "expect": [{"tool": "record_medication", "name": "萘普生"}]}
+{"id": "med-29", "group": "med", "split": "test", "text": "晚上吃了硝苯地平", "expect": [{"tool": "record_medication", "name": "硝苯地平"}]}
+{"id": "med-30", "group": "med", "split": "test", "text": "刚滴了眼药水", "expect": [{"tool": "record_medication", "name": "眼药水"}]}
+{"id": "med-31", "group": "med", "split": "dev", "text": "刚刚吃了两颗速效救心丸", "expect": [{"tool": "record_medication", "name": "速效救心丸"}]}
+{"id": "med-32", "group": "med", "split": "dev", "text": "吃了片头孢", "expect": [{"tool": "record_medication", "name": "头孢"}]}
+{"id": "multi-01", "group": "multi", "split": "dev", "text": "吃了布洛芬和奥美拉唑", "expect": [{"tool": "record_medication", "name": "布洛芬"}, {"tool": "record_medication", "name": "奥美拉唑"}]}
+{"id": "multi-02", "group": "multi", "split": "dev", "text": "早上吃了华法林、阿托伐他汀", "expect": [{"tool": "record_medication", "name": "华法林"}, {"tool": "record_medication", "name": "阿托伐他汀"}]}
+{"id": "multi-03", "group": "multi", "split": "dev", "text": "刚吃了泰诺，还吃了一片氯雷他定", "expect": [{"tool": "record_medication", "name": "泰诺"}, {"tool": "record_medication", "name": "氯雷他定"}]}
+{"id": "multi-04", "group": "multi", "split": "test", "text": "二甲双胍和降压药都吃了", "expect": [{"tool": "record_medication", "name": "二甲双胍"}, {"tool": "record_medication", "name": "降压药"}]}
+{"id": "multi-05", "group": "multi", "split": "test", "text": "吃了阿司匹林跟氯吡格雷", "expect": [{"tool": "record_medication", "name": "阿司匹林"}, {"tool": "record_medication", "name": "氯吡格雷"}]}
+{"id": "multi-06", "group": "multi", "split": "dev", "text": "我吃了感冒灵和布洛芬", "expect": [{"tool": "record_medication", "name": "感冒灵"}, {"tool": "record_medication", "name": "布洛芬"}]}
+{"id": "multi-07", "group": "multi", "split": "dev", "text": "服用了优甲乐，之后又吃了钙片", "expect": [{"tool": "record_medication", "name": "优甲乐"}, {"tool": "record_medication", "name": "钙片"}]}
+{"id": "multi-08", "group": "multi", "split": "dev", "text": "吃了舍曲林以及维生素D", "expect": [{"tool": "record_medication", "name": "舍曲林"}, {"tool": "record_medication", "name": "维生素D"}]}
+{"id": "multi-09", "group": "multi", "split": "test", "text": "刚吃了两种药：奥美拉唑、法莫替丁", "expect": [{"tool": "record_medication", "name": "奥美拉唑"}, {"tool": "record_medication", "name": "法莫替丁"}]}
+{"id": "multi-10", "group": "multi", "split": "test", "text": "吃了头孢和止咳糖浆", "expect": [{"tool": "record_medication", "name": "头孢"}, {"tool": "record_medication", "name": "止咳糖浆"}]}
+{"id": "multi-11", "group": "multi", "split": "dev", "text": "吃了布洛芬、泰诺和阿司匹林", "expect": [{"tool": "record_medication", "name": "布洛芬"}, {"tool": "record_medication", "name": "泰诺"}, {"tool": "record_medication", "name": "阿司匹林"}]}
+{"id": "multi-12", "group": "multi", "split": "dev", "text": "午饭后吃了二甲双胍和阿托伐他汀", "expect": [{"tool": "record_medication", "name": "二甲双胍"}, {"tool": "record_medication", "name": "阿托伐他汀"}]}
+{"id": "none-01", "group": "none", "split": "dev", "text": "今天还没吃降压药", "expect": []}
+{"id": "none-02", "group": "none", "split": "dev", "text": "我忘了吃华法林", "expect": []}
+{"id": "none-03", "group": "none", "split": "dev", "text": "布洛芬我没吃", "expect": []}
+{"id": "none-04", "group": "none", "split": "test", "text": "不想吃药", "expect": []}
+{"id": "none-05", "group": "none", "split": "test", "text": "医生让我别吃阿司匹林了", "expect": []}
+{"id": "none-06", "group": "none", "split": "dev", "text": "你好", "expect": []}
+{"id": "none-07", "group": "none", "split": "dev", "text": "谢谢你", "expect": []}
+{"id": "none-08", "group": "none", "split": "dev", "text": "今天天气不错", "expect": []}
+{"id": "none-09", "group": "none", "split": "test", "text": "我在看电视", "expect": []}
+{"id": "none-10", "group": "none", "split": "test", "text": "明天要去买菜", "expect": []}
+{"id": "none-11", "group": "none", "split": "dev", "text": "早上好", "expect": []}
+{"id": "none-12", "group": "none", "split": "dev", "text": "没有头疼，也没有发烧", "expect": []}
+{"id": "none-13", "group": "none", "split": "dev", "text": "我已经好了", "expect": []}
+{"id": "none-14", "group": "none", "split": "test", "text": "今天走了一万步", "expect": []}
+{"id": "symptom-01", "group": "symptom", "split": "dev", "text": "有点头晕", "expect": [{"tool": "record_symptom", "category": "头晕"}]}
+{"id": "symptom-02", "group": "symptom", "split": "dev", "text": "头疼得厉害", "expect": [{"tool": "record_symptom", "category": "头痛"}]}
+{"id": "symptom-03", "group": "symptom", "split": "dev", "text": "胃不舒服", "expect": [{"tool": "record_symptom", "category": "胃痛"}]}
+{"id": "symptom-04", "group": "symptom", "split": "test", "text": "肚子疼了一上午", "expect": [{"tool": "record_symptom", "category": "腹痛"}]}
+{"id": "symptom-05", "group": "symptom", "split": "test", "text": "恶心想吐", "expect": [{"tool": "record_symptom", "category": "恶心"}]}
+{"id": "symptom-06", "group": "symptom", "split": "dev", "text": "发烧了，38度5", "expect": [{"tool": "record_symptom", "category": "发热"}]}
+{"id": "symptom-07", "group": "symptom", "split": "dev", "text": "一直咳嗽", "expect": [{"tool": "record_symptom", "category": "咳嗽"}]}
+{"id": "symptom-08", "group": "symptom", "split": "dev", "text": "胸闷", "expect": [{"tool": "record_symptom", "category": "胸闷"}]}
+{"id": "symptom-09", "group": "symptom", "split": "test", "text": "浑身没劲", "expect": [{"tool": "record_symptom", "category": "乏力"}]}
+{"id": "symptom-10", "group": "symptom", "split": "test", "text": "晚上睡不着", "expect": [{"tool": "record_symptom", "category": "失眠"}]}
+{"id": "symptom-11", "group": "symptom", "split": "dev", "text": "拉肚子", "expect": [{"tool": "record_symptom", "category": "腹泻"}]}
+{"id": "symptom-12", "group": "symptom", "split": "dev", "text": "手臂上起了疹子", "expect": [{"tool": "record_symptom", "category": "皮疹"}]}
+{"id": "symptom-13", "group": "symptom", "split": "dev", "text": "心慌得很", "expect": [{"tool": "record_symptom", "category": "心悸"}]}
+{"id": "symptom-14", "group": "symptom", "split": "test", "text": "嗓子疼", "expect": [{"tool": "record_symptom", "category": "咽痛"}]}
+{"id": "symptom-15", "group": "symptom", "split": "test", "text": "头有点晕乎乎的", "expect": [{"tool": "record_symptom", "category": "头晕"}]}
+{"id": "symptom-16", "group": "symptom", "split": "dev", "text": "胃疼", "expect": [{"tool": "record_symptom", "category": "胃痛"}]}
+{"id": "symptom-17", "group": "symptom", "split": "dev", "text": "昨晚失眠了", "expect": [{"tool": "record_symptom", "category": "失眠"}]}
+{"id": "symptom-18", "group": "symptom", "split": "dev", "text": "有些乏力", "expect": [{"tool": "record_symptom", "category": "乏力"}]}
+{"id": "symptom-19", "group": "symptom", "split": "test", "text": "一直反胃", "expect": [{"tool": "record_symptom", "category": "恶心"}]}
+{"id": "symptom-20", "group": "symptom", "split": "test", "text": "咳了一晚上", "expect": [{"tool": "record_symptom", "category": "咳嗽"}]}
+{"id": "symptom-21", "group": "symptom", "split": "dev", "text": "感觉心跳很快", "expect": [{"tool": "record_symptom", "category": "心悸"}]}
+{"id": "symptom-22", "group": "symptom", "split": "dev", "text": "喉咙痛", "expect": [{"tool": "record_symptom", "category": "咽痛"}]}
+{"id": "symptom-23", "group": "symptom", "split": "dev", "text": "有点发热", "expect": [{"tool": "record_symptom", "category": "发热"}]}
+{"id": "symptom-24", "group": "symptom", "split": "test", "text": "腹泻三次了", "expect": [{"tool": "record_symptom", "category": "腹泻"}]}
+{"id": "symptom-25", "group": "symptom", "split": "test", "text": "今天头痛", "expect": [{"tool": "record_symptom", "category": "头痛"}]}
+{"id": "symptom-26", "group": "symptom", "split": "dev", "text": "胸口闷闷的", "expect": [{"tool": "record_symptom", "category": "胸闷"}]}
+{"id": "symptom-27", "group": "symptom", "split": "dev", "text": "吃完饭肚子痛", "expect": [{"tool": "record_symptom", "category": "腹痛"}]}
+{"id": "symptom-28", "group": "symptom", "split": "dev", "text": "身上痒还起了红疹", "expect": [{"tool": "record_symptom", "category": "皮疹"}]}
+{"id": "symptom-29", "group": "symptom", "split": "test", "text": "头晕眼花", "expect": [{"tool": "record_symptom", "category": "头晕"}]}
+{"id": "symptom-30", "group": "symptom", "split": "test", "text": "胃痛了两天", "expect": [{"tool": "record_symptom", "category": "胃痛"}]}
+{"id": "symptom-31", "group": "symptom", "split": "dev", "text": "腰疼", "expect": [{"tool": "record_symptom", "category": "腰痛"}]}
+{"id": "symptom-32", "group": "symptom", "split": "dev", "text": "关节疼得厉害", "expect": [{"tool": "record_symptom", "category": "关节痛"}]}
+{"id": "book-01", "group": "book", "split": "dev", "text": "帮我约明天的复诊", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-17"}]}
+{"id": "book-02", "group": "book", "split": "dev", "text": "预约周三消化内科", "expect": [{"tool": "book_appointment", "department": "消化内科", "date": "2026-11-18"}]}
+{"id": "book-03", "group": "book", "split": "dev", "text": "挂个下周一心内科的号", "expect": [{"tool": "book_appointment", "department": "心血管内科", "date": "2026-11-23"}]}
+{"id": "book-04", "group": "book", "split": "test", "text": "约11月20号的神经内科", "expect": [{"tool": "book_appointment", "department": "神经内科", "date": "2026-11-20"}]}
+{"id": "book-05", "group": "book", "split": "test", "text": "帮我挂后天的号", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-18"}]}
+{"id": "book-06", "group": "book", "split": "dev", "text": "想约个周五的复诊", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-20"}]}
+{"id": "book-07", "group": "book", "split": "dev", "text": "帮我预约下周三的呼吸科", "expect": [{"tool": "book_appointment", "department": "呼吸内科", "date": "2026-11-25"}]}
+{"id": "book-08", "group": "book", "split": "dev", "text": "约个皮肤科，明天", "expect": [{"tool": "book_appointment", "department": "皮肤科", "date": "2026-11-17"}]}
+{"id": "book-09", "group": "book", "split": "test", "text": "预约12月1日复诊", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-12-01"}]}
+{"id": "book-10", "group": "book", "split": "test", "text": "这周四帮我挂个号", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-19"}]}
+{"id": "book-11", "group": "book", "split": "dev", "text": "约大后天的全科门诊", "expect": [{"tool": "book_appointment", "department": "全科", "date": "2026-11-19"}]}
+{"id": "book-12", "group": "book", "split": "dev", "text": "帮我约内分泌科复查，周三", "expect": [{"tool": "book_appointment", "department": "内分泌科", "date": "2026-11-18"}]}
+{"id": "book-13", "group": "book", "split": "dev", "text": "挂一个眼科的号", "expect": [{"tool": "book_appointment", "department": "眼科", "date": null}]}
+{"id": "book-14", "group": "book", "split": "test", "text": "下周五去骨科复诊，帮我约一下", "expect": [{"tool": "book_appointment", "department": "骨科", "date": "2026-11-27"}]}
+{"id": "book-15", "group": "book", "split": "test", "text": "帮我约今天下午的号", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-16"}]}
+{"id": "book-16", "group": "book", "split": "dev", "text": "预约复诊", "expect": [{"tool": "book_appointment", "department": null, "date": null}]}
+{"id": "book-17", "group": "book", "split": "dev", "text": "明天去医院复查，帮我挂号", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-17"}]}
+{"id": "book-18", "group": "book", "split": "dev", "text": "帮我约下周二的消化科", "expect": [{"tool": "book_appointment", "department": "消化内科", "date": "2026-11-24"}]}
+{"id": "book-19", "group": "book", "split": "test", "text": "约周日的号", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-22"}]}
+{"id": "book-20", "group": "book", "split": "test", "text": "帮忙预约耳鼻喉科，后天", "expect": [{"tool": "book_appointment", "department": "耳鼻喉科", "date": "2026-11-18"}]}
+{"id": "book-21", "group": "book", "split": "dev", "text": "我想挂心血管内科，11月25日", "expect": [{"tool": "book_appointment", "department": "心血管内科", "date": "2026-11-25"}]}
+{"id": "book-22", "group": "book", "split": "dev", "text": "约个神经科的号，周四", "expect": [{"tool": "book_appointment", "department": "神经内科", "date": "2026-11-19"}]}
+{"id": "book-23", "group": "book", "split": "dev", "text": "帮我约星期三", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-18"}]}
+{"id": "book-24", "group": "book", "split": "test", "text": "礼拜五挂个号", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-20"}]}
+{"id": "book-25", "group": "book", "split": "test", "text": "预约下礼拜一的全科", "expect": [{"tool": "book_appointment", "department": "全科", "date": "2026-11-23"}]}
+{"id": "book-26", "group": "book", "split": "dev", "text": "能帮我约明天的心内科吗", "expect": [{"tool": "book_appointment", "department": "心血管内科", "date": "2026-11-17"}]}
+{"id": "book-27", "group": "book", "split": "dev", "text": "可不可以帮我挂周三呼吸内科", "expect": [{"tool": "book_appointment", "department": "呼吸内科", "date": "2026-11-18"}]}
+{"id": "book-28", "group": "book", "split": "dev", "text": "帮我挂个号看看皮肤", "expect": [{"tool": "book_appointment", "department": "皮肤科", "date": null}]}
+{"id": "book-29", "group": "book", "split": "test", "text": "约一下周二复诊", "expect": [{"tool": "book_appointment", "department": null, "date": "2026-11-17"}]}
+{"id": "book-30", "group": "book", "split": "test", "text": "预约11月30号骨科", "expect": [{"tool": "book_appointment", "department": "骨科", "date": "2026-11-30"}]}
+{"id": "book-31", "group": "book", "split": "dev", "text": "帮我约个明天上午的骨科", "expect": [{"tool": "book_appointment", "department": "骨科", "date": "2026-11-17"}]}
+{"id": "notify-01", "group": "notify", "split": "dev", "text": "告诉女儿我到家了", "expect": [{"tool": "notify_family", "to": "女儿"}]}
+{"id": "notify-02", "group": "notify", "split": "dev", "text": "跟老伴说一声我到医院了", "expect": [{"tool": "notify_family", "to": "老伴"}]}
+{"id": "notify-03", "group": "notify", "split": "dev", "text": "通知儿子我今天不回去吃饭", "expect": [{"tool": "notify_family", "to": "儿子"}]}
+{"id": "notify-04", "group": "notify", "split": "test", "text": "给我妈发个消息说我很好", "expect": [{"tool": "notify_family", "to": "妈妈"}]}
+{"id": "notify-05", "group": "notify", "split": "test", "text": "告诉爸爸明天去复诊", "expect": [{"tool": "notify_family", "to": "爸爸"}]}
+{"id": "notify-06", "group": "notify", "split": "dev", "text": "通知家人我住院了", "expect": [{"tool": "notify_family", "to": "家人"}]}
+{"id": "notify-07", "group": "notify", "split": "dev", "text": "跟老婆说我晚点回家", "expect": [{"tool": "notify_family", "to": "老婆"}]}
+{"id": "notify-08", "group": "notify", "split": "dev", "text": "告诉老公我已经到医院了", "expect": [{"tool": "notify_family", "to": "老公"}]}
+{"id": "notify-09", "group": "notify", "split": "test", "text": "给女儿发微信，说我头不晕了", "expect": [{"tool": "notify_family", "to": "女儿"}]}
+{"id": "notify-10", "group": "notify", "split": "test", "text": "让儿子知道我在等检查结果", "expect": [{"tool": "notify_family", "to": "儿子"}]}
+{"id": "notify-11", "group": "notify", "split": "dev", "text": "跟姐姐说一声我没事", "expect": [{"tool": "notify_family", "to": "姐姐"}]}
+{"id": "notify-12", "group": "notify", "split": "dev", "text": "告诉我妈我在吃药了", "expect": [{"tool": "notify_family", "to": "妈妈"}]}
+{"id": "notify-13", "group": "notify", "split": "dev", "text": "通知女儿来接我", "expect": [{"tool": "notify_family", "to": "女儿"}]}
+{"id": "notify-14", "group": "notify", "split": "test", "text": "发消息给老伴，说检查结果正常", "expect": [{"tool": "notify_family", "to": "老伴"}]}
+{"id": "notify-15", "group": "notify", "split": "test", "text": "跟爸爸说我下午去拿药", "expect": [{"tool": "notify_family", "to": "爸爸"}]}
+{"id": "notify-16", "group": "notify", "split": "dev", "text": "告诉哥哥别担心", "expect": [{"tool": "notify_family", "to": "哥哥"}]}
+{"id": "notify-17", "group": "notify", "split": "dev", "text": "告诉家人我今天状态不错", "expect": [{"tool": "notify_family", "to": "家人"}]}
+{"id": "notify-18", "group": "notify", "split": "dev", "text": "给老公打个招呼说我出门了", "expect": [{"tool": "notify_family", "to": "老公"}]}
+{"id": "notify-19", "group": "notify", "split": "test", "text": "跟女儿讲一下我血压正常", "expect": [{"tool": "notify_family", "to": "女儿"}]}
+{"id": "notify-20", "group": "notify", "split": "test", "text": "告诉儿子周末不用过来了", "expect": [{"tool": "notify_family", "to": "儿子"}]}
+{"id": "notify-21", "group": "notify", "split": "dev", "text": "跟儿子说我检查完了", "expect": [{"tool": "notify_family", "to": "儿子"}]}
+{"id": "combo-01", "group": "combo", "split": "dev", "text": "我吃了布洛芬，有点胃疼，帮我约周三复诊", "expect": [{"tool": "record_medication", "name": "布洛芬"}, {"tool": "record_symptom", "category": "胃痛"}, {"tool": "book_appointment", "department": null, "date": "2026-11-18"}]}
+{"id": "combo-02", "group": "combo", "split": "dev", "text": "吃了降压药，头晕，告诉女儿", "expect": [{"tool": "record_medication", "name": "降压药"}, {"tool": "record_symptom", "category": "头晕"}, {"tool": "notify_family", "to": "女儿"}]}
+{"id": "combo-03", "group": "combo", "split": "dev", "text": "头疼，帮我约明天神经内科", "expect": [{"tool": "record_symptom", "category": "头痛"}, {"tool": "book_appointment", "department": "神经内科", "date": "2026-11-17"}]}
+{"id": "combo-04", "group": "combo", "split": "test", "text": "发烧了，吃了泰诺，跟老伴说一声", "expect": [{"tool": "record_symptom", "category": "发热"}, {"tool": "record_medication", "name": "泰诺"}, {"tool": "notify_family", "to": "老伴"}]}
+{"id": "combo-05", "group": "combo", "split": "test", "text": "吃了华法林，牙龈出血，帮我约后天的号", "expect": [{"tool": "record_medication", "name": "华法林"}, {"tool": "record_symptom", "category": "出血"}, {"tool": "book_appointment", "department": null, "date": "2026-11-18"}]}
+{"id": "combo-06", "group": "combo", "split": "dev", "text": "胃痛，吃了奥美拉唑", "expect": [{"tool": "record_symptom", "category": "胃痛"}, {"tool": "record_medication", "name": "奥美拉唑"}]}
+{"id": "combo-07", "group": "combo", "split": "dev", "text": "咳嗽好几天了，约个周五呼吸科", "expect": [{"tool": "record_symptom", "category": "咳嗽"}, {"tool": "book_appointment", "department": "呼吸内科", "date": "2026-11-20"}]}
+{"id": "combo-08", "group": "combo", "split": "dev", "text": "吃了二甲双胍和降压药，有点乏力，告诉儿子", "expect": [{"tool": "record_medication", "name": "二甲双胍"}, {"tool": "record_medication", "name": "降压药"}, {"tool": "record_symptom", "category": "乏力"}, {"tool": "notify_family", "to": "儿子"}]}
+{"id": "combo-09", "group": "combo", "split": "test", "text": "拉肚子，帮我约明天消化科，再告诉老婆", "expect": [{"tool": "record_symptom", "category": "腹泻"}, {"tool": "book_appointment", "department": "消化内科", "date": "2026-11-17"}, {"tool": "notify_family", "to": "老婆"}]}
+{"id": "combo-10", "group": "combo", "split": "test", "text": "心慌，吃了一片美托洛尔", "expect": [{"tool": "record_symptom", "category": "心悸"}, {"tool": "record_medication", "name": "美托洛尔"}]}
+{"id": "combo-11", "group": "combo", "split": "dev", "text": "失眠，吃了安眠药，告诉女儿我没事", "expect": [{"tool": "record_symptom", "category": "失眠"}, {"tool": "record_medication", "name": "安眠药"}, {"tool": "notify_family", "to": "女儿"}]}
+{"id": "combo-12", "group": "combo", "split": "dev", "text": "起疹子了，约皮肤科下周一", "expect": [{"tool": "record_symptom", "category": "皮疹"}, {"tool": "book_appointment", "department": "皮肤科", "date": "2026-11-23"}]}
+{"id": "combo-13", "group": "combo", "split": "dev", "text": "吃了阿莫西林，还是嗓子疼", "expect": [{"tool": "record_medication", "name": "阿莫西林"}, {"tool": "record_symptom", "category": "咽痛"}]}
+{"id": "combo-14", "group": "combo", "split": "test", "text": "胸闷，帮我约下周三的心内科，跟老伴说一声", "expect": [{"tool": "record_symptom", "category": "胸闷"}, {"tool": "book_appointment", "department": "心血管内科", "date": "2026-11-25"}, {"tool": "notify_family", "to": "老伴"}]}
+{"id": "combo-15", "group": "combo", "split": "test", "text": "恶心，刚吃了甲氧氯普胺", "expect": [{"tool": "record_symptom", "category": "恶心"}, {"tool": "record_medication", "name": "甲氧氯普胺"}]}
+{"id": "combo-16", "group": "combo", "split": "dev", "text": "吃了布洛芬，头还是疼", "expect": [{"tool": "record_medication", "name": "布洛芬"}, {"tool": "record_symptom", "category": "头痛"}]}
+{"id": "combo-17", "group": "combo", "split": "dev", "text": "我头晕，帮我挂明天的号", "expect": [{"tool": "record_symptom", "category": "头晕"}, {"tool": "book_appointment", "department": null, "date": "2026-11-17"}]}
+{"id": "combo-18", "group": "combo", "split": "dev", "text": "吃了感冒药，发烧还没退，约周四全科", "expect": [{"tool": "record_medication", "name": "感冒药"}, {"tool": "record_symptom", "category": "发热"}, {"tool": "book_appointment", "department": "全科", "date": "2026-11-19"}]}
+{"id": "combo-19", "group": "combo", "split": "test", "text": "吃了泰诺，告诉妈妈我好多了", "expect": [{"tool": "record_medication", "name": "泰诺"}, {"tool": "notify_family", "to": "妈妈"}]}
+{"id": "combo-20", "group": "combo", "split": "test", "text": "腹泻，吃了蒙脱石散，约明天的消化内科", "expect": [{"tool": "record_symptom", "category": "腹泻"}, {"tool": "record_medication", "name": "蒙脱石散"}, {"tool": "book_appointment", "department": "消化内科", "date": "2026-11-17"}]}
+{"id": "combo-21", "group": "combo", "split": "dev", "text": "头痛三天了，吃了布洛芬没用，帮我约神经科", "expect": [{"tool": "record_symptom", "category": "头痛"}, {"tool": "record_medication", "name": "布洛芬"}, {"tool": "book_appointment", "department": "神经内科", "date": null}]}
+{"id": "combo-22", "group": "combo", "split": "dev", "text": "吃了华法林和阿司匹林，告诉儿子", "expect": [{"tool": "record_medication", "name": "华法林"}, {"tool": "record_medication", "name": "阿司匹林"}, {"tool": "notify_family", "to": "儿子"}]}
+{"id": "combo-23", "group": "combo", "split": "dev", "text": "早上吃了降压药，现在头晕想吐", "expect": [{"tool": "record_medication", "name": "降压药"}, {"tool": "record_symptom", "category": "头晕"}, {"tool": "record_symptom", "category": "恶心"}]}
+{"id": "combo-24", "group": "combo", "split": "test", "text": "咳嗽，喉咙痛，约后天呼吸内科", "expect": [{"tool": "record_symptom", "category": "咳嗽"}, {"tool": "record_symptom", "category": "咽痛"}, {"tool": "book_appointment", "department": "呼吸内科", "date": "2026-11-18"}]}
+{"id": "combo-25", "group": "combo", "split": "test", "text": "吃了氯雷他定，还在起疹子，跟老公说一声", "expect": [{"tool": "record_medication", "name": "氯雷他定"}, {"tool": "record_symptom", "category": "皮疹"}, {"tool": "notify_family", "to": "老公"}]}
+{"id": "combo-26", "group": "combo", "split": "dev", "text": "乏力，帮我约内分泌科", "expect": [{"tool": "record_symptom", "category": "乏力"}, {"tool": "book_appointment", "department": "内分泌科", "date": null}]}
+{"id": "combo-27", "group": "combo", "split": "dev", "text": "胃疼，吃了法莫替丁，告诉家人", "expect": [{"tool": "record_symptom", "category": "胃痛"}, {"tool": "record_medication", "name": "法莫替丁"}, {"tool": "notify_family", "to": "家人"}]}
+{"id": "combo-28", "group": "combo", "split": "dev", "text": "吃过阿托伐他汀，肌肉疼，约下周一复诊", "expect": [{"tool": "record_medication", "name": "阿托伐他汀"}, {"tool": "record_symptom", "category": "肌肉痛"}, {"tool": "book_appointment", "department": null, "date": "2026-11-23"}]}
+{"id": "combo-29", "group": "combo", "split": "test", "text": "发烧，帮我约明天的号，告诉女儿", "expect": [{"tool": "record_symptom", "category": "发热"}, {"tool": "book_appointment", "department": null, "date": "2026-11-17"}, {"tool": "notify_family", "to": "女儿"}]}
+{"id": "combo-30", "group": "combo", "split": "test", "text": "吃了优甲乐，心跳很快，预约周三内分泌科", "expect": [{"tool": "record_medication", "name": "优甲乐"}, {"tool": "record_symptom", "category": "心悸"}, {"tool": "book_appointment", "department": "内分泌科", "date": "2026-11-18"}]}
+{"id": "combo-31", "group": "combo", "split": "dev", "text": "吃了降糖药，还是有点头晕，告诉老伴", "expect": [{"tool": "record_medication", "name": "降糖药"}, {"tool": "record_symptom", "category": "头晕"}, {"tool": "notify_family", "to": "老伴"}]}
+{"id": "combo-32", "group": "combo", "split": "dev", "text": "腰疼，帮我挂下周二骨科", "expect": [{"tool": "record_symptom", "category": "腰痛"}, {"tool": "book_appointment", "department": "骨科", "date": "2026-11-24"}]}
+{"id": "question-01", "group": "question", "split": "dev", "text": "布洛芬能和阿司匹林一起吃吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-02", "group": "question", "split": "dev", "text": "泰诺一天最多吃几片", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-03", "group": "question", "split": "dev", "text": "这个药饭前吃还是饭后吃", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-04", "group": "question", "split": "test", "text": "孕妇能吃氯雷他定吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-05", "group": "question", "split": "test", "text": "吃了头孢能喝酒吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-06", "group": "question", "split": "dev", "text": "华法林有什么副作用", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-07", "group": "question", "split": "dev", "text": "奥美拉唑要吃多久", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-08", "group": "question", "split": "dev", "text": "降压药可以停吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-09", "group": "question", "split": "test", "text": "阿托伐他汀晚上吃好还是早上吃好", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-10", "group": "question", "split": "test", "text": "吃了布洛芬多久能再吃一次", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-11", "group": "question", "split": "dev", "text": "小孩发烧能吃对乙酰氨基酚吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-12", "group": "question", "split": "dev", "text": "舍曲林和布洛芬一起吃有风险吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-13", "group": "question", "split": "dev", "text": "二甲双胍会伤肾吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-14", "group": "question", "split": "test", "text": "Advil 和 Tylenol 能同时吃吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-15", "group": "question", "split": "test", "text": "感冒药里有没有对乙酰氨基酚", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-16", "group": "question", "split": "dev", "text": "有胃溃疡的人可以吃布洛芬吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-17", "group": "question", "split": "dev", "text": "优甲乐和钙片要隔多久吃", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-18", "group": "question", "split": "dev", "text": "头孢过敏能吃阿莫西林吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-19", "group": "question", "split": "test", "text": "吃完药能开车吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-20", "group": "question", "split": "test", "text": "漏吃了一次降压药怎么办", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-21", "group": "question", "split": "dev", "text": "氯吡格雷要空腹吃吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-22", "group": "question", "split": "dev", "text": "苯海拉明会让人犯困吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-23", "group": "question", "split": "dev", "text": "阿司匹林每天吃多少", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-24", "group": "question", "split": "test", "text": "布洛芬缓释胶囊可以掰开吃吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-25", "group": "question", "split": "test", "text": "法莫替丁和奥美拉唑有什么区别", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-26", "group": "question", "split": "dev", "text": "What is the max dose of Tylenol?", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-27", "group": "question", "split": "dev", "text": "药过期了还能吃吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-28", "group": "question", "split": "dev", "text": "吃了泰诺还能吃感冒灵吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-29", "group": "question", "split": "test", "text": "蒙脱石散怎么吃", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-30", "group": "question", "split": "test", "text": "我在吃华法林，能吃布洛芬吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-31", "group": "question", "split": "dev", "text": "哺乳期能用氟替卡松喷鼻吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-32", "group": "question", "split": "dev", "text": "糖尿病人能吃感冒灵吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-33", "group": "question", "split": "dev", "text": "硝苯地平有哪些禁忌", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-34", "group": "question", "split": "test", "text": "胰岛素要放冰箱吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-35", "group": "question", "split": "test", "text": "睡前吃安眠药会上瘾吗", "expect": [{"tool": "ask_pharmacist"}]}
+{"id": "question-36", "group": "question", "split": "dev", "text": "降糖药和降压药能一起吃吗", "expect": [{"tool": "ask_pharmacist"}]}

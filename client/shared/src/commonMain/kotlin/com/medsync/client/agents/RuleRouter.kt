@@ -101,7 +101,8 @@ object RuleRouter {
             "明天" in text -> return today.plus(DatePeriod(days = 1))
             "今天" in text -> return today
         }
-        Regex("""(下)?(?:周|星期|礼拜)([一二三四五六日天])""").find(text)?.let { m ->
+        // (?<!一): "约一下周二" is this coming Tuesday, not next week's.
+        Regex("""(?<!一)(下)?(?:周|星期|礼拜)([一二三四五六日天])""").find(text)?.let { m ->
             val target = weekdays.getValue(m.groupValues[2][0])
             var days = (target - today.dayOfWeek.isoDayNumber + 7) % 7
             if (days == 0) days = 7
