@@ -190,3 +190,35 @@ class AgentTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ExactNameTests(unittest.TestCase):
+    """Picking a product by typing its exact name must end the "which product?" loop."""
+
+    LABELS = [
+        {"id": "pain-a", "version": "1", "openfda": {"brand_name": ["Fixture Pain Relief"]},
+         "warnings": ["Old warning text."]},
+        {"id": "pain-a", "version": "4", "openfda": {"brand_name": ["Fixture Pain Relief"]},
+         "warnings": ["Current warning text."]},
+        {"id": "pain-pm", "version": "1", "openfda": {"brand_name": ["Fixture Pain Relief PM"]},
+         "warnings": ["May cause drowsiness."]},
+    ]
+
+    def setUp(self):
+        self.index = LabelIndex(LabelSnapshot(self.LABELS, public=False), model=None)
+        self.addCleanup(self.index.db.close)
+        self.agent = LabelAgent(self.index, model=ScriptedModel(), medications=FakeMedications(), store=SessionStore())
+
+    def resolve(self, name):
+        from agent import Session
+        return self.agent._resolve(Session("s", "o"), drug_name=name)
+
+    def test_exact_name_picks_the_newest_version_of_that_label(self):
+        problem, label = self.resolve("fixture pain relief")
+        self.assertIsNone(problem)
+        self.assertEqual((label["id"], label["version"]), ("pain-a", "4"))
+
+    def test_partial_name_still_asks(self):
+        problem, label = self.resolve("Fixture Pain")
+        self.assertEqual(problem["status"], "needs_selection")
+        self.assertIsNone(label)

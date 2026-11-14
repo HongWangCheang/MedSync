@@ -26,7 +26,7 @@ mocks (模拟医院预约 / 家属通知)                         故意不去�
 | [services/gateway/](services/gateway/) | 同步网关，在 MedTrack sync-server 基础上新增 `action_ledger` 和 `/v1/actions` |
 | [services/agent/](services/agent/) | Agent 服务：LangGraph 图、tool ledger、MCP Server |
 | [services/mocks/](services/mocks/) | 模拟外部系统，带副作用计数和"提交后响应丢失"故障 |
-| [services/rag/](services/rag/) | 从 MedTrack 拷贝的说明书 RAG（可选，`--profile rag`） |
+| [services/rag/](services/rag/) | 从 MedTrack 拷贝的说明书 RAG + Gemini 问答 Agent，供药学问答步骤调用 |
 | [chaos/](chaos/) | Toxiproxy 三跳配置和故障注入脚本 |
 | [scripts/smoke.py](scripts/smoke.py) | 端到端冒烟测试 |
 | [eval/](eval/) | 对比实验：B0 朴素重试 / B1 请求级幂等 / B2 参数哈希去重 / Full，报告见 [eval/report.md](eval/report.md) |
@@ -35,7 +35,7 @@ mocks (模拟医院预约 / 家属通知)                         故意不去�
 ## 启动服务端
 
 ```sh
-cp .env.example .env          # 填三个数据库密码
+cp .env.example .env          # 填三个数据库密码；要回答用药问题再填 GEMINI_API_KEY
 docker compose up --build -d
 python3 scripts/smoke.py      # 6 项检查：重放、409、响应丢失、Agent 不可达、号源被抢、无重复副作用
 ```
@@ -92,17 +92,21 @@ cd client
 
 **iOS**：需要完整的 Xcode（只有 Command Line Tools 不够）。用 Xcode 打开 `client/iosApp/iosApp.xcodeproj` 运行即可，构建时会自动调用 Gradle 编译 `shared` 框架。真机运行需要在 `client/iosApp/Configuration/Config.xcconfig` 里填 `TEAM_ID`。
 
+**用药问答**：例如输入"布洛芬能和阿司匹林一起吃吗？"。在线时，这个问题由 `services/rag` 检索 openFDA 说明书后回答，答案里的 [S1] 会高亮，点开能看到原文摘录。找不到可引用的原文时会直接拒答。
+
+同一个药名可能对应多个产品，这时会先反问是哪一款；直接回复产品名（例如 `ADVIL`）就会接着回答。10 分钟内的追问（例如"它一天最多吃几片？"）也会接着同一段对话。没有配置 `GEMINI_API_KEY` 时，这一步会失败并显示"药学服务未配置"。
+
 界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
 
 ## 测试
 
 ```sh
 cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest' test   # 11 项
-cd services/agent   && uv run pytest -q                                            # 19 项
+cd services/agent   && uv run pytest -q                                            # 31 项
 cd services/mocks   && uv run pytest -q                                            # 4 项
-cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 14 项
+cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 18 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
-cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 1 项：真实 Ktor 客户端 → 三跳 → mocks
+cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 2 项：真实 Ktor 客户端 → 三跳 → mocks / RAG
 ```
 
 ## 来源

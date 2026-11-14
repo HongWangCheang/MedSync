@@ -1,5 +1,6 @@
 package com.medsync.client
 
+import com.medsync.client.agents.PharmacistAnswer
 import com.medsync.client.agents.RuleRouter
 import com.medsync.client.outbox.Planner
 import com.medsync.client.sync.KtorGatewayApi
@@ -18,6 +19,8 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
 /**
@@ -66,5 +69,31 @@ class LiveGatewayTest {
             put("decision", "choose"); put("date", choice["date"]!!.jsonPrimitive.content)
         }, System.currentTimeMillis())
         assertEquals("DONE", done.state)
+    }
+
+    /** Pharmacist through the real stack. With GEMINI_API_KEY → a grounded or refused answer; without → a clear failure. */
+    @Test
+    fun pharmacistQuestionThroughTheRealStack() = runBlocking {
+        if (System.getenv("MEDSYNC_LIVE") == null) return@runBlocking
+        var token: String? = null
+        val api = KtorGatewayApi(gateway, { token?.ifBlank { null } }, { token = it },
+            { "it_${Uuid.random().toHexString().take(10)}" to "integration-pass-1" })
+        val dao = FakeDao()
+        val engine = SyncEngine(dao, api)
+        val routed = RuleRouter.route("布洛芬能和阿司匹林一起吃吗？", LocalDate(2026, 11, 14), 0)
+        assertEquals(listOf("ask_pharmacist"), routed.steps.map { it.tool })
+        dao.insertAll(Planner.plan(routed.steps, "it-device", System.currentTimeMillis()))
+        val deadline = System.currentTimeMillis() + 90_000
+        while (dao.rows.value.single().state !in setOf("DONE", "FAILED") && System.currentTimeMillis() < deadline) {
+            engine.drainOnce(System.currentTimeMillis())
+            kotlinx.coroutines.delay(1_000)
+        }
+        val row = dao.rows.value.single()
+        println("pharmacist → ${row.state} ${row.reason} ${row.resultJson?.take(300)}")
+        when (row.state) {
+            "DONE" -> assertNotNull(PharmacistAnswer.parse(row.resultJson))
+            "FAILED" -> assertTrue(row.reason!!.startsWith("pharmacist_not_configured"), row.reason)
+            else -> error("pharmacist step did not finish: ${row.state} ${row.reason}")
+        }
     }
 }
