@@ -262,3 +262,43 @@ class MedSyncIntegrationTests(unittest.TestCase):
             meds = agent_module.SyncServerMedications("http://gateway:8081").list("Bearer dlg_" + "x" * 43)
         self.assertEqual(meds, [{"name": "布洛芬", "last_taken_at": 1763100000000, "times_recorded": 3}])
         self.assertEqual(fetch.call_args.args[0], "http://gateway:8081/v1/delegated/medications")
+
+
+class CandidateSelectionTests(unittest.TestCase):
+    """Candidates travel to the client; a tapped candidate is used exactly, even when names collide."""
+
+    def setUp(self):
+        self.index = LabelIndex(LabelSnapshot(LABELS, public=False), model=None)
+        self.addCleanup(self.index.db.close)
+
+    def agent(self, *turns):
+        return LabelAgent(self.index, model=ScriptedModel(*turns), medications=FakeMedications(), store=SessionStore())
+
+    def test_needs_selection_event_carries_the_candidates(self):
+        agent = self.agent(call("search_label", question="storage?", drug_name="Fixture Acid Reducer"),
+                           say("Which Fixture Acid Reducer do you mean?"))
+        events = list(agent.run("How do I store Fixture Acid Reducer?"))
+        result = next(d for e, d in events if e == "tool_result")
+        self.assertEqual(result["status"], "needs_selection")
+        self.assertEqual(sorted((c["label_id"], c["version"]) for c in result["candidates"]),
+                         [("acid-b", "2"), ("acid-c", "3")])
+
+    def test_selected_label_is_used_even_when_the_model_names_it_again(self):
+        # Both acid-b and acid-c are called "Fixture Acid Reducer": by name alone this would ask again forever.
+        agent = self.agent(call("search_label", question="storage?", drug_name="Fixture Acid Reducer"),
+                           say("Store the carton at 15-30C [S1]."))
+        events = dict(agent.run("I mean this one", selection={"label_id": "acid-c", "version": "3"}))
+        self.assertTrue(events["answer"]["grounded"])
+        self.assertEqual(events["answer"]["citations"]["S1"]["label_id"], "acid-c")
+
+    def test_unknown_selection_is_ignored(self):
+        agent = self.agent(call("search_label", question="storage?", drug_name="Fixture Acid Reducer"), say("Which?"))
+        events = list(agent.run("this one", selection={"label_id": "nope", "version": "9"}))
+        self.assertEqual(next(d for e, d in events if e == "tool_result")["status"], "needs_selection")
+
+    def test_api_rejects_a_malformed_selection(self):
+        from fastapi.testclient import TestClient
+        with TestClient(create_app(index=self.index, legacy=MedTrack(DemoLabels(), demo_select, "demo"),
+                                   agent=self.agent())) as client:
+            bad = client.post("/v1/agent/chat", json={"message": "x", "selection": {"label_id": "a b", "version": "1"}})
+            self.assertEqual(bad.status_code, 422)

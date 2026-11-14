@@ -215,6 +215,10 @@ class LabelAgent:
             if session.focus:
                 return None, session.focus
             return {"status": "needs_drug_name"}, None
+        if session.focus and plain(drug_name) == plain(session.focus["name"]):
+            # The user already picked this exact product (by tapping a candidate, or in an earlier answer); the model
+            # naming it again must not reopen "which one?", even when several labels share the name.
+            return None, session.focus
         candidates = self.index.catalog.search(drug_name)["labels"]
         if not candidates:
             return {"status": "no_match", "drug_name": drug_name}, None
@@ -325,7 +329,7 @@ class LabelAgent:
             return False, "uncited_answer", cited
         return True, None, cited
 
-    def run(self, message, session_id=None, token=None, owner=None):
+    def run(self, message, session_id=None, token=None, owner=None, selection=None):
         """Yields (event, data) pairs. The final answer is only emitted after citation validation.
 
         `owner` is a verified caller identity (see verified_owner); without one the session belongs to the token.
@@ -334,6 +338,12 @@ class LabelAgent:
         session = self.store.load(session_id, owner) if session_id else None
         if session is None:
             session = Session(str(uuid.uuid4()), owner)
+        if selection:
+            # A product the user picked from the candidates we showed: exact label and version, no guessing by name.
+            record = self.index.snapshot.get(selection.get("label_id"), selection.get("version"))
+            if record is not None:
+                session.focus = {"id": selection["label_id"], "version": selection["version"],
+                                 "name": next(iter(names(record)), "Drug label")}
         yield "session", {"session_id": session.id}
         contents = self._history(session) + [{"role": "user", "parts": [{"text": message}]}]
         turn_citations, steps, text, tools_called = set(), 0, None, 0
@@ -363,8 +373,11 @@ class LabelAgent:
                 except ApiError as error:
                     result = {"status": "tool_error", "code": error.payload["code"]}
                 turn_citations.update(p["cite"] for p in result.get("passages", []))
-                yield "tool_result", {"name": name, "status": result.get("status"),
-                                      "citations": [p["cite"] for p in result.get("passages", [])]}
+                event = {"name": name, "status": result.get("status"),
+                         "citations": [p["cite"] for p in result.get("passages", [])]}
+                if result.get("status") == "needs_selection":
+                    event["candidates"] = result.get("candidates", [])  # lets a client offer them as buttons
+                yield "tool_result", event
                 part = {"name": name, "response": result}
                 if call.get("id"):
                     part["id"] = call["id"]

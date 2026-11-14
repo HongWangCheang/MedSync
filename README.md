@@ -96,17 +96,17 @@ cd client
 
 问到"我吃的药"时，药学 Agent 会读取你记录过的服药（最近 90 天）。它拿到的是网关临时签发的只读授权：有效期 2 分钟，只能读用药清单，不会被保存下来。
 
-同一个药名可能对应多个产品，这时会先反问是哪一款；直接回复产品名（例如 `ADVIL`）就会接着回答。10 分钟内的追问（例如"它一天最多吃几片？"）也会接着同一段对话。没有配置 `GEMINI_API_KEY` 时，这一步会失败并显示"药学服务未配置"。
+同一个药名可能对应多个产品，这时会先反问是哪一款，并把候选产品列成按钮（标明厂商和版本）；点一下就会接着回答，也可以直接回复产品名。10 分钟内的追问（例如"它一天最多吃几片？"）也会接着同一段对话。没有配置 `GEMINI_API_KEY` 时，这一步会失败并显示"药学服务未配置"。
 
 界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
 
 ## 测试
 
 ```sh
-cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest' test   # 15 项
-cd services/agent   && uv run pytest -q                                            # 33 项
+cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest,AgentClientTest' test   # 20 项
+cd services/agent   && uv run pytest -q                                            # 35 项
 cd services/mocks   && uv run pytest -q                                            # 4 项
-cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 18 项
+cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 19 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
 cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 2 项：真实 Ktor 客户端 → 三跳 → mocks / RAG
 ```

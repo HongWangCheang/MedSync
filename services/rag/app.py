@@ -22,10 +22,17 @@ Version = Annotated[str, StringConstraints(pattern=r"^[0-9]{1,12}$")]
 Question = Annotated[str, StringConstraints(strip_whitespace=True, min_length=3, max_length=300)]
 
 
+class Selection(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    label_id: LabelId
+    version: Version
+
+
 class AgentMessage(BaseModel):
     model_config = ConfigDict(extra="forbid")
     message: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=1000)]
     session_id: Annotated[str, StringConstraints(pattern=r"^[0-9a-f-]{36}$")] | None = None
+    selection: Selection | None = None  # a candidate the user tapped after a needs_selection answer
 
 
 def sse(event, data):
@@ -101,7 +108,8 @@ def create_app(index=None, legacy=None, agent=None):
         """Server-sent events: session, tool_call, tool_result, then answer (or error)."""
         token = request.headers.get("authorization")
         owner = verified_owner(request.headers.get("x-medsync-owner"))
-        steps = request.app.state.agent.run(body.message, body.session_id, token, owner=owner)
+        steps = request.app.state.agent.run(body.message, body.session_id, token, owner=owner,
+                                            selection=body.selection.model_dump() if body.selection else None)
 
         def stream():
             try:

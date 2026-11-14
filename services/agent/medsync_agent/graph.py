@@ -36,6 +36,13 @@ class StepState(TypedDict, total=False):
     outcome: dict[str, Any]
 
 
+def _selection(value: Any) -> dict[str, str] | None:
+    """A tapped candidate from the device: only label_id + version strings are forwarded."""
+    if isinstance(value, dict) and isinstance(value.get("label_id"), str) and isinstance(value.get("version"), str):
+        return {"label_id": value["label_id"], "version": value["version"]}
+    return None
+
+
 class ExternalPending(Exception):
     """The side effect's outcome is not known yet; the step stays parked at the executor."""
 
@@ -64,7 +71,8 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
         try:
             answer = pharmacist.ask(str(request.payload.get("question", "")),
                                     session_id=request.payload.get("session_id") or None,
-                                    owner=signed_owner(request.account_id), token=delegation.get())
+                                    owner=signed_owner(request.account_id), token=delegation.get(),
+                                    selection=_selection(request.payload.get("selection")))
         except PharmacistUnavailable as error:
             raise ExternalPending(f"pharmacist unavailable: {error}") from error
         except PharmacistMisconfigured as error:

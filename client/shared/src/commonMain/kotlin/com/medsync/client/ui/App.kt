@@ -97,7 +97,7 @@ fun App(controller: MedSyncController) {
 
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(actions.asReversed(), key = { it.actionId }) { action ->
-                        ActionCard(action) { decision -> controller.resolve(action, decision) }
+                        ActionCard(action, onChoose = controller::choose) { decision -> controller.resolve(action, decision) }
                     }
                 }
             }
@@ -106,7 +106,11 @@ fun App(controller: MedSyncController) {
 }
 
 @Composable
-private fun ActionCard(action: ActionEntity, onDecision: (JsonObject?) -> Unit) {
+private fun ActionCard(
+    action: ActionEntity,
+    onChoose: (PharmacistAnswer, com.medsync.client.agents.Choice) -> Unit,
+    onDecision: (JsonObject?) -> Unit,
+) {
     val state = ActionState.valueOf(action.state)
     val payload = remember(action.payloadJson) { Json.parseToJsonElement(action.payloadJson).jsonObject }
     Card(Modifier.fillMaxWidth()) {
@@ -118,7 +122,7 @@ private fun ActionCard(action: ActionEntity, onDecision: (JsonObject?) -> Unit) 
             }
             Text(summary(action.tool, payload), style = MaterialTheme.typography.bodyMedium)
             if (action.tool == "ask_pharmacist" && state == ActionState.DONE) {
-                PharmacistAnswer.parse(action.resultJson)?.let { AnswerView(it) }
+                PharmacistAnswer.parse(action.resultJson)?.let { answer -> AnswerView(answer) { onChoose(answer, it) } }
             }
             val meta = buildList {
                 if (action.attempt > 0) add("重试 ${action.attempt} 次")
@@ -144,7 +148,7 @@ private fun ActionCard(action: ActionEntity, onDecision: (JsonObject?) -> Unit) 
 
 /** The answer with [S1] markers highlighted; each source opens to show its label excerpt. */
 @Composable
-private fun AnswerView(answer: PharmacistAnswer) {
+private fun AnswerView(answer: PharmacistAnswer, onChoose: (com.medsync.client.agents.Choice) -> Unit) {
     val container = if (answer.grounded) MaterialTheme.colorScheme.secondaryContainer
         else MaterialTheme.colorScheme.surfaceVariant
     Card(colors = CardDefaults.cardColors(containerColor = container), modifier = Modifier.fillMaxWidth()) {
@@ -170,7 +174,14 @@ private fun AnswerView(answer: PharmacistAnswer) {
                     }
                 }
             }
-            if (answer.awaitingChoice) {
+            if (answer.awaitingChoice && answer.choices.isNotEmpty()) {
+                Text("点一下你在用的那一款，会接着回答：", style = MaterialTheme.typography.labelMedium)
+                answer.choices.forEach { choice ->
+                    OutlinedButton(onClick = { onChoose(choice) }, modifier = Modifier.fillMaxWidth()) {
+                        Text(choice.title, style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+            } else if (answer.awaitingChoice) {
                 Text("直接回复产品名即可，例如“ADVIL”，会接着这个问题回答。", style = MaterialTheme.typography.labelMedium)
             }
             Text("仅摘录说明书原文，不能代替医生或药师的建议。", style = MaterialTheme.typography.labelSmall)

@@ -11,6 +11,13 @@ import kotlinx.serialization.json.jsonObject
 /** One label passage the answer cites, e.g. [S1] → Advil, "Ask a doctor or pharmacist before use if you are". */
 data class Citation(val id: String, val label: String, val section: String, val excerpt: String, val url: String?)
 
+/** A product the pharmacist could not choose between; label id + version make the user's pick exact. */
+data class Choice(val labelId: String, val version: String, val name: String, val manufacturer: String?) {
+    /** Two labels can share a name ("Tylenol Extra Strength"), so the button also shows maker and version. */
+    val title: String get() = listOfNotNull(name, manufacturer?.takeIf { it.isNotBlank() }, "版本 $version")
+        .joinToString(" · ")
+}
+
 /**
  * The pharmacist step's result as stored in the outbox row. `grounded == false` means the server replaced the
  * model's text with a refusal because it could not be tied to retrieved label passages.
@@ -23,6 +30,7 @@ data class PharmacistAnswer(
     val sessionId: String? = null,
     /** The pharmacist asked which product the user means; the next reply should continue this conversation. */
     val awaitingChoice: Boolean = false,
+    val choices: List<Choice> = emptyList(),
 ) {
     /** Splits the answer into plain text and citation markers so the UI can highlight "[S1]". */
     fun segments(): List<Pair<String, Boolean>> {
@@ -48,11 +56,26 @@ data class PharmacistAnswer(
                 Citation(c.str("id") ?: "?", c.str("label") ?: "", c.str("section") ?: "", c.str("excerpt") ?: "",
                     c.str("source_url"))
             }
+            val choices = root["choices"]?.jsonArray.orEmpty().mapNotNull { element ->
+                val c = element.jsonObject
+                val id = c.str("label_id") ?: return@mapNotNull null
+                val version = c.str("version") ?: return@mapNotNull null
+                Choice(id, version, c.str("name") ?: id, c.str("manufacturer"))
+            }
             PharmacistAnswer(text, (root["grounded"] as? JsonPrimitive)?.booleanOrNull == true, citations,
-                root.str("session_id"), (root["awaiting_choice"] as? JsonPrimitive)?.booleanOrNull == true)
+                root.str("session_id"), (root["awaiting_choice"] as? JsonPrimitive)?.booleanOrNull == true, choices)
         }.getOrNull()
 
         private const val FOLLOW_UP_WINDOW_MS = 10 * 60_000L
+
+        /** The follow-up step sent when the user taps a candidate: same conversation, exact product. */
+        fun choiceStep(choice: Choice, sessionId: String?): com.medsync.client.outbox.StepDraft =
+            com.medsync.client.outbox.StepDraft("ask_pharmacist", JsonObject(buildMap {
+                put("question", JsonPrimitive("我选：${choice.title}"))
+                sessionId?.let { put("session_id", JsonPrimitive(it)) }
+                put("selection", JsonObject(mapOf("label_id" to JsonPrimitive(choice.labelId),
+                    "version" to JsonPrimitive(choice.version))))
+            }))
 
         /**
          * The pharmacist conversation a new message should continue: the latest answered question, if it is recent.
