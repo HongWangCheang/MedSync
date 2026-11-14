@@ -111,6 +111,14 @@ cd client
 
 暂停期间什么都不会发出去；"附上提醒再发"追加的文字由服务器根据审核结果生成，不采用手机传回的内容。为了让审核结果先到，同一句话里的通知会等服务器处理完那条服药记录再发送。
 
+下面三张截图来自桌面端界面走查（`WalkthroughTest`，无界面运行真实的 App，连着本机的 Compose 服务）：离线约的号被抢后改约；联网后服药记录出现提醒，排队的"我没事"被暂停；附上提醒后发出。
+
+<p>
+<img src="docs/screenshots/2-online-slot-taken.png" width="32%">
+<img src="docs/screenshots/6-alert-and-paused-message.png" width="32%">
+<img src="docs/screenshots/8-sent-with-note.png" width="32%">
+</p>
+
 界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
 
 ## 测试
@@ -124,6 +132,7 @@ cd services/mocks   && uv run pytest -q                                         
 cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 22 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
 cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 2 项：真实 Ktor 客户端 → 三跳 → mocks / RAG
+cd client && MEDSYNC_WALKTHROUGH=1 ./gradlew :desktopApp:test   # 桌面端界面走查：点按钮、打字，截图存到 desktopApp/build/walkthrough
 ```
 
 ## 来源

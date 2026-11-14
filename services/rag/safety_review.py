@@ -348,7 +348,12 @@ class SafetyChecker:
                 rank, passage, at, said = hits[0]
                 section = SECTION_ZH.get(passage.field, passage.section)
                 who = said if said == mentioned.name else f"{said}（{mentioned.name}）"
-                summary = f"{reader.label['name']} 的说明书在「{section}」里提到了{who}。"
+                # Name the user's own word for the product; the label read for it may be a sibling product
+                # ("布洛芬" is read from one ibuprofen label), so say which.
+                label = reader.label["name"]
+                whose = f"{label} 的说明书" if same_name(label) == same_name(reader.name) \
+                    else f"{reader.name}（参照 {label} 说明书）"
+                summary = f"{whose}在「{section}」里提到了{who}。"
                 findings.append(Finding((1, *rank), summary, self._citation(reader.label, passage, at),
                                         passage.field in HIGH_SECTIONS, "label_warning"))
         if not findings:

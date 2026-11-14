@@ -52,15 +52,15 @@
 
 ## 引用了哪段原文
 
-- **P01** [moderate] Motrin IB Migraine 的说明书在「警告」里提到了抗凝药（华法林）。  
+- **P01** [moderate] 布洛芬（参照 Motrin IB Migraine 说明书）在「警告」里提到了抗凝药（华法林）。  
   Motrin IB Migraine · Warnings：“…you: are age 60 or older have had stomach ulcers or bleeding problems take a blood thinning (anticoagulant) or steroid drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while…”
-- **P02** [moderate] Motrin IB Migraine 的说明书在「用药前咨询医生或药师」里提到了阿司匹林。  
+- **P02** [moderate] 布洛芬（参照 Motrin IB Migraine 说明书）在「用药前咨询医生或药师」里提到了阿司匹林。  
   Motrin IB Migraine · Ask a doctor or pharmacist before use：“…r or pharmacist before use if you are under a doctor's care for any serious condition taking aspirin for heart attack or stroke, because ibuprofen may decrease this benefit of aspirin taking any other drug”
-- **P03** [moderate] Aleve Gelcaps 的说明书在「警告」里提到了布洛芬。  
+- **P03** [moderate] 萘普生（参照 Aleve Gelcaps 说明书）在「警告」里提到了布洛芬。  
   Aleve Gelcaps · Warnings：“…or steroid drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while using this product take more or for a longer time than directed Heart Attack and Stroke Warning NSAIDs, exc…”
-- **P03** [moderate] Motrin IB Migraine 的说明书在「警告」里提到了萘普生。  
+- **P03** [moderate] 布洛芬（参照 Motrin IB Migraine 说明书）在「警告」里提到了萘普生。  
   Motrin IB Migraine · Warnings：“…drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while using this product take more or for a longer time than directed Heart attack and stroke warning NSAIDs, except aspirin…”
-- **P04** [moderate] TYLENOL Regular Strength 的说明书在「用药前咨询医生或药师」里提到了华法林。  
+- **P04** [moderate] 泰诺（参照 TYLENOL Regular Strength 说明书）在「用药前咨询医生或药师」里提到了华法林。  
   TYLENOL Regular Strength · Ask a doctor or pharmacist before use：“Ask a doctor or pharmacist before use if the user is taking the blood thinning drug warfarin”
 - **P05** [high] 泰诺 和 Advil Dual Action with Acetaminophen 含有相同成分（对乙酰氨基酚），24 小时内一起用可能超过每日最大剂量；如果这是同一种药的两种叫法，可以忽略。  
   TYLENOL Regular Strength · Do not use：“Do not use with any other drug containing acetaminophen (prescription or nonprescription). If you are not sure whether a drug contains acetaminophen, ask a doctor or pharmacist. if you are allergic to acetaminophen or any of the inactive ingredients in this product”
@@ -68,21 +68,21 @@
   TYLENOL Regular Strength · Do not use：“Do not use with any other drug containing acetaminophen (prescription or nonprescription). If you are not sure whether a drug contains acetaminophen, ask a doctor or pharmacist. if you are allergic to acetaminophen or any of the inactive ingredients in this product”
 - **P07** [high] 苯海拉明 和 Benadryl Extra Strength Itch Relief 含有相同成分（苯海拉明），24 小时内一起用可能超过每日最大剂量；如果这是同一种药的两种叫法，可以忽略。  
   Benadryl · Do not use：“Do not use to make a child sleepy with any other product containing diphenhydramine, even one used on skin”
-- **P08** [moderate] Zoloft 的说明书在「警告与注意事项」里提到了非甾体抗炎药（布洛芬）。  
+- **P08** [moderate] 舍曲林（参照 Zoloft 说明书）在「警告与注意事项」里提到了非甾体抗炎药（布洛芬）。  
   Zoloft · Warnings and precautions：“…ncreased Risk of Bleeding: Concomitant use of aspirin, nonsteroidal anti-inflammatory drugs (NSAIDs), other antiplatelet drugs, warfarin, and other anticoagulants may increase this risk. ( 5.3 ) • Activation of Mania/Hypomania: Screen patients for bipolar disorder. ( 5.4 ) •”
-- **P09** [moderate] Zoloft 的说明书在「警告与注意事项」里提到了非甾体抗炎药（布洛芬）。  
+- **P09** [moderate] 舍曲林（参照 Zoloft 说明书）在「警告与注意事项」里提到了非甾体抗炎药（布洛芬）。  
   Zoloft · Warnings and precautions：“…ncreased Risk of Bleeding: Concomitant use of aspirin, nonsteroidal anti-inflammatory drugs (NSAIDs), other antiplatelet drugs, warfarin, and other anticoagulants may increase this risk. ( 5.3 ) • Activation of Mania/Hypomania: Screen patients for bipolar disorder. ( 5.4 ) •”
-- **P10** [moderate] Synthroid 的说明书在「药物相互作用」里提到了质子泵抑制剂（奥美拉唑）。  
+- **P10** [moderate] 优甲乐（参照 Synthroid 说明书）在「药物相互作用」里提到了质子泵抑制剂（奥美拉唑）。  
   Synthroid · Drug interactions：“…bsorption. Administer SYNTHROID at least 4 hours prior to these drugs or monitor TSH levels. Proton Pump Inhibitors Sucralfate Antacids (e.g., aluminum & magnesium hydroxides, simethicone) Gastric acidity is an essential requirement for adequate absorption of levothyroxine.”
-- **P11** [moderate] Synthroid 的说明书在「药物相互作用」里提到了碳酸钙。  
+- **P11** [moderate] 优甲乐（参照 Synthroid 说明书）在「药物相互作用」里提到了碳酸钙。  
   Synthroid · Drug interactions：“…potentially resulting in hypothyroidism. Drug or Drug Class Effect Phosphate Binders (e.g., calcium carbonate, ferrous sulfate, sevelamer, lanthanum) Phosphate binders may bind to levothyroxine. Administer SYNTHROID at least 4 hours apart from these agents. Orlistat Monitor pati…”
-- **P12** [moderate] Motrin IB Migraine 的说明书在「警告」里提到了糖皮质激素（泼尼松）。  
+- **P12** [moderate] 布洛芬（参照 Motrin IB Migraine 说明书）在「警告」里提到了糖皮质激素（泼尼松）。  
   Motrin IB Migraine · Warnings：“…older have had stomach ulcers or bleeding problems take a blood thinning (anticoagulant) or steroid drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while using this produc…”
-- **P13** [moderate] Zoloft 的说明书在「警告与注意事项」里提到了非甾体抗炎药（ADVIL COLD AND SINUS）。  
+- **P13** [moderate] 舍曲林（参照 Zoloft 说明书）在「警告与注意事项」里提到了非甾体抗炎药（ADVIL COLD AND SINUS）。  
   Zoloft · Warnings and precautions：“…ncreased Risk of Bleeding: Concomitant use of aspirin, nonsteroidal anti-inflammatory drugs (NSAIDs), other antiplatelet drugs, warfarin, and other anticoagulants may increase this risk. ( 5.3 ) • Activation of Mania/Hypomania: Screen patients for bipolar disorder. ( 5.4 ) •”
 - **P18** [moderate] Aleve 的说明书在「警告」里提到了抗凝药（华法林）。  
   Aleve · Warnings：“…you: are age 60 or older have had stomach ulcers or bleeding problems take a blood thinning (anticoagulant) or steroid drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while…”
-- **P19** [moderate] Motrin IB Migraine 的说明书在「警告」里提到了抗凝药（华法林）。  
+- **P19** [moderate] 布洛芬（参照 Motrin IB Migraine 说明书）在「警告」里提到了抗凝药（华法林）。  
   Motrin IB Migraine · Warnings：“…you: are age 60 or older have had stomach ulcers or bleeding problems take a blood thinning (anticoagulant) or steroid drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while…”
 - **P20** [high] 芬必得 和 Motrin IB 含有相同成分（布洛芬），24 小时内一起用可能超过每日最大剂量；如果这是同一种药的两种叫法，可以忽略。  
   Motrin IB Migraine · Warnings：“…or steroid drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while using this product take more or for a longer time than directed Heart attack and stroke warning NSAIDs, exc…”

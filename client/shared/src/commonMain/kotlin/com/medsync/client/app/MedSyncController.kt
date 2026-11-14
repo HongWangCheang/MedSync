@@ -89,7 +89,7 @@ class MedSyncController(
                 "用药问答需要联网检索说明书。离线时不回答，避免给出没有依据的建议。"
             else -> {
                 dao.insertAll(Planner.plan(routed.steps, deviceId(), now))  // one transaction for the whole plan
-                notice.value = if (_offline.value) "已保存在本机，联网后自动同步" else null
+                notice.value = if (_offline.value) SAVED_OFFLINE else null
                 if (!_offline.value) drain()
             }
         }
@@ -107,7 +107,10 @@ class MedSyncController(
 
     fun setOffline(value: Boolean) {
         _offline.value = value
-        if (!value) syncNow()
+        if (!value) {
+            if (notice.value == SAVED_OFFLINE) notice.value = null  // stale once the queue starts syncing
+            syncNow()
+        }
     }
 
     fun syncNow() = scope.launch { drain() }
@@ -141,6 +144,8 @@ class MedSyncController(
             .onFailure { notice.value = "同步出错：${it.message}" }
     }
 }
+
+private const val SAVED_OFFLINE = "已保存在本机，联网后自动同步"
 
 /** One controller per process, shared by the UI and background schedulers (e.g. Android WorkManager). */
 object MedSyncApp {

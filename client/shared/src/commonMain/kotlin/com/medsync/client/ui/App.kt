@@ -124,7 +124,10 @@ private fun ActionCard(
                     modifier = Modifier.weight(1f))
                 AssistChip(onClick = {}, label = { Text(stateLabel(state)) })
             }
-            Text(summary(action.tool, payload), style = MaterialTheme.typography.bodyMedium)
+            // A finished booking or message shows what actually happened (rescheduled date, warning appended),
+            // not what was planned.
+            val shown = remember(action.payloadJson, action.resultJson, action.state) { shown(action, payload) }
+            Text(summary(action.tool, shown), style = MaterialTheme.typography.bodyMedium)
             if (action.tool == "ask_pharmacist" && state == ActionState.DONE) {
                 PharmacistAnswer.parse(action.resultJson)?.let { answer -> AnswerView(answer) { onChoose(answer, it) } }
             }
@@ -159,7 +162,7 @@ private fun ActionCard(
                         OutlinedButton(onClick = { onDecision(null) }) { Text("取消这一步") }
                     }
                     options.forEach { option ->
-                        OutlinedButton(onClick = { onDecision(option) }) { Text(optionLabel(option)) }
+                        OutlinedButton(onClick = { onDecision(option) }) { Text(optionLabel(option, action.tool)) }
                     }
                 }
             }
@@ -226,6 +229,7 @@ private fun SafetyView(review: SafetyReview, onAsk: (String) -> Unit) {
                 review.status == "unresolved_medication" -> "安全审核：没认出「${review.medication}」，没有检查"
                 review.high -> "安全审核：有需要马上留意的提醒"
                 review.alerts.isNotEmpty() -> "安全审核：有用药提醒"
+                review.checked.isEmpty() && review.unresolved.isEmpty() -> "安全审核：最近一周没有其他服药记录，无需对照"
                 else -> "安全审核：说明书里没有找到相关提醒"
             }
             Text(title, style = MaterialTheme.typography.labelLarge)
@@ -302,10 +306,20 @@ private fun reasonLabel(reason: String): String = when (reason) {
     else -> reason
 }
 
-private fun optionLabel(option: JsonObject): String = when (option["decision"]?.jsonPrimitive?.contentOrNull) {
+private val OUTCOME_FIELDS = mapOf("book_appointment" to listOf("department", "date"),
+    "notify_family" to listOf("to", "message"))
+
+private fun shown(action: ActionEntity, payload: JsonObject): JsonObject {
+    val fields = OUTCOME_FIELDS[action.tool] ?: return payload
+    if (action.state != ActionState.DONE.name) return payload
+    val result = runCatching { Json.parseToJsonElement(action.resultJson!!).jsonObject }.getOrNull() ?: return payload
+    return JsonObject(payload + fields.mapNotNull { key -> (result[key] as? JsonPrimitive)?.let { key to it } })
+}
+
+private fun optionLabel(option: JsonObject, tool: String): String = when (option["decision"]?.jsonPrimitive?.contentOrNull) {
     "choose" -> "改约 ${option.str("date")}"
+    "confirm" -> if (tool == "notify_family") "照原样发送" else "仍然执行"
     "send_with_note" -> "附上提醒再发"
-    "confirm" -> "仍然执行"
     "cancel" -> "取消"
     else -> option.toString()
 }
