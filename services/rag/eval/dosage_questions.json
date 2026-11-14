@@ -1,0 +1,211 @@
+[
+  {
+    "id": "D01",
+    "category": "dosage",
+    "request": {
+      "question": "How many caplets can adults take and how often?",
+      "label_id": "22d94fd9-9488-a812-e063-6394a90a7ffc",
+      "version": "11"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1"
+    ],
+    "gold_excerpt": "every 6 hours"
+  },
+  {
+    "id": "D02",
+    "category": "dosage",
+    "request": {
+      "question": "How often can adults take Advil tablets?",
+      "label_id": "5f675a2c-cd5d-ac5f-e063-6294a90abdc7",
+      "version": "39"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1",
+      "dosage_and_administration:1:2",
+      "dosage_and_administration:2:1",
+      "dosage_and_administration:3:1",
+      "dosage_and_administration:4:1"
+    ],
+    "gold_excerpt": "every 4 to 6 hours"
+  },
+  {
+    "id": "D03",
+    "category": "dosage",
+    "request": {
+      "question": "How many capsules can an adult take per day?",
+      "label_id": "41a5a9a1-61a6-f771-e063-6294a90aed87",
+      "version": "6"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1"
+    ],
+    "gold_excerpt": "once daily"
+  },
+  {
+    "id": "D04",
+    "category": "dosage",
+    "request": {
+      "question": "How many days is one course of treatment?",
+      "label_id": "5d19143c-93be-ae16-e063-6294a90a19a6",
+      "version": "18"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1",
+      "dosage_and_administration:1:2"
+    ],
+    "gold_excerpt": "14 days"
+  },
+  {
+    "id": "D05",
+    "category": "dosage",
+    "request": {
+      "question": "What is the daily dose for adults?",
+      "label_id": "f5db88bd-8ea6-0df0-e053-2995a90a18b4",
+      "version": "3"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1"
+    ],
+    "gold_excerpt": "1 tablet daily"
+  },
+  {
+    "id": "D06",
+    "category": "dosage",
+    "request": {
+      "question": "What is the most I can take in one day?",
+      "label_id": "4526b265-424f-3e71-e063-6294a90a21a8",
+      "version": "19"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1"
+    ],
+    "gold_excerpt": "3 tablets in a 24-hour period"
+  },
+  {
+    "id": "D07",
+    "category": "dosage",
+    "request": {
+      "question": "How many times can I take it in 24 hours?",
+      "label_id": "21716a1f-3636-bdde-e063-6394a90aab01",
+      "version": "10"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1"
+    ],
+    "gold_excerpt": "6 times in 24 hours"
+  },
+  {
+    "id": "D08",
+    "category": "dosage",
+    "request": {
+      "question": "What dose is used for patients who weigh 15 to 30 kg?",
+      "label_id": "81569d26-e9b3-4c1d-ac34-8a4cf5b4a98b",
+      "version": "37"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1",
+      "dosage_and_administration:1:2",
+      "dosage_and_administration:1:3"
+    ],
+    "gold_excerpt": "0.15 mg"
+  },
+  {
+    "id": "D09",
+    "category": "dosage",
+    "request": {
+      "question": "What is the recommended dosage range for adults?",
+      "label_id": "dd011a82-7356-4b83-86c4-b21cd9138fc6",
+      "version": "8"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1",
+      "dosage_and_administration:1:3",
+      "dosage_and_administration:1:4"
+    ],
+    "gold_excerpt": "10 mg to 80 mg"
+  },
+  {
+    "id": "D10",
+    "category": "dosage",
+    "request": {
+      "question": "What is the maximum daily dosage for major depressive disorder?",
+      "label_id": "fd27d2f5-1ade-4dbf-b2d2-bb98daf7da3a",
+      "version": "7"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1",
+      "dosage_and_administration:1:3",
+      "dosage_and_administration:1:4"
+    ],
+    "gold_excerpt": "200 mg"
+  },
+  {
+    "id": "D11",
+    "category": "dosage",
+    "request": {
+      "question": "When should it be taken in relation to breakfast?",
+      "label_id": "b85ab7fa-ba96-43cd-b736-44b3924e644c",
+      "version": "1537"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1",
+      "dosage_and_administration:1:2"
+    ],
+    "gold_excerpt": "before breakfast"
+  },
+  {
+    "id": "D12",
+    "category": "dosage",
+    "request": {
+      "question": "How often can I repeat a dose for my child?",
+      "label_id": "22ecca9c-274b-73c3-e063-6394a90a2a66",
+      "version": "9"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:2"
+    ],
+    "gold_excerpt": "every 6-8 hours"
+  },
+  {
+    "id": "D13",
+    "category": "dosage",
+    "request": {
+      "question": "How many tablets can I take in 24 hours?",
+      "label_id": "4a227807-355e-b37d-e063-6394a90a7639",
+      "version": "20"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1"
+    ],
+    "gold_excerpt": "24 hours"
+  },
+  {
+    "id": "D14",
+    "category": "dosage",
+    "request": {
+      "question": "How many sprays should go in each nostril?",
+      "label_id": "85fd731d-433f-4eba-aad8-6eda4550138e",
+      "version": "11"
+    },
+    "expected": "answered",
+    "relevant_passages": [
+      "dosage_and_administration:1:1",
+      "dosage_and_administration:1:2"
+    ],
+    "gold_excerpt": "each nostril"
+  }
+]

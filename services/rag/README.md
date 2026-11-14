@@ -28,6 +28,8 @@ curl -X POST http://127.0.0.1:8765/v1/answer \
 
 - [快照](data/openfda_labels.json)包含 48 条版本记录，采集于 2026-11-13。数据取自 openFDA 药品标签 API 的公开样本，保留原始 ID、版本和选定章节。样本有意包含同名产品与不同厂商，覆盖范围以快照为准。
 - [openFDA 官方下载](https://open.fda.gov/apis/drug/label/download/)提供同结构的批量 JSON。可用 `python backend/label_corpus.py --output /path/to/snapshot.json /path/to/drug-label.json.zip` 生成自定义快照，再用 `MEDTRACK_CORPUS=/path/to/snapshot.json` 启动。当前向量索引放在内存，建议先用 `--selection backend/data/openfda_labels.json` 或另一份同结构清单限定目标版本。
+- **用法用量章节（MedSync 补采）**：MedTrack 原快照没有保留 `dosage_and_administration`（OTC 的 "Directions" 和处方药的用法用量都在这个字段）。`python backfill_sections.py dosage_and_administration` 按快照里的 id 和版本从 openFDA API 补采这一个字段，只有版本一致才写入，出处记录在快照的 `backfills` 里。48 个版本全部补上，段落数从 917 增加到 1020。
+- [14 道用法用量题](eval/dosage_questions.json)：`python -B evaluate.py --questions eval/dosage_questions.json --output-dir eval/dosage` 写出 [报告](eval/dosage/REPORT.md)。补采前三种模式都是 0/14；补采后关键词 9/14、混合 13/14、重排 14/14。补采后固定 50 题的答对数不变，混合检索的 Recall@5 从 1.000 降到 0.969。
 - [50 道固定题](eval/questions.json)包含 32 道可回答题和 18 道同名、无匹配及证据不足题。运行 `python -B backend/evaluate.py` 会重写 [结果报告](eval/REPORT.md) 和 [逐题 JSON](eval/results.json)。运行 `python -B -m unittest discover -s backend -v` 执行回归测试。模型需要已下载或可联网下载。
 - 重排阈值只在 [30 道验证题](eval/validation.json)上选定。验证题使用的说明书与 50 道测试题不重叠，运行 `python -B backend/tune_rerank.py` 可复现阈值搜索。重排模型也是按验证集选的：MiniLM-L-6 通过 27/30，bge-reranker-base 通过 26/30 且慢约 5 倍。可用 `MEDTRACK_RERANK_MODEL`、`MEDTRACK_RERANK_MIN_SCORE`、`MEDTRACK_RERANK_POOL` 覆盖默认值。
 - 三种模式共享同一套题目、标签和摘录逻辑。端到端手机网络、首次加载和外部模型调用延迟不在评测计时内。

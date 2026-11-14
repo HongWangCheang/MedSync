@@ -1,10 +1,10 @@
 {
   "metadata": {
     "labels": 48,
-    "passages": 917,
+    "passages": 1020,
     "repeats": 3,
     "platform": "Darwin arm64, Python 3.12.16",
-    "corpus_sha256": "9e3c9778b8a003c4107369554f8310c62f0a7e4ee48021a0da57af0bc51d865f",
+    "corpus_sha256": "e80137d1d11381a34b28f185b6f5d16921eb1b20ac89e0379e4d0406d1087565",
     "questions_sha256": "5e22d2123ca0c076eedbfea723de93d6e48c6649c16a1fd491c3884bede5a516"
   },
   "metrics": {
@@ -13,8 +13,8 @@
       "citation_accuracy": 0.9090909090909091,
       "correct_citations": 10,
       "total_citations": 11,
-      "p95_ms": 1.52075,
-      "selected_label_p95_ms": 1.572917,
+      "p95_ms": 3.288542,
+      "selected_label_p95_ms": 4.044959,
       "passed": 28,
       "by_category": {
         "answerable": 10,
@@ -24,12 +24,12 @@
       }
     },
     "hybrid": {
-      "recall_at_5": 1.0,
-      "citation_accuracy": 0.5925925925925926,
+      "recall_at_5": 0.96875,
+      "citation_accuracy": 0.5714285714285714,
       "correct_citations": 16,
-      "total_citations": 27,
-      "p95_ms": 6.347125,
-      "selected_label_p95_ms": 6.408375,
+      "total_citations": 28,
+      "p95_ms": 14.504625,
+      "selected_label_p95_ms": 14.760583,
       "passed": 32,
       "by_category": {
         "answerable": 16,
@@ -43,8 +43,8 @@
       "citation_accuracy": 0.8571428571428571,
       "correct_citations": 18,
       "total_citations": 21,
-      "p95_ms": 200.7165,
-      "selected_label_p95_ms": 202.250667,
+      "p95_ms": 255.453458,
+      "selected_label_p95_ms": 263.413709,
       "passed": 36,
       "by_category": {
         "answerable": 18,
@@ -67,9 +67,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.449917,
-          1.107917,
-          1.293667
+          1.198417,
+          1.038667,
+          1.012917
         ]
       },
       "hybrid": {
@@ -89,9 +89,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          5.412625,
-          5.062875,
-          5.026375
+          5.234041,
+          5.293208,
+          4.995083
         ]
       },
       "rerank": {
@@ -111,9 +111,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          97.788625,
-          96.862625,
-          94.208875
+          104.719958,
+          101.095,
+          98.979667
         ]
       }
     },
@@ -121,7 +121,8 @@
       "keyword": {
         "status": "answered",
         "retrieved": [
-          "active_ingredient:1:1"
+          "active_ingredient:1:1",
+          "dosage_and_administration:1:1"
         ],
         "citations": [
           "active_ingredient:1:1"
@@ -131,19 +132,19 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.298375,
-          1.238791,
-          1.150292
+          1.349125,
+          1.28925,
+          1.088833
         ]
       },
       "hybrid": {
         "status": "answered",
         "retrieved": [
           "active_ingredient:1:1",
+          "dosage_and_administration:1:1",
           "purpose:1:1",
           "do_not_use:1:1",
-          "inactive_ingredient:1:1",
-          "indications_and_usage:1:1"
+          "inactive_ingredient:1:1"
         ],
         "citations": [
           "active_ingredient:1:1"
@@ -153,9 +154,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          4.494792,
-          4.290583,
-          4.528375
+          4.362791,
+          4.048042,
+          4.499
         ]
       },
       "rerank": {
@@ -165,7 +166,7 @@
           "do_not_use:1:1",
           "inactive_ingredient:1:1",
           "warnings:1:1",
-          "warnings:1:2"
+          "dosage_and_administration:1:1"
         ],
         "citations": [
           "active_ingredient:1:1"
@@ -175,9 +176,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          91.086667,
-          91.137208,
-          90.85275
+          96.709,
+          96.016083,
+          96.228584
         ]
       }
     },
@@ -199,9 +200,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.572917,
-          1.301666,
-          1.41825
+          1.59775,
+          1.370416,
+          1.350833
         ]
       },
       "hybrid": {
@@ -221,9 +222,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          6.243667,
-          5.994292,
-          6.235125
+          6.52575,
+          6.88275,
+          6.059209
         ]
       },
       "rerank": {
@@ -243,9 +244,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          102.70675,
-          104.094292,
-          98.659333
+          107.106833,
+          106.326333,
+          103.32175
         ]
       }
     },
@@ -259,9 +260,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          1.150125,
-          1.050333,
-          0.92225
+          1.204375,
+          1.133125,
+          0.920875
         ]
       },
       "hybrid": {
@@ -281,9 +282,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          6.337209,
-          5.34275,
-          5.371333
+          5.49875,
+          5.215458,
+          5.729041
         ]
       },
       "rerank": {
@@ -301,9 +302,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          98.317167,
-          99.129167,
-          95.966833
+          103.3015,
+          103.378666,
+          100.878375
         ]
       }
     },
@@ -319,9 +320,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          1.305333,
-          1.010875,
-          1.172208
+          1.255416,
+          1.068959,
+          1.061875
         ]
       },
       "hybrid": {
@@ -339,9 +340,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          4.932917,
-          4.974709,
-          6.131583
+          5.030833,
+          4.956917,
+          4.729292
         ]
       },
       "rerank": {
@@ -349,9 +350,9 @@
         "retrieved": [
           "storage_and_handling:1:1",
           "warnings:1:1",
+          "dosage_and_administration:1:1",
           "warnings:1:2",
-          "keep_out_of_reach_of_children:1:1",
-          "inactive_ingredient:1:1"
+          "keep_out_of_reach_of_children:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -359,9 +360,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          108.248708,
-          106.876416,
-          104.798791
+          109.430041,
+          109.509833,
+          109.942125
         ]
       }
     },
@@ -379,9 +380,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.23725,
-          1.06125,
-          1.018375
+          1.265875,
+          1.22525,
+          1.04375
         ]
       },
       "hybrid": {
@@ -399,19 +400,19 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          4.484333,
-          4.168541,
-          4.225666
+          4.362292,
+          4.216208,
+          4.266125
         ]
       },
       "rerank": {
         "status": "no_evidence",
         "retrieved": [
           "inactive_ingredient:1:1",
+          "dosage_and_administration:1:1",
           "keep_out_of_reach_of_children:1:1",
           "warnings:1:2",
-          "warnings:1:1",
-          "purpose:1:1"
+          "warnings:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -419,9 +420,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          106.209875,
-          103.875084,
-          109.320834
+          107.555125,
+          123.492084,
+          139.560125
         ]
       }
     },
@@ -440,9 +441,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.517416,
-          1.391,
-          1.232084
+          1.68425,
+          1.38975,
+          1.334208
         ]
       },
       "hybrid": {
@@ -462,9 +463,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          4.592375,
-          4.540625,
-          4.569
+          5.304292,
+          6.190583,
+          6.543083
         ]
       },
       "rerank": {
@@ -482,9 +483,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          107.437459,
-          107.673125,
-          105.081792
+          117.603416,
+          112.377125,
+          171.909667
         ]
       }
     },
@@ -500,9 +501,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.292458,
-          1.154041,
-          1.110667
+          12.859333,
+          3.455708,
+          1.374958
         ]
       },
       "hybrid": {
@@ -522,9 +523,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          5.638208,
-          6.051917,
-          4.944417
+          25.3725,
+          9.992042,
+          9.878542
         ]
       },
       "rerank": {
@@ -544,9 +545,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          87.233666,
-          89.636041,
-          84.443625
+          242.298958,
+          149.407166,
+          150.181708
         ]
       }
     },
@@ -563,9 +564,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          1.628333,
-          1.1735,
-          1.144916
+          2.110958,
+          1.974,
+          1.274333
         ]
       },
       "hybrid": {
@@ -583,9 +584,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          6.266875,
-          6.411125,
-          5.973
+          9.5805,
+          9.078625,
+          7.8275
         ]
       },
       "rerank": {
@@ -605,9 +606,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          92.518375,
-          91.429791,
-          90.158667
+          118.41075,
+          117.067542,
+          103.733208
         ]
       }
     },
@@ -615,6 +616,7 @@
       "keyword": {
         "status": "no_evidence",
         "retrieved": [
+          "dosage_and_administration:1:1",
           "indications_and_usage:1:1",
           "do_not_use:1:1",
           "stop_use:1:1",
@@ -626,9 +628,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          1.2835,
-          1.292375,
-          1.147917
+          1.666125,
+          1.685416,
+          1.346916
         ]
       },
       "hybrid": {
@@ -636,21 +638,21 @@
         "retrieved": [
           "do_not_use:1:1",
           "indications_and_usage:1:1",
+          "dosage_and_administration:1:1",
           "warnings:1:1",
-          "stop_use:1:1",
-          "purpose:1:1"
+          "stop_use:1:1"
         ],
         "citations": [
           "do_not_use:1:1"
         ],
         "candidate_keys": [],
         "citation_hits": 0,
-        "recall": 1.0,
+        "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          5.356583,
-          5.48775,
-          5.535583
+          5.96175,
+          5.932792,
+          5.500667
         ]
       },
       "rerank": {
@@ -670,9 +672,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          89.865167,
-          90.827792,
-          87.417
+          98.761458,
+          97.772334,
+          97.728667
         ]
       }
     },
@@ -681,8 +683,8 @@
         "status": "answered",
         "retrieved": [
           "active_ingredient:3:1",
-          "active_ingredient:4:1",
           "active_ingredient:1:1",
+          "active_ingredient:4:1",
           "active_ingredient:2:1",
           "inactive_ingredient:3:1"
         ],
@@ -694,9 +696,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.3675,
-          1.090292,
-          1.127084
+          1.877834,
+          1.472959,
+          1.317791
         ]
       },
       "hybrid": {
@@ -716,9 +718,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          5.600708,
-          4.660583,
-          4.875583
+          5.574083,
+          5.717208,
+          5.47225
         ]
       },
       "rerank": {
@@ -738,9 +740,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          200.713209,
-          204.261,
-          196.216792
+          255.453458,
+          252.066291,
+          245.775291
         ]
       }
     },
@@ -756,9 +758,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          1.268375,
-          1.271458,
-          1.283542
+          1.749917,
+          1.711,
+          1.440167
         ]
       },
       "hybrid": {
@@ -778,9 +780,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          5.814167,
-          5.534542,
-          5.590333
+          5.980667,
+          5.89775,
+          6.41
         ]
       },
       "rerank": {
@@ -790,7 +792,7 @@
           "warnings:1:3",
           "warnings:1:2",
           "ask_doctor_or_pharmacist:1:1",
-          "pregnancy_or_breast_feeding:1:1"
+          "dosage_and_administration:1:2"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -798,9 +800,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          202.250667,
-          201.78225,
-          202.291958
+          273.999209,
+          263.413709,
+          262.049208
         ]
       }
     },
@@ -817,9 +819,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.629333,
-          1.140917,
-          1.107625
+          1.531167,
+          1.187167,
+          1.32025
         ]
       },
       "hybrid": {
@@ -839,9 +841,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          4.816959,
-          5.155417,
-          4.532083
+          5.283,
+          5.58525,
+          5.12825
         ]
       },
       "rerank": {
@@ -849,9 +851,9 @@
         "retrieved": [
           "stop_use:1:1",
           "warnings:1:4",
+          "dosage_and_administration:1:2",
           "inactive_ingredient:3:1",
-          "warnings:1:1",
-          "purpose:1:1"
+          "warnings:1:1"
         ],
         "citations": [
           "stop_use:1:1"
@@ -861,9 +863,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          196.370042,
-          195.380834,
-          193.853583
+          245.259667,
+          245.571125,
+          296.581958
         ]
       }
     },
@@ -880,9 +882,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          1.282958,
-          1.114834,
-          1.039875
+          19.45375,
+          9.871708,
+          4.044959
         ]
       },
       "hybrid": {
@@ -900,9 +902,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          5.639,
-          5.318125,
-          5.129459
+          17.564708,
+          11.409458,
+          8.528792
         ]
       },
       "rerank": {
@@ -922,9 +924,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          126.408708,
-          124.702958,
-          124.294542
+          160.67025,
+          140.555,
+          136.892667
         ]
       }
     },
@@ -946,9 +948,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.785083,
-          1.287834,
-          1.19175
+          1.49775,
+          1.207209,
+          1.715834
         ]
       },
       "hybrid": {
@@ -968,9 +970,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          5.943375,
-          5.282333,
-          5.220542
+          5.615166,
+          6.306625,
+          6.074458
         ]
       },
       "rerank": {
@@ -990,9 +992,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          126.433041,
-          127.780334,
-          128.285584
+          140.793875,
+          134.599125,
+          137.127417
         ]
       }
     },
@@ -1009,9 +1011,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.844208,
-          1.495875,
-          1.358416
+          1.731583,
+          1.571542,
+          1.220208
         ]
       },
       "hybrid": {
@@ -1031,9 +1033,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          6.029584,
-          5.818834,
-          5.759625
+          6.962209,
+          5.734208,
+          6.055833
         ]
       },
       "rerank": {
@@ -1051,9 +1053,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          102.624708,
-          101.636833,
-          104.248541
+          112.970292,
+          114.905541,
+          112.554709
         ]
       }
     },
@@ -1063,6 +1065,7 @@
         "retrieved": [
           "storage_and_handling:1:1",
           "inactive_ingredient:1:1",
+          "dosage_and_administration:1:1",
           "purpose:1:1"
         ],
         "citations": [],
@@ -1071,9 +1074,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.532333,
-          1.255041,
-          1.170958
+          1.831542,
+          1.342709,
+          1.319208
         ]
       },
       "hybrid": {
@@ -1081,9 +1084,9 @@
         "retrieved": [
           "inactive_ingredient:1:1",
           "storage_and_handling:1:1",
+          "dosage_and_administration:1:1",
           "purpose:1:1",
-          "active_ingredient:1:1",
-          "warnings:1:1"
+          "active_ingredient:1:1"
         ],
         "citations": [
           "inactive_ingredient:1:1"
@@ -1093,9 +1096,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          5.866959,
-          5.26675,
-          5.30425
+          6.093458,
+          6.681708,
+          6.123208
         ]
       },
       "rerank": {
@@ -1103,9 +1106,9 @@
         "retrieved": [
           "inactive_ingredient:1:1",
           "storage_and_handling:1:1",
+          "dosage_and_administration:1:1",
           "purpose:1:1",
-          "active_ingredient:1:1",
-          "do_not_use:1:1"
+          "active_ingredient:1:1"
         ],
         "citations": [
           "inactive_ingredient:1:1"
@@ -1115,9 +1118,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          101.57075,
-          100.579875,
-          102.5685
+          118.902666,
+          116.101333,
+          163.661167
         ]
       }
     },
@@ -1133,9 +1136,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.366083,
-          1.167125,
-          1.134417
+          4.162,
+          3.288542,
+          4.505584
         ]
       },
       "hybrid": {
@@ -1153,9 +1156,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          5.413958,
-          5.350125,
-          4.791292
+          8.595458,
+          17.48225,
+          14.760583
         ]
       },
       "rerank": {
@@ -1173,9 +1176,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          49.479958,
-          50.192541,
-          49.31075
+          65.269584,
+          58.347167,
+          57.015791
         ]
       }
     },
@@ -1189,9 +1192,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          1.379958,
-          1.057334,
-          1.010416
+          1.607042,
+          1.745125,
+          1.159625
         ]
       },
       "hybrid": {
@@ -1211,9 +1214,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          4.585125,
-          4.06475,
-          4.122375
+          5.263959,
+          6.480958,
+          4.984042
         ]
       },
       "rerank": {
@@ -1231,9 +1234,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          44.100125,
-          44.4345,
-          44.492833
+          52.637209,
+          51.760416,
+          51.472209
         ]
       }
     },
@@ -1252,9 +1255,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.235084,
-          1.073334,
-          1.074708
+          1.515375,
+          1.231542,
+          1.312875
         ]
       },
       "hybrid": {
@@ -1274,9 +1277,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          6.107625,
-          6.879666,
-          5.156583
+          6.254875,
+          6.275833,
+          5.784959
         ]
       },
       "rerank": {
@@ -1296,9 +1299,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          97.534542,
-          96.704708,
-          94.711916
+          110.137125,
+          107.861125,
+          111.316167
         ]
       }
     },
@@ -1312,9 +1315,9 @@
         "recall": 0.0,
         "passed": false,
         "latency_ms": [
-          1.331791,
-          1.012583,
-          1.005917
+          1.312917,
+          1.581041,
+          1.040833
         ]
       },
       "hybrid": {
@@ -1334,9 +1337,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          4.299125,
-          3.927084,
-          4.512958
+          4.60925,
+          6.086625,
+          4.827375
         ]
       },
       "rerank": {
@@ -1344,9 +1347,9 @@
         "retrieved": [
           "when_using:1:1",
           "warnings:1:2",
+          "dosage_and_administration:1:1",
           "do_not_use:1:1",
-          "indications_and_usage:1:1",
-          "purpose:1:1"
+          "indications_and_usage:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -1354,9 +1357,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          86.061791,
-          86.271667,
-          85.8825
+          98.254708,
+          98.873791,
+          95.682125
         ]
       }
     },
@@ -1373,9 +1376,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.110042,
-          1.009584,
-          0.989417
+          1.49175,
+          1.362459,
+          1.105
         ]
       },
       "hybrid": {
@@ -1393,9 +1396,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          5.001792,
-          4.519958,
-          4.889541
+          5.020709,
+          4.850125,
+          5.149958
         ]
       },
       "rerank": {
@@ -1413,9 +1416,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          97.192625,
-          96.641083,
-          94.078875
+          105.395625,
+          105.433458,
+          105.132
         ]
       }
     },
@@ -1437,9 +1440,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.474292,
-          1.270083,
-          1.264041
+          1.718042,
+          1.577166,
+          1.8035
         ]
       },
       "hybrid": {
@@ -1459,9 +1462,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          5.260791,
-          4.705,
-          4.947375
+          5.489542,
+          6.049417,
+          5.681583
         ]
       },
       "rerank": {
@@ -1481,9 +1484,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          93.650792,
-          97.41475,
-          96.614875
+          111.77925,
+          106.877709,
+          106.076375
         ]
       }
     },
@@ -1493,6 +1496,7 @@
         "retrieved": [
           "purpose:1:1",
           "active_ingredient:1:1",
+          "dosage_and_administration:1:1",
           "indications_and_usage:1:1"
         ],
         "citations": [
@@ -1503,9 +1507,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.413708,
-          1.025833,
-          0.992625
+          1.438333,
+          1.31225,
+          1.233333
         ]
       },
       "hybrid": {
@@ -1514,8 +1518,8 @@
           "active_ingredient:1:1",
           "purpose:1:1",
           "indications_and_usage:1:1",
-          "when_using:1:1",
-          "inactive_ingredient:1:1"
+          "dosage_and_administration:1:1",
+          "when_using:1:1"
         ],
         "citations": [
           "active_ingredient:1:1"
@@ -1525,9 +1529,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          4.894542,
-          6.674458,
-          6.27175
+          5.180083,
+          5.236417,
+          5.363875
         ]
       },
       "rerank": {
@@ -1547,9 +1551,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          77.08875,
-          78.024958,
-          76.185208
+          99.765833,
+          110.932625,
+          91.744958
         ]
       }
     },
@@ -1567,9 +1571,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.261708,
-          1.069875,
-          1.063666
+          1.534625,
+          1.664083,
+          1.235916
         ]
       },
       "hybrid": {
@@ -1589,9 +1593,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          4.759916,
-          4.361084,
-          4.314333
+          5.229167,
+          5.902542,
+          4.806291
         ]
       },
       "rerank": {
@@ -1601,7 +1605,7 @@
           "keep_out_of_reach_of_children:1:1",
           "do_not_use:1:1",
           "warnings:1:1",
-          "warnings:1:2"
+          "dosage_and_administration:1:1"
         ],
         "citations": [
           "storage_and_handling:1:1"
@@ -1611,9 +1615,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          97.402875,
-          96.171375,
-          98.755417
+          105.347416,
+          103.768458,
+          103.35
         ]
       }
     },
@@ -1633,9 +1637,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.316959,
-          1.06225,
-          1.026
+          1.633375,
+          1.222709,
+          1.175125
         ]
       },
       "hybrid": {
@@ -1655,9 +1659,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          5.146375,
-          6.409375,
-          6.058666
+          5.163375,
+          5.578542,
+          4.954834
         ]
       },
       "rerank": {
@@ -1677,9 +1681,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          97.975833,
-          97.322333,
-          95.103
+          106.52325,
+          105.417208,
+          103.765125
         ]
       }
     },
@@ -1697,9 +1701,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.424667,
-          1.324125,
-          1.12375
+          1.506708,
+          1.370542,
+          1.261834
         ]
       },
       "hybrid": {
@@ -1719,9 +1723,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          4.815583,
-          4.716542,
-          4.748541
+          5.264583,
+          5.016834,
+          5.016917
         ]
       },
       "rerank": {
@@ -1741,9 +1745,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          92.195959,
-          90.264083,
-          89.127042
+          108.945375,
+          109.817958,
+          108.978084
         ]
       }
     },
@@ -1752,6 +1756,7 @@
         "status": "no_evidence",
         "retrieved": [
           "indications_and_usage:1:1",
+          "dosage_and_administration:1:1",
           "warnings:1:1"
         ],
         "citations": [],
@@ -1760,29 +1765,31 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.361208,
-          1.107833,
-          1.063375
+          2.533666,
+          1.707709,
+          1.586709
         ]
       },
       "hybrid": {
-        "status": "no_evidence",
+        "status": "answered",
         "retrieved": [
+          "dosage_and_administration:1:1",
           "indications_and_usage:1:1",
           "warnings:1:1",
           "ask_doctor_or_pharmacist:1:1",
-          "ask_doctor:1:1",
-          "pregnancy_or_breast_feeding:1:1"
+          "ask_doctor:1:1"
         ],
-        "citations": [],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
         "candidate_keys": [],
         "citation_hits": 0,
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          4.792708,
-          4.70725,
-          4.37475
+          5.8815,
+          5.712583,
+          5.786875
         ]
       },
       "rerank": {
@@ -1791,8 +1798,8 @@
           "warnings:1:1",
           "indications_and_usage:1:1",
           "do_not_use:1:1",
-          "stop_use:1:1",
-          "keep_out_of_reach_of_children:1:1"
+          "dosage_and_administration:1:1",
+          "stop_use:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -1800,9 +1807,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          90.635416,
-          89.614458,
-          87.705208
+          140.047041,
+          147.773167,
+          103.697875
         ]
       }
     },
@@ -1812,7 +1819,8 @@
         "retrieved": [
           "keep_out_of_reach_of_children:1:1",
           "warnings:1:4",
-          "storage_and_handling:1:1"
+          "storage_and_handling:1:1",
+          "dosage_and_administration:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -1820,9 +1828,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          1.45575,
-          1.172958,
-          1.068709
+          1.569542,
+          2.190542,
+          2.006334
         ]
       },
       "hybrid": {
@@ -1831,8 +1839,8 @@
           "storage_and_handling:1:1",
           "warnings:1:4",
           "keep_out_of_reach_of_children:1:1",
-          "warnings:1:2",
-          "when_using:1:1"
+          "dosage_and_administration:1:1",
+          "warnings:1:2"
         ],
         "citations": [
           "storage_and_handling:1:1"
@@ -1842,9 +1850,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          6.019083,
-          5.7145,
-          5.527167
+          6.673375,
+          7.833417,
+          6.448334
         ]
       },
       "rerank": {
@@ -1864,9 +1872,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          123.665958,
-          122.600916,
-          121.845834
+          151.3655,
+          148.639667,
+          156.886667
         ]
       }
     },
@@ -1888,9 +1896,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.573709,
-          1.438875,
-          1.402125
+          2.311584,
+          2.271,
+          3.083709
         ]
       },
       "hybrid": {
@@ -1899,8 +1907,8 @@
           "stop_use:1:1",
           "warnings:1:3",
           "indications_and_usage:1:1",
-          "stop_use:1:2",
-          "warnings:1:1"
+          "warnings:1:1",
+          "stop_use:1:2"
         ],
         "citations": [
           "stop_use:1:1"
@@ -1910,9 +1918,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          5.981084,
-          5.778584,
-          6.04075
+          16.493958,
+          16.464667,
+          14.504625
         ]
       },
       "rerank": {
@@ -1932,9 +1940,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          124.959916,
-          125.220167,
-          125.884708
+          199.531291,
+          164.07625,
+          154.900333
         ]
       }
     },
@@ -1955,9 +1963,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.296667,
-          1.139541,
-          1.1145
+          1.499375,
+          1.279917,
+          1.368875
         ]
       },
       "hybrid": {
@@ -1977,9 +1985,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          5.40425,
-          5.121833,
-          4.552292
+          5.36425,
+          4.869041,
+          4.709375
         ]
       },
       "rerank": {
@@ -1999,9 +2007,9 @@
         "recall": 1.0,
         "passed": false,
         "latency_ms": [
-          109.031958,
-          108.994291,
-          107.173958
+          121.04175,
+          147.79975,
+          138.534791
         ]
       }
     },
@@ -2022,9 +2030,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          1.416459,
-          1.344958,
-          1.151667
+          1.676291,
+          2.316167,
+          2.874875
         ]
       },
       "hybrid": {
@@ -2034,7 +2042,7 @@
           "how_supplied:1:1",
           "dosage_forms_and_strengths:1:1",
           "description:1:2",
-          "adverse_reactions:1:4"
+          "dosage_and_administration:1:3"
         ],
         "citations": [
           "how_supplied:1:2"
@@ -2044,9 +2052,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          4.360833,
-          4.518458,
-          4.526208
+          8.568625,
+          5.63675,
+          6.710375
         ]
       },
       "rerank": {
@@ -2056,7 +2064,7 @@
           "how_supplied:1:1",
           "description:1:2",
           "dosage_forms_and_strengths:1:1",
-          "dosage_forms_and_strengths:1:2"
+          "dosage_and_administration:1:3"
         ],
         "citations": [
           "how_supplied:1:2"
@@ -2066,9 +2074,9 @@
         "recall": 1.0,
         "passed": true,
         "latency_ms": [
-          379.903083,
-          376.910833,
-          366.276
+          512.614167,
+          480.223916,
+          375.9125
         ]
       }
     },
@@ -2085,9 +2093,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.52075,
-          1.238666,
-          1.329458
+          2.034667,
+          1.4495,
+          1.545791
         ]
       },
       "hybrid": {
@@ -2102,9 +2110,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.388708,
-          1.23125,
-          1.177167
+          1.627917,
+          1.31375,
+          1.214542
         ]
       },
       "rerank": {
@@ -2119,9 +2127,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.180625,
-          1.164041,
-          1.342708
+          1.16425,
+          1.300916,
+          1.488375
         ]
       }
     },
@@ -2140,9 +2148,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.368333,
-          1.203375,
-          1.102958
+          1.535333,
+          1.25225,
+          1.178917
         ]
       },
       "hybrid": {
@@ -2159,9 +2167,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.139209,
-          1.134875,
-          1.141709
+          1.165334,
+          1.164791,
+          1.258583
         ]
       },
       "rerank": {
@@ -2178,9 +2186,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.237667,
-          1.330917,
-          1.128167
+          1.332167,
+          1.125959,
+          1.141167
         ]
       }
     },
@@ -2200,9 +2208,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.208459,
-          1.129375,
-          1.119416
+          1.257583,
+          1.157375,
+          1.297625
         ]
       },
       "hybrid": {
@@ -2220,9 +2228,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.247833,
-          1.277083,
-          1.138167
+          1.318375,
+          1.281334,
+          1.211708
         ]
       },
       "rerank": {
@@ -2240,9 +2248,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.126292,
-          1.120417,
-          1.137917
+          1.193458,
+          1.20275,
+          1.369625
         ]
       }
     },
@@ -2260,9 +2268,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.338875,
-          1.131125,
-          1.28475
+          1.213833,
+          1.165916,
+          1.234208
         ]
       },
       "hybrid": {
@@ -2278,9 +2286,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.169584,
-          1.16075,
-          1.15825
+          1.143667,
+          1.130625,
+          22.234667
         ]
       },
       "rerank": {
@@ -2296,9 +2304,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.355834,
-          1.13425,
-          1.146875
+          1.432125,
+          1.184375,
+          1.190083
         ]
       }
     },
@@ -2316,9 +2324,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.357666,
-          1.163625,
-          1.2135
+          1.197333,
+          1.238542,
+          1.308792
         ]
       },
       "hybrid": {
@@ -2334,9 +2342,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          16.811083,
-          1.342125,
-          1.211541
+          1.16,
+          1.139625,
+          1.216541
         ]
       },
       "rerank": {
@@ -2352,9 +2360,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.153875,
-          1.155625,
-          1.419167
+          1.165292,
+          1.267625,
+          1.171625
         ]
       }
     },
@@ -2371,9 +2379,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.189833,
-          1.122875,
-          1.121208
+          1.292417,
+          1.366125,
+          1.136125
         ]
       },
       "hybrid": {
@@ -2388,9 +2396,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.128583,
-          1.141791,
-          1.244042
+          1.174416,
+          1.228041,
+          1.119584
         ]
       },
       "rerank": {
@@ -2405,9 +2413,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.202125,
-          1.0895,
-          1.099833
+          1.12975,
+          1.22975,
+          1.221833
         ]
       }
     },
@@ -2421,9 +2429,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.197834,
-          1.129542,
-          1.2595
+          1.193583,
+          1.286166,
+          1.136834
         ]
       },
       "hybrid": {
@@ -2435,9 +2443,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.266417,
-          1.222541,
-          1.134625
+          1.14525,
+          1.379542,
+          1.26825
         ]
       },
       "rerank": {
@@ -2449,9 +2457,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.122334,
-          1.104416,
-          1.256208
+          1.144916,
+          1.24075,
+          1.154375
         ]
       }
     },
@@ -2465,9 +2473,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.1785,
-          1.11775,
-          1.274417
+          1.177833,
+          1.123041,
+          1.11
         ]
       },
       "hybrid": {
@@ -2479,9 +2487,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.14525,
-          1.136458,
-          1.21375
+          1.2145,
+          1.268875,
+          1.132958
         ]
       },
       "rerank": {
@@ -2493,9 +2501,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.093375,
-          1.13925,
-          1.231083
+          1.142625,
+          1.110375,
+          1.196833
         ]
       }
     },
@@ -2509,9 +2517,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.203542,
-          1.107917,
-          1.229792
+          1.354208,
+          1.346459,
+          1.191917
         ]
       },
       "hybrid": {
@@ -2523,9 +2531,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.100083,
-          1.074417,
-          1.061916
+          1.117375,
+          1.088875,
+          1.108375
         ]
       },
       "rerank": {
@@ -2537,9 +2545,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.09625,
-          1.224541,
-          1.215542
+          1.059208,
+          1.21175,
+          1.19575
         ]
       }
     },
@@ -2553,9 +2561,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.180333,
-          1.10325,
-          1.10875
+          1.222958,
+          1.142333,
+          1.102333
         ]
       },
       "hybrid": {
@@ -2567,9 +2575,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.1265,
-          1.103208,
-          1.378125
+          1.107791,
+          1.235084,
+          1.178625
         ]
       },
       "rerank": {
@@ -2581,9 +2589,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.156791,
-          1.114959,
-          1.11375
+          1.140875,
+          1.338292,
+          1.100708
         ]
       }
     },
@@ -2597,9 +2605,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.319458,
-          1.147791,
-          1.244959
+          1.195833,
+          1.278,
+          1.112375
         ]
       },
       "hybrid": {
@@ -2611,9 +2619,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.290667,
-          1.128625,
-          1.131875
+          1.1,
+          1.165583,
+          1.1225
         ]
       },
       "rerank": {
@@ -2625,9 +2633,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.102125,
-          1.1265,
-          1.242584
+          1.101042,
+          1.207542,
+          1.128583
         ]
       }
     },
@@ -2641,9 +2649,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.158833,
-          1.142917,
-          1.165291
+          1.152584,
+          1.187209,
+          1.149834
         ]
       },
       "hybrid": {
@@ -2655,9 +2663,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.148708,
-          1.109708,
-          1.203917
+          1.292042,
+          1.348084,
+          1.160625
         ]
       },
       "rerank": {
@@ -2669,9 +2677,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.092,
-          1.083041,
-          1.269459
+          1.126625,
+          1.086833,
+          1.099708
         ]
       }
     },
@@ -2685,9 +2693,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.005,
-          0.968875,
-          1.112834
+          1.091959,
+          1.149666,
+          0.969042
         ]
       },
       "hybrid": {
@@ -2705,9 +2713,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          4.610417,
-          4.843,
-          4.112042
+          4.483458,
+          4.754,
+          4.425958
         ]
       },
       "rerank": {
@@ -2716,8 +2724,8 @@
           "warnings:1:1",
           "storage_and_handling:1:1",
           "inactive_ingredient:1:1",
-          "keep_out_of_reach_of_children:1:1",
-          "purpose:1:1"
+          "dosage_and_administration:1:1",
+          "keep_out_of_reach_of_children:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -2725,9 +2733,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          93.669209,
-          93.019292,
-          90.766917
+          102.007917,
+          101.071667,
+          98.648542
         ]
       }
     },
@@ -2741,9 +2749,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.13325,
-          0.995542,
-          0.985916
+          1.269792,
+          1.102292,
+          1.059709
         ]
       },
       "hybrid": {
@@ -2761,19 +2769,19 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          5.269083,
-          5.540792,
-          5.491291
+          5.717,
+          5.799917,
+          5.403
         ]
       },
       "rerank": {
         "status": "no_evidence",
         "retrieved": [
           "warnings:1:1",
+          "dosage_and_administration:1:1",
           "keep_out_of_reach_of_children:1:1",
           "storage_and_handling:1:1",
-          "warnings:1:2",
-          "purpose:1:1"
+          "warnings:1:2"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -2781,9 +2789,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          109.841292,
-          108.142041,
-          107.106917
+          118.947958,
+          120.838041,
+          124.059125
         ]
       }
     },
@@ -2791,11 +2799,11 @@
       "keyword": {
         "status": "no_evidence",
         "retrieved": [
+          "dosage_and_administration:1:2",
           "active_ingredient:1:1",
           "active_ingredient:3:1",
           "active_ingredient:4:1",
-          "inactive_ingredient:3:1",
-          "inactive_ingredient:4:1"
+          "dosage_and_administration:3:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -2803,38 +2811,18 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.210458,
-          1.0705,
-          1.498958
+          1.544958,
+          1.428125,
+          1.196167
         ]
       },
       "hybrid": {
         "status": "no_evidence",
         "retrieved": [
           "active_ingredient:3:1",
-          "inactive_ingredient:3:1",
           "active_ingredient:4:1",
-          "active_ingredient:1:1",
-          "inactive_ingredient:4:1"
-        ],
-        "citations": [],
-        "candidate_keys": [],
-        "citation_hits": 0,
-        "recall": null,
-        "passed": true,
-        "latency_ms": [
-          6.347125,
-          5.244584,
-          5.55525
-        ]
-      },
-      "rerank": {
-        "status": "no_evidence",
-        "retrieved": [
-          "active_ingredient:3:1",
-          "active_ingredient:4:1",
+          "dosage_and_administration:1:2",
           "inactive_ingredient:3:1",
-          "inactive_ingredient:4:1",
           "active_ingredient:1:1"
         ],
         "citations": [],
@@ -2843,9 +2831,29 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          200.7165,
-          198.149208,
-          196.632041
+          6.308917,
+          5.6275,
+          5.167916
+        ]
+      },
+      "rerank": {
+        "status": "no_evidence",
+        "retrieved": [
+          "active_ingredient:3:1",
+          "dosage_and_administration:3:1",
+          "dosage_and_administration:1:2",
+          "active_ingredient:4:1",
+          "dosage_and_administration:4:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          246.158,
+          254.390833,
+          248.253834
         ]
       }
     },
@@ -2859,9 +2867,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.212166,
-          1.238708,
-          1.223125
+          1.245458,
+          1.07775,
+          2.034375
         ]
       },
       "hybrid": {
@@ -2881,19 +2889,19 @@
         "recall": null,
         "passed": false,
         "latency_ms": [
-          5.091167,
-          5.183541,
-          5.285708
+          5.486833,
+          5.723584,
+          5.489625
         ]
       },
       "rerank": {
         "status": "no_evidence",
         "retrieved": [
+          "dosage_and_administration:1:1",
           "ask_doctor:1:1",
           "purpose:1:1",
           "warnings:1:1",
-          "inactive_ingredient:1:1",
-          "do_not_use:1:1"
+          "inactive_ingredient:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -2901,35 +2909,17 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          101.237,
-          100.928875,
-          98.677333
+          111.488292,
+          111.933083,
+          107.325667
         ]
       }
     },
     "Q49": {
       "keyword": {
         "status": "no_evidence",
-        "retrieved": [],
-        "citations": [],
-        "candidate_keys": [],
-        "citation_hits": 0,
-        "recall": null,
-        "passed": true,
-        "latency_ms": [
-          1.185208,
-          0.974792,
-          1.120167
-        ]
-      },
-      "hybrid": {
-        "status": "no_evidence",
         "retrieved": [
-          "storage_and_handling:1:1",
-          "ask_doctor:1:1",
-          "stop_use:1:1",
-          "purpose:1:1",
-          "ask_doctor_or_pharmacist:1:1"
+          "dosage_and_administration:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -2937,19 +2927,39 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          5.040667,
-          5.156083,
-          4.843667
+          1.369292,
+          1.30925,
+          1.098375
+        ]
+      },
+      "hybrid": {
+        "status": "no_evidence",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "storage_and_handling:1:1",
+          "ask_doctor:1:1",
+          "stop_use:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": null,
+        "passed": true,
+        "latency_ms": [
+          5.072333,
+          5.365209,
+          4.768958
         ]
       },
       "rerank": {
         "status": "no_evidence",
         "retrieved": [
           "warnings:1:3",
+          "dosage_and_administration:1:1",
           "stop_use:1:1",
           "storage_and_handling:1:1",
-          "indications_and_usage:1:1",
-          "warnings:1:1"
+          "indications_and_usage:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -2957,9 +2967,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          120.636834,
-          120.384917,
-          118.483166
+          150.227167,
+          154.751167,
+          146.067416
         ]
       }
     },
@@ -2967,7 +2977,8 @@
       "keyword": {
         "status": "no_evidence",
         "retrieved": [
-          "active_ingredient:1:1"
+          "active_ingredient:1:1",
+          "dosage_and_administration:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -2975,19 +2986,19 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          1.210542,
-          1.065542,
-          1.051167
+          1.611708,
+          1.426208,
+          1.14525
         ]
       },
       "hybrid": {
         "status": "answered",
         "retrieved": [
           "active_ingredient:1:1",
+          "dosage_and_administration:1:1",
           "ask_doctor_or_pharmacist:1:1",
           "warnings:1:2",
-          "indications_and_usage:1:1",
-          "purpose:1:1"
+          "indications_and_usage:1:1"
         ],
         "citations": [
           "active_ingredient:1:1"
@@ -2997,19 +3008,19 @@
         "recall": null,
         "passed": false,
         "latency_ms": [
-          6.408375,
-          5.979,
-          6.924541
+          6.684375,
+          6.836458,
+          6.855292
         ]
       },
       "rerank": {
         "status": "no_evidence",
         "retrieved": [
           "active_ingredient:1:1",
+          "dosage_and_administration:1:1",
           "keep_out_of_reach_of_children:1:1",
           "warnings:1:1",
-          "purpose:1:1",
-          "do_not_use:1:1"
+          "purpose:1:1"
         ],
         "citations": [],
         "candidate_keys": [],
@@ -3017,9 +3028,9 @@
         "recall": null,
         "passed": true,
         "latency_ms": [
-          102.010542,
-          101.04125,
-          103.499708
+          110.617625,
+          109.091125,
+          107.110917
         ]
       }
     }

@@ -1,13 +1,13 @@
 # MedTrack 固定题评测
 
-openFDA 快照含 48 条版本记录，索引 917 个段落。
+openFDA 快照含 48 条版本记录，索引 1020 个段落。
 共 50 题，每题每种模式运行 3 次。运行环境为 Darwin arm64, Python 3.12.16。
 
 | 检索方式 | Recall@5 | 引用正确率 | P95 | 已选标签 P95 | 通过题数 |
 |---|---:|---:|---:|---:|---:|
-| keyword | 75.0% | 90.9% (10/11) | 1.52 ms | 1.57 ms | 28/50 |
-| hybrid | 100.0% | 59.3% (16/27) | 6.35 ms | 6.41 ms | 32/50 |
-| rerank | 93.8% | 85.7% (18/21) | 200.72 ms | 202.25 ms | 36/50 |
+| keyword | 75.0% | 90.9% (10/11) | 3.29 ms | 4.04 ms | 28/50 |
+| hybrid | 96.9% | 57.1% (16/28) | 14.50 ms | 14.76 ms | 32/50 |
+| rerank | 93.8% | 85.7% (18/21) | 255.45 ms | 263.41 ms | 36/50 |
 
 | 题型 | 总题数 | 关键词通过 | 混合通过 | 混合+重排通过 |
 |---|---:|---:|---:|---:|
@@ -68,6 +68,6 @@ P95 用预热后的进程内 FastAPI 请求计时，包含检索、引用选择�
 - **Q18** Where does the label mention the seal being damaged? · 标注 `other_safety_information:1:1` · 关键词 `no_evidence` · 混合 `no_evidence` · 混合+重排 `no_evidence`
 - **Q19** Which substance provides the intended effect? · 标注 `active_ingredient:1:1` · 关键词 `no_evidence` · 混合 `purpose:1:1` · 混合+重排 `no_evidence`
 - **Q22** What does the package say about operating a car? · 标注 `when_using:1:1` · 关键词 `no_evidence` · 混合 `no_evidence` · 混合+重排 `no_evidence`
-- **Q28** Does the label promise relief straight away? · 标注 `indications_and_usage:1:1` · 关键词 `no_evidence` · 混合 `no_evidence` · 混合+重排 `no_evidence`
+- **Q28** Does the label promise relief straight away? · 标注 `indications_and_usage:1:1` · 关键词 `no_evidence` · 混合 `dosage_and_administration:1:1` · 混合+重排 `no_evidence`
 
-向量模型 `BAAI/bge-small-en-v1.5`。语料 SHA-256 `9e3c9778b8a003c4107369554f8310c62f0a7e4ee48021a0da57af0bc51d865f`。题集 SHA-256 `5e22d2123ca0c076eedbfea723de93d6e48c6649c16a1fd491c3884bede5a516`。
+向量模型 `BAAI/bge-small-en-v1.5`。语料 SHA-256 `e80137d1d11381a34b28f185b6f5d16921eb1b20ac89e0379e4d0406d1087565`。题集 SHA-256 `5e22d2123ca0c076eedbfea723de93d6e48c6649c16a1fd491c3884bede5a516`。

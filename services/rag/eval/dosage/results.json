@@ -1,0 +1,987 @@
+{
+  "metadata": {
+    "labels": 48,
+    "passages": 1020,
+    "repeats": 3,
+    "platform": "Darwin arm64, Python 3.12.16",
+    "corpus_sha256": "e80137d1d11381a34b28f185b6f5d16921eb1b20ac89e0379e4d0406d1087565",
+    "questions_sha256": "996bf848b4fb5ac39c897b69bce1e8552f10ef664264940117ade65e632c5b14"
+  },
+  "metrics": {
+    "keyword": {
+      "recall_at_5": 0.8857142857142857,
+      "citation_accuracy": 0.75,
+      "correct_citations": 9,
+      "total_citations": 12,
+      "p95_ms": 1.94025,
+      "selected_label_p95_ms": 1.94025,
+      "passed": 9,
+      "by_category": {
+        "dosage": 9
+      }
+    },
+    "hybrid": {
+      "recall_at_5": 0.9714285714285714,
+      "citation_accuracy": 0.9285714285714286,
+      "correct_citations": 13,
+      "total_citations": 14,
+      "p95_ms": 6.594958,
+      "selected_label_p95_ms": 6.594958,
+      "passed": 13,
+      "by_category": {
+        "dosage": 13
+      }
+    },
+    "rerank": {
+      "recall_at_5": 1.0,
+      "citation_accuracy": 1.0,
+      "correct_citations": 14,
+      "total_citations": 14,
+      "p95_ms": 320.822834,
+      "selected_label_p95_ms": 320.822834,
+      "passed": 14,
+      "by_category": {
+        "dosage": 14
+      }
+    }
+  },
+  "questions": {
+    "D01": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "warnings:1:3",
+          "ask_doctor_or_pharmacist:1:1",
+          "warnings:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.648625,
+          1.402125,
+          1.258166
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "warnings:1:3",
+          "warnings:1:1",
+          "ask_doctor_or_pharmacist:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          6.0805,
+          5.682125,
+          5.536667
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "warnings:1:1",
+          "stop_use:1:1",
+          "warnings:1:3",
+          "pregnancy_or_breast_feeding:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          108.658208,
+          107.354417,
+          114.513917
+        ]
+      }
+    },
+    "D02": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:2:1",
+          "active_ingredient:1:1",
+          "active_ingredient:2:1",
+          "inactive_ingredient:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 0.4,
+        "passed": true,
+        "latency_ms": [
+          1.94025,
+          1.687,
+          1.279541
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:2:1",
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:3:1",
+          "active_ingredient:1:1",
+          "active_ingredient:2:1"
+        ],
+        "citations": [
+          "dosage_and_administration:2:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 0.6,
+        "passed": true,
+        "latency_ms": [
+          5.176666,
+          5.1125,
+          5.506208
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:2:1",
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:3:1",
+          "dosage_and_administration:4:1",
+          "dosage_and_administration:1:2"
+        ],
+        "citations": [
+          "dosage_and_administration:2:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          249.12275,
+          245.755792,
+          241.277292
+        ]
+      }
+    },
+    "D03": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "active_ingredient:1:1",
+          "ask_doctor_or_pharmacist:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          2.120667,
+          1.446708,
+          1.456417
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "active_ingredient:1:1",
+          "ask_doctor_or_pharmacist:1:1",
+          "warnings:1:1",
+          "ask_doctor:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          6.477083,
+          6.901292,
+          6.594958
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "active_ingredient:1:1",
+          "storage_and_handling:1:1",
+          "warnings:1:2",
+          "purpose:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          133.678625,
+          116.014125,
+          101.098417
+        ]
+      }
+    },
+    "D04": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "stop_use:1:1",
+          "dosage_and_administration:1:2",
+          "dosage_and_administration:1:1",
+          "indications_and_usage:1:1"
+        ],
+        "citations": [
+          "stop_use:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.602542,
+          1.577459,
+          1.33675
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:2",
+          "dosage_and_administration:1:1",
+          "stop_use:1:1",
+          "indications_and_usage:1:1",
+          "ask_doctor:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:2"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          5.066542,
+          4.929167,
+          5.066166
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "stop_use:1:1",
+          "dosage_and_administration:1:2",
+          "indications_and_usage:1:1",
+          "ask_doctor:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          108.636083,
+          106.686,
+          103.041375
+        ]
+      }
+    },
+    "D05": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "ask_doctor:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.456917,
+          1.394959,
+          1.167541
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "ask_doctor:1:1",
+          "warnings:1:1",
+          "active_ingredient:1:1",
+          "when_using:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.582375,
+          4.8705,
+          5.016542
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "ask_doctor:1:1",
+          "active_ingredient:1:1",
+          "warnings:1:1",
+          "purpose:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          72.678167,
+          76.03075,
+          75.605916
+        ]
+      }
+    },
+    "D06": {
+      "keyword": {
+        "status": "no_evidence",
+        "retrieved": [
+          "dosage_and_administration:1:1"
+        ],
+        "citations": [],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.598375,
+          1.510541,
+          1.26875
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "indications_and_usage:1:1",
+          "storage_and_handling:1:1",
+          "purpose:1:1",
+          "keep_out_of_reach_of_children:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          5.879667,
+          5.114083,
+          5.438292
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "storage_and_handling:1:1",
+          "active_ingredient:1:1",
+          "purpose:1:1",
+          "keep_out_of_reach_of_children:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          43.778292,
+          45.2045,
+          45.0355
+        ]
+      }
+    },
+    "D07": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "ask_doctor_or_pharmacist:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.469625,
+          1.228875,
+          1.176583
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "ask_doctor_or_pharmacist:1:1",
+          "warnings:1:1",
+          "storage_and_handling:1:1",
+          "ask_doctor:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          4.993291,
+          5.169208,
+          5.697792
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "purpose:1:1",
+          "ask_doctor_or_pharmacist:1:1",
+          "active_ingredient:1:1",
+          "pregnancy_or_breast_feeding:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          105.561709,
+          102.949541,
+          101.689875
+        ]
+      }
+    },
+    "D08": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:2",
+          "dosage_forms_and_strengths:1:1",
+          "description:1:1",
+          "dosage_and_administration:1:3"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.944167,
+          1.763375,
+          1.667083
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:2",
+          "dosage_forms_and_strengths:1:1",
+          "dosage_and_administration:1:3",
+          "information_for_patients:1:7"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          6.055458,
+          6.063167,
+          5.860708
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:2",
+          "dosage_forms_and_strengths:1:1",
+          "information_for_patients:1:2",
+          "dosage_and_administration:1:3"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          293.222959,
+          287.170334,
+          284.347708
+        ]
+      }
+    },
+    "D09": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:3",
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:4",
+          "dosage_and_administration:1:2",
+          "dosage_and_administration:1:6"
+        ],
+        "citations": [
+          "dosage_and_administration:1:3"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.901625,
+          1.783458,
+          1.583375
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:3",
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:4",
+          "dosage_and_administration:1:2",
+          "dosage_forms_and_strengths:1:2"
+        ],
+        "citations": [
+          "dosage_and_administration:1:3"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          5.986167,
+          6.381792,
+          6.909875
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:3",
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:4",
+          "dosage_and_administration:1:2",
+          "dosage_forms_and_strengths:1:2"
+        ],
+        "citations": [
+          "dosage_and_administration:1:3"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          352.974458,
+          350.070542,
+          320.822834
+        ]
+      }
+    },
+    "D10": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "indications_and_usage:1:1",
+          "dosage_and_administration:1:7",
+          "warnings_and_cautions:1:14",
+          "dosage_and_administration:1:2",
+          "warnings_and_cautions:1:16"
+        ],
+        "citations": [
+          "indications_and_usage:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 0.0,
+        "passed": false,
+        "latency_ms": [
+          1.595417,
+          1.566583,
+          1.29775
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:2",
+          "dosage_and_administration:1:3",
+          "dosage_and_administration:1:4",
+          "dosage_and_administration:1:7",
+          "dosage_and_administration:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:2"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          5.519,
+          5.598459,
+          6.365292
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:6",
+          "dosage_and_administration:1:3",
+          "dosage_and_administration:1:4",
+          "dosage_and_administration:1:2"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          288.523083,
+          290.967667,
+          298.272666
+        ]
+      }
+    },
+    "D11": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "information_for_patients:1:2",
+          "warnings_and_cautions:1:3",
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:2",
+          "information_for_patients:1:1"
+        ],
+        "citations": [
+          "information_for_patients:1:2"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 0,
+        "recall": 1.0,
+        "passed": false,
+        "latency_ms": [
+          1.475708,
+          1.309625,
+          1.546958
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "information_for_patients:1:1",
+          "information_for_patients:1:2",
+          "dosage_and_administration:1:2",
+          "dosage_and_administration:1:6"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          5.399667,
+          5.80925,
+          5.322791
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "information_for_patients:1:1",
+          "dosage_and_administration:1:2",
+          "dosage_and_administration:1:3",
+          "information_for_patients:1:2"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          271.504792,
+          268.086334,
+          267.131708
+        ]
+      }
+    },
+    "D12": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:2",
+          "ask_doctor:1:1",
+          "warnings:1:4",
+          "warnings:1:3",
+          "stop_use:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:2"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.775708,
+          1.470583,
+          1.26525
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:2",
+          "stop_use:1:1",
+          "ask_doctor_or_pharmacist:1:1",
+          "ask_doctor:1:1",
+          "warnings:1:3"
+        ],
+        "citations": [
+          "dosage_and_administration:1:2"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          5.221083,
+          5.000541,
+          5.705541
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:2",
+          "warnings:1:3",
+          "warnings:1:5",
+          "stop_use:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [
+          "dosage_and_administration:1:2"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          122.91775,
+          122.613041,
+          122.221417
+        ]
+      }
+    },
+    "D13": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "active_ingredient:1:1",
+          "stop_use:1:1",
+          "ask_doctor_or_pharmacist:1:1",
+          "warnings:1:2"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.415542,
+          1.235958,
+          1.227041
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "stop_use:1:1",
+          "active_ingredient:1:1",
+          "warnings:1:2",
+          "ask_doctor_or_pharmacist:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          5.152208,
+          5.28175,
+          4.912417
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "stop_use:1:1",
+          "active_ingredient:1:1",
+          "warnings:1:2",
+          "warnings:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          106.887916,
+          112.361917,
+          105.422459
+        ]
+      }
+    },
+    "D14": {
+      "keyword": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:2",
+          "active_ingredient:1:1",
+          "warnings:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          1.435292,
+          1.8745,
+          1.320834
+        ]
+      },
+      "hybrid": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:2",
+          "warnings:1:1",
+          "active_ingredient:1:1",
+          "stop_use:1:1"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          6.018375,
+          5.339583,
+          5.376584
+        ]
+      },
+      "rerank": {
+        "status": "answered",
+        "retrieved": [
+          "dosage_and_administration:1:1",
+          "dosage_and_administration:1:2",
+          "active_ingredient:1:1",
+          "warnings:1:1",
+          "warnings:1:3"
+        ],
+        "citations": [
+          "dosage_and_administration:1:1"
+        ],
+        "candidate_keys": [],
+        "citation_hits": 1,
+        "recall": 1.0,
+        "passed": true,
+        "latency_ms": [
+          148.315375,
+          147.09125,
+          148.490917
+        ]
+      }
+    }
+  }
+}

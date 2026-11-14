@@ -140,15 +140,19 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--output-dir", type=Path, default=QUESTIONS.parent)
+    parser.add_argument("--questions", type=Path, default=QUESTIONS,
+                        help="question set; default is the fixed 50 (eval/questions.json)")
     args = parser.parse_args()
     if args.repeats < 1:
         parser.error("--repeats must be positive")
     if os.getenv("MEDTRACK_CORPUS") or os.getenv("MEDTRACK_SYNTHETIC_LABELS") == "1":
         parser.error("Unset MEDTRACK_CORPUS and MEDTRACK_SYNTHETIC_LABELS to evaluate the bundled corpus")
-    raw = QUESTIONS.read_bytes()
+    raw = args.questions.read_bytes()
     cases = json.loads(raw)
-    if len(cases) != 50 or len({c["id"] for c in cases}) != 50:
-        raise ValueError("The benchmark requires exactly 50 unique questions.")
+    if len({c["id"] for c in cases}) != len(cases):
+        raise ValueError("Question IDs must be unique.")
+    if args.questions.resolve() == QUESTIONS.resolve() and len(cases) != 50:
+        raise ValueError("The fixed benchmark requires exactly 50 unique questions.")
     with TestClient(app) as client:
         health = client.get("/health").json()
         if health["corpus"] != "openFDA snapshot":

@@ -54,7 +54,10 @@
         "substance_name": [
           "EPINEPHRINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "2 DOSAGE AND ADMINISTRATION Patients greater than or equal to 30 kg (66 lbs): EpiPen 0.3 mg ( 2 ) Inject intramuscularly or subcutaneously into the anterolateral aspect of the thigh, through clothing if necessary. Each device is a single-dose injection . ( 2 ) 2.1 Recommended Dosage According to Patient Body Weight Patients greater than or equal to 30 kg (approximately 66 pounds or more): EpiPen 0.3 mg 2.2 Administration Instructions Inject the single-dose EpiPen intramuscularly or subcutaneously into the anterolateral aspect of the thigh, through clothing if necessary. Do not inject intravenously, and do not inject into buttocks, into digits, hands or feet [see Warnings and Precautions (5.2) ]. Instruct caregivers of young children who are prescribed an EpiPen and who may be uncooperative and kick or move during an injection to hold the leg firmly in place and limit movement prior to and during an injection [see Warnings and Precautions (5.2) ] . Each EpiPen is a single-dose epinephrine injection for single use. Since the doses of epinephrine delivered from EpiPen are fixed, consider using other forms of injectable epinephrine if doses lower than 0.15 mg are deemed necessary. With severe persistent anaphylaxis, repeat injections with an additional EpiPen may be necessary. More than two sequential doses of epinephrine should only be administered under direct medical supervision [see Warnings and Precautions (5.1) ] . The epinephrine solution in the clear window of the EpiPen Auto-Injector should be inspected visually for particulate matter and discoloration. Discarding After Use: The EpiPen each contain 2 mL epinephrine solution. Approximately 1.7 mL remains in the auto-injector after activation, but is not available for future use, and should be discarded ."
+      ]
     },
     {
       "purpose": [
@@ -116,7 +119,10 @@
         "substance_name": [
           "FAMOTIDINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions adults and children 12 years and over: to relieve symptoms, swallow 1 tablet with a glass of water. Do not chew. to prevent symptoms, swallow 1 tablet with a glass of water at any time from 10 to 60 minutes before eating food or drinking beverages that cause heartburn do not use more than 2 tablets in 24 hours children under 12 years: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -181,7 +187,10 @@
           "MENTHOL, UNSPECIFIED FORM",
           "METHYL SALICYLATE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions use only as directed adults and children 12 years and older: apply to affected area not more than 3 to 4 times daily children under 12 years of age: consult your doctor wash hands after applying"
+      ]
     },
     {
       "purpose": [
@@ -248,7 +257,10 @@
           "CHLORPHENIRAMINE MALEATE",
           "PHENYLEPHRINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not use more than directed adults and children 12 years of age and over: take 2 caplets every 4-6 hours swallow whole – do not crush, chew, or dissolve do not take more than 10 caplets in 24 hours children under 12 years of age: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -316,7 +328,10 @@
         "substance_name": [
           "FLUTICASONE FUROATE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions • read the Quick Start Guide for how to: o shake vigorously before each use o prime the bottle o use the spray o sniff gently after each spray • clean the spray nozzle with a clean dry tissue • use this product only once a day • do not use more than directed ADULTS AND CHILDREN 12 YEARS OF AGE AND OLDER • Week 1 – use 2 sprays in each nostril once daily • Week 2 through 6 months – use 1 or 2 sprays in each nostril once daily, as needed to treat your symptoms • After 6 months of daily use – ask your doctor if you can keep using CHILDREN 2 TO 11 YEARS OF AGE • the growth rate of some children may be slower while using this product. Children should use for the shortest amount of time necessary to achieve symptom relief. Talk to your child’s doctor if your child needs to use the spray for longer than two months a year. • an adult should supervise use • use 1 spray in each nostril once daily CHILDREN UNDER 2 YEARS OF AGE • do not use"
+      ]
     },
     {
       "purpose": [
@@ -372,7 +387,10 @@
         "product_ndc": [
           "50580-370"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions take every 4 to 6 hours, or as directed by a doctor do not take more than 6 times in 24 hours adults and children 12 years and over 1 to 2 tablets children 6 to under 12 years 1 tablet children under 6 years do not use"
+      ]
     },
     {
       "purpose": [
@@ -434,7 +452,10 @@
         "substance_name": [
           "ACETAMINOPHEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions ■ do not take more than directed (see Overdose warning ) adults and children 12 years and over ■ take 2 caplets every 8 hours with water ■ swallow whole; do not crush, chew, split or dissolve ■ do not take more than 6 caplets in 24 hours ■ do not use for more than 10 days unless directed by a doctor children under 12 years ■ ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -496,7 +517,10 @@
         "substance_name": [
           "ACETAMINOPHEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed (see overdose warning ) adults take 2 caplets every 8 hours with water swallow whole; do not crush, chew, split or dissolve do not take more than 6 caplets in 24 hours do not use for more than 10 days unless directed by a doctor under 18 years of age ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -558,7 +582,10 @@
         "substance_name": [
           "FAMOTIDINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions adults and children 12 years and over: to relieve symptoms, swallow 1 tablet with a glass of water. Do not chew. to prevent symptoms, swallow 1 tablet with a glass of water at any time from 10 to 60 minutes before eating food or drinking beverages that cause heartburn do not use more than 2 tablets in 24 hours children under 12 years: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -620,7 +647,10 @@
         "substance_name": [
           "FAMOTIDINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions adults and children 12 years and over: to relieve symptoms, swallow 1 tablet with a glass of water. Do not chew. to prevent symptoms, swallow 1 tablet with a glass of water at any time from 10 to 60 minutes before eating food or drinking beverages that cause heartburn do not use more than 2 tablets in 24 hours children under 12 years: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -682,7 +712,10 @@
         "substance_name": [
           "ACETAMINOPHEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed (see overdose warning ) adults and children 12 years and over take 2 caplets every 6 hours while symptoms last do not take more than 6 caplets in 24 hours, unless directed by a doctor do not use for more than 10 days unless directed by a doctor children under 12 years ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -744,7 +777,10 @@
         "substance_name": [
           "ACETAMINOPHEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed (see overdose warning ) adults and children 12 years and over take 2 tablets every 6 hours while symptoms last do not take more than 6 tablets in 24 hours, unless directed by a doctor do not use for more than 10 days unless directed by a doctor children under 12 years ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -806,7 +842,10 @@
         "substance_name": [
           "IBUPROFEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions this product does not contain directions or complete warnings for adult use do not give more than directed shake well before using mL = milliliter find right dose on chart. If possible, use weight to dose; otherwise use age. use only enclosed dosing cup. Do not use any other dosing device. if needed, repeat dose every 6-8 hours do not use more than 4 times a day replace original bottle cap to maintain child resistance Dosing Chart Weight (lb) Age (yr) Dose (mL) or as directed by a doctor under 24 under 2 years ask a doctor 24-35 lbs 2-3 years 5 mL 36-47 lbs 4-5 years 7.5 mL 48-59 lbs 6-8 years 10 mL 60-71 lbs 9-10 years 12.5 mL 72-95 lbs 11 years 15 mL"
+      ]
     },
     {
       "purpose": [
@@ -865,7 +904,10 @@
         "substance_name": [
           "DIPHENHYDRAMINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions find right dose on chart below mL = milliliter take every 4 to 6 hours, or as directed by a doctor do not take more than 6 doses in 24 hours Age (yr) Dose (mL) children under 2 years do not use children 2 to 5 years do not use unless directed by a doctor children 6 to 11 years 5 mL to 10 mL Attention: use only enclosed dosing cup specifically designed for use with this product. Do not use any other dosing device."
+      ]
     },
     {
       "purpose": [
@@ -927,7 +969,10 @@
         "substance_name": [
           "DIPHENHYDRAMINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions find right dose on chart below mL = milliliter take every 4 to 6 hours, or as directed by a doctor do not take more than 6 doses in 24 hours Age (yr) Dose (mL) adults and children 12 years and over 10 mL to 20 mL (2x10 mL; Note: dosing cup needs to be filled to 10 mL line twice for the 20 mL dose) children 6 to 11 years 5 mL to 10 mL children 2 to 5 years do not use unless directed by a doctor children under 2 years do not use Attention: use only enclosed dosing cup specifically designed for use with this product. Do not use any other dosing device."
+      ]
     },
     {
       "purpose": [
@@ -992,7 +1037,10 @@
         "substance_name": [
           "CETIRIZINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions may be taken with or without water chew or crush tablets completely before swallowing children 2 to under 6 years of age Chew and swallow 1 tablet (2.5 mg) once daily; If needed, dose can be increased to a maximum of 2 tablets (5 mg) once daily or 1 tablet (2.5 mg) every 12 hours. Do not give more than 2 tablets (5 mg) in 24 hours. adults and children 6 years and over Chew and swallow 2 tablets (5 mg) or 4 tablets (10 mg) once daily depending upon severity of symptoms; do not take more than 4 tablets (10 mg) in 24 hours. adults 65 years and over Chew and swallow 2 tablets (5 mg) once daily; do not take more than 2 tablets (5 mg) in 24 hours. children under 2 years of age ask a doctor consumers with liver or kidney disease ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1057,7 +1105,10 @@
         "substance_name": [
           "LORATADINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions Use only with enclosed dosing cup adults and children 6 years and over: 10 mL daily; do not take more than 10 mL in 24 hours children 2 to under 6 years of age: 5 mL daily; do not take more than 5 mL in 24 hours children under 2 years of age: ask a doctor consumers with liver or kidney disease: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1117,7 +1168,10 @@
           "ZINC ACETATE",
           "DIPHENHYDRAMINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not use more than directed hold stick straight down over affected skin area press tip of stick repeatedly on affected skin area until liquid flows, then dab sparingly adults and children 2 years of age and older: apply to affected area not more than 3 to 4 times daily children under 2 years of age: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1182,7 +1236,10 @@
         "substance_name": [
           "FLUTICASONE PROPIONATE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions • read the Quick Start Guide for how to: o prime the bottle o use the spray o clean the spray nozzle • shake gently before each use • use this product only once a day • do not use more than directed ADULTS AND CHILDREN 12 YEARS OF AGE AND OLDER • Week 1- use 2 sprays in each nostril once daily • Week 2 through 6 months- use 1 or 2 sprays in each nostril once daily, as needed to treat your symptoms • After 6 months of daily use – ask your doctor if you can keep using CHILDREN 4 TO 11 YEARS OF AGE • the growth rate of some children may be slower while using this product. Children should use for the shortest amount of time necessary to achieve symptom relief. Talk to your child’s doctor if your child needs to use the spray for longer than two months a year. • an adult should supervise use • use 1 spray in each nostril once daily CHILDREN UNDER 4 YEARS OF AGE • do not use"
+      ]
     },
     {
       "purpose": [
@@ -1245,7 +1302,10 @@
         "substance_name": [
           "IBUPROFEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions chew or crush tablets completely before swallowing this product does not contain directions or complete warnings for adult use do not give more than directed find right dose on chart below. If possible, use weight to dose; otherwise use age. if needed, repeat dose every 6-8 hours do not use more than 4 times a day Dosing Chart Weight (lb) Age (yr) Tablets under 24 under 2 ask a doctor 24-35 2-3 1 36-47 4-5 1 ½ 48-59 6-8 2 60-71 9-10 2 ½ 72-95 11 3"
+      ]
     },
     {
       "purpose": [
@@ -1310,7 +1370,10 @@
         "substance_name": [
           "CETIRIZINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions adults and children 6 years and over one 10 mg capsule once daily; do not take more than one 10 mg capsule in 24 hours. A 5 mg product may be appropriate for less severe symptoms. adults 65 years and over ask a doctor children under 6 years of age ask a doctor consumers with liver or kidney disease ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1375,7 +1438,10 @@
           "IBUPROFEN",
           "ACETAMINOPHEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions ​Directions Do not take more than directed adults and children 12 years and over take 2 caplets every 8 hours while symptoms persist children under 12 years ask a doctor do not take more than 6 caplets in 24 hours, unless directed by a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1437,7 +1503,10 @@
         "substance_name": [
           "DIPHENHYDRAMINE HCL"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions take every 4 to 6 hours, or as directed by a doctor do not take more than 6 doses in 24 hours adults and children 12 years and over 1 capsule children under 12 years do not use"
+      ]
     },
     {
       "purpose": [
@@ -1484,7 +1553,10 @@
         "substance_name": [
           "NAPROXEN SODIUM"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed the smallest effective dose should be used drink a full glass of water with each dose Adults and children 12 years and older take 1 tablet every 8 to 12 hours while symptoms last for the first dose you may take 2 tablets within the first hour do not exceed 2 tablets in any 8- to 12-hour period do not exceed 3 tablets in a 24-hour period Children under 12 years ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1549,7 +1621,10 @@
         "substance_name": [
           "NAPROXEN SODIUM"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed the smallest effective dose should be used drink a full glass of water with each dose Adults and children 12 years and older take 1 tablet every 8 to 12 hours while symptoms last for the first dose you may take 2 tablets within the first hour do not exceed 2 tablets in any 8- to 12-hour period do not exceed 3 tablets in a 24-hour period Children under 12 years ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1614,7 +1689,10 @@
         "substance_name": [
           "NAPROXEN SODIUM"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions · do not take more than directed · the smallest effective dose should be used · drink a full glass of water with each dose Adults and children 12 years and older · take 1 capsule every 8 to 12 hours while symptoms last · for the first dose you may take 2 capsules within the first hour · do not exceed 2 capsules in any 8- to 12-hour period · do not exceed 3 capsules in a 24-hour period Children under 12 years of age · ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1676,7 +1754,10 @@
         "substance_name": [
           "LORATADINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions use only with enclosed dosing cup mL = milliliter Adults and children 6 years and over: 10 mL daily, do not take more than 10mL in 24 hours; children 2 to under 6 years of age: 5mL daily, do not take more than 5mL in 24 hours; children under 2 years of age: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1735,7 +1816,10 @@
         "product_ndc": [
           "11523-0123"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions chew or crush tablets completely before swallowing. adults and children 6 years and over chew 2 tablets daily; not more than 2 chewable tablets in 24 hours children 2 to under 6 years of age chew 1 tablet daily; not more than 1 chewable tablet in 24 hours children under 2 years of age ask a doctor consumers with liver or kidney disease ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1797,7 +1881,10 @@
         "substance_name": [
           "LORATADINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions adults and children 6 years and over chew 2 tablets daily; not more than 2 tablets in 24 hours children 2 to under 6 years of age chew 1 tablet daily; not more than 1 tablet in 24 hours children under 2 years of age ask a doctor consumers with liver or kidney disease ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1862,7 +1949,10 @@
         "substance_name": [
           "IBUPROFEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed the smallest effective dose should be used adults take 2 capsules with a glass of water if symptoms persist or worsen, ask your doctor do not take more than 2 capsules in 24 hours, unless directed by a doctor under 18 years of age ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1924,7 +2014,10 @@
         "substance_name": [
           "ACETAMINOPHEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed (see overdose warning ) adults and children 12 years and over take 2 caplets every 4 to 6 hours while symptoms last do not take more than 10 caplets in 24 hours, unless directed by a doctor do not use for more than 10 days unless directed by a doctor children 6 years to under 12 years take 1 caplet every 4 to 6 hours while symptoms last do not take more than 5 caplets in 24 hours do not use for more than 5 days unless directed by a doctor children under 6 years ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -1986,7 +2079,10 @@
         "substance_name": [
           "FAMOTIDINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions adults and children 12 years and over: to relieve symptoms, swallow 1 tablet with a glass of water. Do not chew. to prevent symptoms, swallow 1 tablet with a glass of water at any time from 15 to 60 minutes before eating food or drinking beverages that cause heartburn do not use more than 2 tablets in 24 hours children under 12 years: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -2055,7 +2151,10 @@
         "substance_name": [
           "NAPROXEN SODIUM"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed the smallest effective dose should be used drink a full glass of water with each dose Adults and children 12 years and older take 1 caplet every 8 to 12 hours while symptoms last for the first dose you may take 2 caplets within the first hour do not exceed 2 caplets in any 8- to 12-hour period do not exceed 3 caplets in a 24-hour period Children under 12 years ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -2120,7 +2219,10 @@
         "substance_name": [
           "CETIRIZINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions may be taken with or without water chew or crush tablets completely before swallowing adults and children 6 years and over Chew and swallow 1 tablet (10 mg) once daily; do not take more than 1 tablet (10 mg) in 24 hours. A 5 mg product may be appropriate for less severe symptoms. adults 65 years and over ask a doctor children under 6 years of age ask a doctor consumers with liver or kidney disease ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -2185,7 +2287,10 @@
         "substance_name": [
           "IBUPROFEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed the smallest effective dose should be used adults and children 12 years and older: take 1 caplet every 4 to 6 hours while symptoms persist if pain or fever does not respond to 1 caplet, 2 caplets may be used do not exceed 6 caplets in 24 hours, unless directed by a doctor children under 12 years: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -2248,7 +2353,10 @@
           "IBUPROFEN",
           "PSEUDOEPHEDRINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions do not take more than directed the smallest effective dose should be used adults and children 12 years of age and over: take 1 capsule every 4 to 6 hours while symptoms persist. If symptoms do not respond to 1 capsule, 2 capsules may be used. do not use more than 6 capsules in any 24-hour period unless directed by a doctor children under 12 years of age: do not use"
+      ]
     },
     {
       "purpose": [
@@ -2310,7 +2418,10 @@
         "substance_name": [
           "OMEPRAZOLE MAGNESIUM"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions for adults 18 years of age and older this product is to be used once a day (every 24 hours), every day for 14 days it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment swallow 1 tablet with a glass of water before eating in the morning take every day for 14 days do not take more than 1 tablet a day do not use for more than 14 days unless directed by your doctor swallow whole. Do not chew or crush tablets. Repeated 14-Day Courses (if needed) you may repeat a 14-day course every 4 months do not take for more than 14 days or more often than every 4 months unless directed by a doctor children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition."
+      ]
     },
     {
       "purpose": [
@@ -2372,7 +2483,10 @@
         "substance_name": [
           "OMEPRAZOLE MAGNESIUM"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions for adults 18 years of age and older this product is to be used once a day (every 24 hours), every day for 14 days it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment swallow 1 tablet with a glass of water before eating in the morning take every day for 14 days do not take more than 1 tablet a day do not use for more than 14 days unless directed by your doctor swallow whole. Do not chew, crush, or suck tablets. Repeated 14-Day Courses (if needed) you may repeat a 14-day course every 4 months do not take for more than 14 days or more often than every 4 months unless directed by a doctor children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition."
+      ]
     },
     {
       "purpose": [
@@ -2434,7 +2548,10 @@
         "substance_name": [
           "OMEPRAZOLE MAGNESIUM"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions for adults 18 years of age and older this product is to be used once a day (every 24 hours), every day for 14 days it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment swallow 1 tablet with a glass of water before eating in the morning take every day for 14 days do not take more than 1 tablet a day do not use for more than 14 days unless directed by your doctor swallow whole. Do not chew, crush, or suck tablets. Repeated 14-Day Courses (if needed) you may repeat a 14-day course every 4 months do not take for more than 14 days or more often than every 4 months unless directed by a doctor children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition."
+      ]
     },
     {
       "purpose": [
@@ -2509,7 +2626,13 @@
         "substance_name": [
           "IBUPROFEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions Advil Tablets do not take more than directed the smallest effective dose should be used adults and children 12 years and over: take 1 tablet every 4 to 6 hours while symptoms persist if pain or fever does not respond to 1 tablet, 2 tablets may be used do not exceed 6 tablets in 24 hours, unless directed by a doctor children under 12 years: ask a doctor Advil Caplets do not take more than directed the smallest effective dose should be used adults and children 12 years and over: take 1 caplet every 4 to 6 hours while symptoms persist if pain or fever does not respond to 1 caplet, 2 caplets may be used do not exceed 6 caplets in 24 hours, unless directed by a doctor children under 12 years: ask a doctor Advil Gel Caplets do not take more than directed the smallest effective dose should be used adults and children 12 years and over: take 1 gel caplet every 4 to 6 hours while symptoms persist if pain or fever does not respond to 1 gel caplet, 2 gel caplets may be used do not exceed 6 gel caplets in 24 hours, unless directed by a doctor children under 12 years: ask a doctor",
+        "Advil Tablets do not take more than directed the smallest effective dose should be used adults and children 12 years and over: take 1 tablet every 4 to 6 hours while symptoms persist if pain or fever does not respond to 1 tablet, 2 tablets may be used do not exceed 6 tablets in 24 hours, unless directed by a doctor children under 12 years: ask a doctor",
+        "Advil Caplets do not take more than directed the smallest effective dose should be used adults and children 12 years and over: take 1 caplet every 4 to 6 hours while symptoms persist if pain or fever does not respond to 1 caplet, 2 caplets may be used do not exceed 6 caplets in 24 hours, unless directed by a doctor children under 12 years: ask a doctor",
+        "Advil Gel Caplets do not take more than directed the smallest effective dose should be used adults and children 12 years and over: take 1 gel caplet every 4 to 6 hours while symptoms persist if pain or fever does not respond to 1 gel caplet, 2 gel caplets may be used do not exceed 6 gel caplets in 24 hours, unless directed by a doctor children under 12 years: ask a doctor"
+      ]
     },
     {
       "purpose": [
@@ -2568,7 +2691,10 @@
         "substance_name": [
           "IBUPROFEN"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "DIRECTIONS • this product does not contain directions or complete warnings for adult use • do not give more than directed • find right dose on chart. If possible, use weight to dose; otherwise use age. • repeat dose every 6-8 hours , if needed • do not use more than 4 times a day Dosing Chart Weight (lb) Age (yr) Dose (tablets) under 24 lb under 2 yr ask a doctor 24-35 lb 2-3 yr 1 tablet 36-47 lb 4-5 yr 1 ½ tablets 48-59 lb 6-8 yr 2 tablets 60-71 lb 9-10 yr 2 ½ tablets 72-95 lb 11 yr 3 tablets"
+      ]
     },
     {
       "indications_and_usage": [
@@ -2620,7 +2746,10 @@
         "substance_name": [
           "EPINEPHRINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "2 DOSAGE AND ADMINISTRATION • Patients greater than or equal to 30 kg (66 lbs): EpiPen 0.3 mg ( 2 ) • Patients 15 to 30 kg (33 lbs to 66 lbs): EpiPen Jr 0.15 mg ( 2 ) Inject intramuscularly or subcutaneously into the anterolateral aspect of the thigh, through clothing if necessary. Each device is a single-dose injection . ( 2 ) 2.1 Recommended Dosage According to Patient Body Weight • Patients greater than or equal to 30 kg (approximately 66 pounds or more): EpiPen 0.3 mg • Patients 15 kg to 30 kg (33 pounds to 66 pounds): EpiPen Jr 0.15 mg 2.2 Administration Instructions • Inject the single-dose EpiPen or EpiPen Jr intramuscularly or subcutaneously into the anterolateral aspect of the thigh, through clothing if necessary. Do not inject intravenously, and do not inject into buttocks, into digits, hands or feet [see Warnings and Precautions (5.2) ]. • Instruct caregivers of young children who are prescribed an EpiPen or EpiPen Jr and who may be uncooperative and kick or move during an injection to hold the leg firmly in place and limit movement prior to and during an injection [see Warnings and Precautions (5.2) ] . • Each EpiPen or EpiPen Jr is a single-dose epinephrine injection for single use. Since the doses of epinephrine delivered from EpiPen or EpiPen Jr are fixed, consider using other forms of injectable epinephrine if doses lower than 0.15 mg are deemed necessary. • With severe persistent anaphylaxis, repeat injections with an additional EpiPen or EpiPen Jr may be necessary. More than two sequential doses of epinephrine should only be administered under direct medical supervision [see Warnings and Precautions (5.1) ] . • The epinephrine solution in the clear window of the EpiPen or EpiPen Jr Auto-Injector should be inspected visually for particulate matter and discoloration. Discarding After Use: The EpiPen and EpiPen Jr each contain 2 mL epinephrine solution. Approximately 1.7 mL remains in the auto-injector after activation, but is not available for future use, and should be discarded ."
+      ]
     },
     {
       "purpose": [
@@ -2685,7 +2814,10 @@
         "substance_name": [
           "FLUTICASONE FUROATE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions • read the Quick Start Guide for how to: • shake vigorously before each use • prime the bottle • use the spray • sniff gently after each spray • clean the spray nozzle with a clean dry tissue • use this product only once a day • do not use more than directed ADULTS AND CHILDREN 12 YEARS OF AGE AND OLDER • Week 1 – use 2 sprays in each nostril once daily • Week 2 through 6 months – use 1 or 2 sprays in each nostril once daily, as needed to treat your symptoms • After 6 months of daily use – ask your doctor if you can keep using CHILDREN 2 TO 11 YEARS OF AGE • the growth rate of some children may be slower while using this product. Children should use for the shortest amount of time necessary to achieve symptom relief. Talk to your child’s doctor if your child needs to use the spray for longer than two months a year. • an adult should supervise use • use 1 spray in each nostril once daily CHILDREN UNDER 2 YEARS OF AGE • do not use"
+      ]
     },
     {
       "indications_and_usage": [
@@ -2749,7 +2881,10 @@
         "substance_name": [
           "LEVOTHYROXINE SODIUM"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "2 DOSAGE AND ADMINISTRATION Administer once daily, preferably on an empty stomach, one-half to one hour before breakfast. ( 2.1 ) Administer at least 4 hours before or after drugs that are known to interfere with absorption. ( 2.1 ) Evaluate the need for dose adjustments when regularly administering within one hour of certain foods that may affect absorption. ( 2.1 ) Advise patients to stop biotin and biotin-containing supplements at least 2 days before assessing TSH and/or T4 levels. ( 2.2 ) Starting dose depends on a variety of factors, including age, body weight, cardiovascular status, and concomitant medications. Peak therapeutic effect may not be attained for 4-6 weeks. ( 2.2 ) See full prescribing information for dosing in specific patient populations. ( 2.3 ) Adequacy of therapy determined with periodic monitoring of TSH and/or T4 as well as clinical status. ( 2.4 ) 2.1 Important Administration Instructions Administer SYNTHROID as a single daily dose, on an empty stomach, one-half to one hour before breakfast. Administer SYNTHROID at least 4 hours before or after drugs known to interfere with SYNTHROID absorption [see Drug Interactions ( 7.1 ) ] . Evaluate the need for dosage adjustments when regularly administering within one hour of certain foods that may affect SYNTHROID absorption [see Dosage and Administration ( 2.2 and 2.3 ), Drug Interactions ( 7.9 ) , and Clinical Pharmacology ( 12.3 ) ] . Administer SYNTHROID to pediatric patients who cannot swallow intact tablets by crushing the tablet, suspending the freshly crushed tablet in a small amount (5 to 10 mL) of water and immediately administering the suspension by spoon or dropper. Ensure the patient ingests the full amount of the suspension. Do not store the suspension. Do not administer in foods that decrease absorption of SYNTHROID, such as soybean-based infant formula [see Drug Interactions ( 7.9 ) ] . 2.2 Important Considerations for Dosing The dosage of SYNTHROID for hypothyroidism or pituitary TSH suppression depends on a variety of factors including: the patient's age, body weight, cardiovascular status, concomitant medical conditions (including pregnancy), concomitant medications, co-administered food and the specific nature of the condition being treated [see Dosage and Administration ( 2.3 ), Warnings and Precautions ( 5 ), and Drug Interactions ( 7 )] . Dosing must be individualized to account for these factors and dosage adjustments made based on periodic assessment of the patient's clinical response and laboratory parameters [see Dosage and Administration ( 2.4 )] . For adult patients with primary hypothyroidism, titrate until the patient is clinically euthyroid and the serum TSH returns to normal [see Dosage and Administration ( 2.3 )] . For secondary or tertiary hypothyroidism, serum TSH is not a reliable measure of SYNTHROID dosage adequacy and should not be used to monitor therapy. Use the serum free-T4 level to titrate SYNTHROID dosing until the patient is clinically euthyroid and the serum free-T4 level is restored to the upper half of the normal range [see Dosage and Administration ( 2.3 )] . Inquire whether patients are taking biotin or biotin-containing supplements. If so, advise them to stop biotin supplementation at least 2 days before assessing TSH and/or T4 levels [see Dosage and Administration ( 2.4 ) and Drug Interactions ( 7.10 )]. The peak therapeutic effect of a given dose of SYNTHROID may not be attained for 4 to 6 weeks. 2.3 Recommended Dosage and Titration Primary, Secondary, and Tertiary Hypothyroidism in Adults The recommended starting daily dosage of SYNTHROID in adults with primary, secondary, or tertiary hypothyroidism is based on age and comorbid cardiac conditions, as described in Table 1. For patients at risk of atrial fibrillation or patients with underlying cardiac disease, start with a lower dosage and titrate the dosage more slowly to avoid exacerbation of cardiac symptoms. Dosage titration is based on serum TSH or free-T4 [see Dosage and Administration ( 2.2 )] . Table 1. SYNTHROID Dosing Guidelines for Hypothyroidism in Adults* Patient Population Starting Dosage Dosage Titration Based on Serum TSH or Free-T4 Adults diagnosed with hypothyroidism Full replacement dose is 1.6 mcg/kg/day. Some patients require a lower starting dose. Titrate dosage by 12.5 to 25 mcg increments every 4 to 6 weeks, as needed until the patient is euthyroid. Adults at risk for atrial fibrillation or with underlying cardiac disease Lower starting dose (less than 1.6 mcg/kg/day) Titrate dosage every 6 to 8 weeks, as needed until the patient is euthyroid. Geriatric patients Lower starting dose (less than 1.6 mcg/kg/day) * Dosages greater than 200 mcg/day are seldom required. An inadequate response to daily dosages greater than 300 mcg/day is rare and may indicate poor compliance, malabsorption, drug interactions, or a combination of these factors [see Dosage and Administration ( 2.1 ) and Drug Interactions (7) ] . Primary, Secondary, and Tertiary Hypothyroidism in Pediatric Patients The recommended starting daily dosage of SYNTHROID in pediatric patients with primary, secondary, or tertiary hypothyroidism is based on body weight and changes with age as described in Table 2. Titrate the dosage (every 2 weeks) as needed based on serum TSH or free-T4 until the patient is euthyroid [see Dosage and Administration ( 2.2 )] . Table 2. SYNTHROID Dosing Guidelines for Hypothyroidism in Pediatric Patients Ag e Starting Daily Dos ag e Per Kg Body Weight * 0-3 months 10-15 mcg/kg/day 3-6 months 8-10 mcg/kg/day 6-12 months 6-8 mcg/kg/day 1-5 years 5-6 mcg/kg/day 6-12 years 4-5 mcg/kg/day Greater than 12 years but growth and puberty incomplete 2-3 mcg/kg/day Growth and puberty complete 1.6 mcg/kg/day * Adjust dosage based on clinical response and laboratory parameters [see Dosage and Administration ( 2.4 ) and Use in Specific Populations ( 8.4 ) ] . Pediatric Patients from Birth to 3 Months of Age at Risk for Cardiac Failure Start at a lower starting dosage and increase the dosage every 4 to 6 weeks as needed based on clinical and laboratory response. Pediatric Patients at Risk for Hyperactivity To minimize the risk of hyperactivity, start at one-fourth the recommended full replacement dosage, and increase on a weekly basis by one-fourth the full recommended replacement dosage until the full recommended replacement dosage is reached. Hypothyroidism in Pregnant Patients For pregnant patients with pre-existing hypothyroidism, measure serum TSH and free-T4 as soon as pregnancy is confirmed and, at minimum, during each trimester of pregnancy. In pregnant patients with primary hypothyroidism, maintain serum TSH in the trimester-specific reference range. The recommended daily dosage of SYNTHROID in pregnant patients is described in Table 3. Table 3. SYNTHROID Dosing Guidelines for Hypothyroidism in Pregnant Patients Patient Population Starting Dosage Dose Adjustment and Titration Pre-existing primary hypothyroidism with serum TSH above normal trimester-specific range Pre-pregnancy dosage may increase during pregnancy Increase SYNTHROID dosage by 12.5 to 25 mcg per day. Monitor TSH every 4 weeks until a stable dose is reached and serum TSH is within normal trimester-specific range. Reduce SYNTHROID dosage to pre-pregnancy levels immediately after delivery. Monitor serum TSH 4 to 8 weeks postpartum. New onset hypothyroidism (TSH ≥ 10 mIU per liter) 1.6 mcg/kg/day Monitor serum TSH every 4 weeks and adjust SYNTHROID dosage until serum TSH is within normal trimester-specific range. New onset hypothyroidism (TSH < 10 mIU per liter) 1.0 mcg/kg/day TSH Suppression in Well-differentiated Thyroid Cancer in Adult and Pediatric Patients The SYNTHROID dosage is based on the target level of TSH suppression for the stage and clinical status of thyroid cancer. 2.4 Monitoring TSH and/or Thyroxine (T4) Levels Assess the adequacy of therapy by periodic assessment of laboratory tests and clinical evaluation. Biotin supplementation may interfere with immunoassays for TSH, T4, and T3, resulting in erroneous thyroid hormone test results. Stop biotin and biotin-containing supplements for at least 2 days before assessing TSH and/or T4 levels [see Drug Interactions ( 7.10 )]. Persistent clinical and laboratory evidence of hypothyroidism despite an apparent adequate replacement dose of SYNTHROID may be evidence of inadequate absorption, poor compliance, drug interactions, or a combination of these factors. Adults In adult patients with primary hypothyroidism, monitor serum TSH levels after an interval of 6 to 8 weeks after any change in dosage. In patients on a stable and appropriate replacement dosage, evaluate clinical and biochemical response every 6 to 12 months and whenever there is a change in the patient’s clinical status. Pediatric Patients In patients with hypothyroidism, assess the adequacy of replacement therapy by measuring both serum TSH and total or free-T4. Monitor TSH and total or free-T4 in pediatric patients as follows: 2 and 4 weeks after the initiation of treatment, 2 weeks after any change in dosage, and then every 3 to 12 months thereafter following dosage stabilization until growth is completed. Poor compliance or abnormal values may necessitate more frequent monitoring. Perform routine clinical examination, including assessment of development, mental and physical growth, and bone maturation, at regular intervals. The general aim of therapy is to normalize the serum TSH level. TSH may not normalize in some patients due to in utero hypothyroidism causing a resetting of pituitary-thyroid feedback. Failure of the serum T4 to increase into the upper half of the normal range within 2 weeks of initiation of SYNTHROID therapy and/or of the serum TSH to decrease below 20 mIU per liter within 4 weeks may indicate the patient is not receiving adequate therapy. Assess compliance, dose of medication administered, and method of administration prior to increasing the dose of SYNTHROID [see Warnings and Precautions ( 5.1 ) and Use in Specific Populations ( 8.4 )] . Secondary and Tertiary Hypothyroidism Monitor serum free-T4 levels and maintain in the upper half of the normal range in these patients."
+      ]
     },
     {
       "purpose": [
@@ -2817,7 +2952,10 @@
         "substance_name": [
           "CETIRIZINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions may be taken with or without water chew or crush tablets completely before swallowing children 2 to under 6 years of age Chew and swallow 1 tablet (2.5 mg) once daily; If needed, dose can be increased to a maximum of 2 tablets (5 mg) once daily or 1 tablet (2.5 mg) every 12 hours. Do not give more than 2 tablets (5 mg) in 24 hours. adults and children 6 years and over Chew and swallow 2 tablets (5 mg) or 4 tablets (10 mg) once daily depending upon severity of symptoms; do not take more than 4 tablets (10 mg) in 24 hours. adults 65 years and over Chew and swallow 2 tablets (5 mg) once daily; do not take more than 2 tablets (5 mg) in 24 hours. children under 2 years of age ask a doctor consumers with liver or kidney disease ask a doctor"
+      ]
     },
     {
       "indications_and_usage": [
@@ -2871,7 +3009,10 @@
         "substance_name": [
           "ATORVASTATIN CALCIUM TRIHYDRATE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "2 DOSAGE AND ADMINISTRATION • Take orally once daily with or without food ( 2.1 ). • Assess LDL-C when clinically appropriate, as early as 4 weeks after initiating LIPITOR, and adjust dosage if necessary ( 2.1 ). • Adults ( 2.2 ): o Recommended starting dosage is 10 or 20 mg once daily; dosage range is 10 mg to 80 mg once daily. o Patients requiring LDL-C reduction >45% may start at 40 mg once daily. • Pediatric Patients Aged 10 Years of Age and Older with HeFH: Recommended starting dosage is 10 mg once daily; dosage range is 10 to 20 mg once daily ( 2.3 ). • Pediatric Patients Aged 10 Years of Age and Older with HoFH: Recommended starting dosage is 10 to 20 mg once daily; dosage range is 10 to 80 mg once daily ( 2.4 ). • See full prescribing information for LIPITOR dosage modifications due to drug interactions ( 2.5 ). 2.1 Important Dosage Information • Take Lipitor orally once daily at any time of the day, with or without food. • Assess LDL-C when clinically appropriate, as early as 4 weeks after initiating LIPITOR, and adjust the dosage if necessary. • If a dose is missed, advise patients not to take the missed dose and resume with the next scheduled dose. 2.2 Recommended Dosage in Adult Patients The recommended starting dosage of LIPITOR is 10 mg to 20 mg once daily. The dosage range is 10 mg to 80 mg once daily. Patients who require reduction in LDL-C greater than 45% may be started at 40 mg once daily. 2.3 Recommended Dosage in Pediatric Patients 10 Years of Age and Older with HeFH The recommended starting dosage of LIPITOR is 10 mg once daily. The dosage range is 10 mg to 20 mg once daily. 2.4 Recommended Dosage in Pediatric Patients 10 Years of Age and Older with HoFH The recommended starting dosage of LIPITOR is 10 mg to 20 mg once daily. The dosage range is 10 mg to 80 mg once daily. 2.5 Dosage Modifications Due to Drug Interactions Concomitant use of LIPITOR with the following drugs requires dosage modification of LIPITOR [see Warnings and Precautions (5.1) and Drug Interactions (7.1) ] . Anti-Viral Medications • In patients taking saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir or letermovir, do not exceed LIPITOR 20 mg once daily. • In patients taking nelfinavir, do not exceed LIPITOR 40 mg once daily. Select Azole Antifungals or Macrolide Antibiotics • In patients taking clarithromycin or itraconazole, do not exceed LIPITOR 20 mg once daily. For additional recommendations regarding concomitant use of LIPITOR with other anti-viral medications, azole antifungals or macrolide antibiotics, see Drug Interactions (7.1) ."
+      ]
     },
     {
       "purpose": [
@@ -2927,7 +3068,10 @@
         "substance_name": [
           "LORATADINE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "Directions adults and Children 12 years and older 1 tablet daily; not more than 1 tablet in 24 hours children under 6 years of age ask a doctor consumers with liver or kidney diseases Ask a doctor"
+      ]
     },
     {
       "indications_and_usage": [
@@ -2983,8 +3127,27 @@
         "substance_name": [
           "SERTRALINE HYDROCHLORIDE"
         ]
-      }
+      },
+      "dosage_and_administration": [
+        "2 DOSAGE AND ADMINISTRATION Indication Starting Dosage Maximum Dosage MDD ( 2.1 ) 50 mg per day 200 mg per day OCD ( 2.1 ) 25 mg per day (ages 6-12) 50 mg per day (ages ≥ 13) 200 mg per day PD, PTSD, SAD ( 2.1 ) 25 mg per day 200 mg per day PMDD ( 2.2 ) continuous dosing 50 mg per day 150 mg per day PMDD ( 2.2 ) intermittent dosing 50 mg per day during luteal phase only 100 mg per day during luteal phase only • If inadequate response to starting dosage, titrate in 25-50 mg per day increments once weekly in MDD, OCD, PD, PTSD, and SAD ( 2.1 ) • See Full Prescribing Information for titration in PMDD ( 2.2 ) • Hepatic impairment: o Mild: Recommended starting and maximum dosage is half recommended dosage ( 2.4 ) o Moderate or severe: Not recommended ( 2.4 ) • When discontinuing ZOLOFT, reduce dose gradually ( 2.6 , 5.4 ) • Oral solution: Must be diluted before administration ( 2.7 ) 2.1 Dosage in Patients with MDD, OCD, PD, PTSD, and SAD The recommended initial dosage and maximum ZOLOFT dosage in patients with MDD, OCD, PD, PTSD, and SAD are displayed in Table 1 below. A dosage of 25 mg or 50 mg per day is the initial therapeutic dosage. For adults and pediatric patients, subsequent dosages may be increased in case of an inadequate response in 25 to 50 mg per day increments once a week, depending on tolerability, up to a maximum of 200 mg per day. Given the 24-hour elimination half-life of ZOLOFT, the recommended interval between dose changes is one week. Table 1: Recommended Daily Dosage of ZOLOFT in Patients with MDD, OCD, PD, PTSD, and SAD Indication Starting Dose Therapeutic Range Adults MDD 50 mg 50-200 mg OCD 50 mg PD, PTSD, SAD 25 mg Pediatric Patients OCD (ages 6-12 years old) 25 mg 50-200 mg OCD (ages 13-17 years old) 50 mg 2.2 Dosage in Patients with PMDD The recommended starting ZOLOFT dosage in adult women with PMDD is 50 mg per day. ZOLOFT may be administered either continuously (every day throughout the menstrual cycle) or intermittently (only during the luteal phase of the menstrual cycle, i.e., starting the daily dosage 14 days prior to the anticipated onset of menstruation and continuing through the onset of menses). Intermittent dosing would be repeated with each new cycle. • When dosing continuously , patients not responding to a 50 mg dosage may benefit from dosage increases at 50 mg increments per menstrual cycle up to 150 mg per day. • When dosing intermittently , patients not responding to a 50 mg dosage may benefit from increasing the dosage up to a maximum of 100 mg per day during the next menstrual cycle (and subsequent cycles) as follows: 50 mg per day during the first 3 days of dosing followed by 100 mg per day during the remaining days in the dosing cycle. 2.3 Screen for Bipolar Disorder Prior to Starting ZOLOFT Prior to initiating treatment with ZOLOFT or another antidepressant, screen patients for a personal or family history of bipolar disorder, mania, or hypomania [See Warnings and Precautions (5.4) ] . 2.4 Dosage Modifications in Patients with Hepatic Impairment Both the recommended starting dosage and therapeutic range in patients with mild hepatic impairment (Child Pugh scores 5 or 6) are half the recommended daily dosage [See Dosage and Administration (2.1 , 2.2) ] . The use of ZOLOFT in patients with moderate (Child Pugh scores 7 to 9) or severe hepatic impairment (Child Pugh scores 10-15) is not recommended [See Use in Specific Populations (8.6) , Clinical Pharmacology (12.3) ] . 2.5 Switching Patients to or from a Monoamine Oxidase Inhibitor Antidepressant At least 14 days must elapse between discontinuation of a monoamine oxidase inhibitor (MAOI) antidepressant and initiation of ZOLOFT. In addition, at least 14 days must elapse after stopping ZOLOFT before starting an MAOI antidepressant [See Contraindications (4) , Warnings and Precautions (5.2) ] . 2.6 Discontinuation of Treatment with ZOLOFT Adverse reactions may occur upon discontinuation of ZOLOFT [See Warnings and Precautions (5.5) ] . Gradually reduce the dosage rather than stopping ZOLOFT abruptly whenever possible. 2.7 Preparation of ZOLOFT Oral Solution ZOLOFT oral solution must be diluted before use. • Use the supplied calibrated dropper to measure the amount of ZOLOFT oral solution needed • Note: The supplied calibrated dropper has 25 mg and 50 mg graduation marks only • Mix with 4 ounces (1/2 cup) of water, ginger ale, lemon/lime soda, lemonade or orange juice ONLY. After mixing, a slight haze may appear, which is normal. Instruct patients or caregivers to immediately take the dose after mixing."
+      ]
     }
   ],
-  "sampling": "Selected public prescription and OTC products; includes multiple product variants and identical brand names from different label records."
+  "sampling": "Selected public prescription and OTC products; includes multiple product variants and identical brand names from different label records.",
+  "backfills": [
+    {
+      "fields": [
+        "dosage_and_administration"
+      ],
+      "source": "https://api.fda.gov/drug/label.json",
+      "retrieved_on": "2026-11-14",
+      "rule": "same SPL document id and version only",
+      "absent_upstream": [],
+      "version_changed": [],
+      "not_found": [],
+      "filled": {
+        "dosage_and_administration": 48
+      }
+    }
+  ]
 }
