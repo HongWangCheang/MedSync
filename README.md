@@ -4,6 +4,22 @@
 
 核心问题：Agent 有副作用的操作，在**断网、超时、重试、进程被杀、LLM 重新推理**时，要做到端到端**只执行一次**；排队期间情况变了的动作，要能被拦下来。
 
+<img src="docs/demo.gif" width="420" align="right">
+
+```sh
+scripts/up.sh --model --app   # 启动全部服务 → 冒烟测试 → 准备端侧模型 → 打开桌面端
+```
+
+右边的动图是 [2 分钟演示](docs/demo.md) 的故事，由 `DemoTest` 在真实的 App 和服务上自动跑出来：
+1. 断网时，本机模型识别出关键词规则漏掉的危险信号。
+2. 本机模型把一句话拆成 3 个动作，存进本机队列。
+3. 联网后，安全审核的结论和排队的"我没事"矛盾，这条消息被暂停；号源被抢，问用户改约哪天。
+4. 用户确认后，每个动作只执行一次，以外部系统自己统计的次数为准。
+
+架构详见 [docs/architecture.md](docs/architecture.md)，关键决定的理由见 [docs/adr/](docs/adr/)。
+
+<br clear="right">
+
 ```
 客户端 (Android / iOS / 桌面，KMP 共享代码)
   路由 Agent · 危险信号 Agent · Room outbox（step_key 在规划时生成并落库）
@@ -30,14 +46,23 @@ mocks (模拟医院预约 / 家属通知)                         故意不去�
 | [chaos/](chaos/) | Toxiproxy 三跳配置和故障注入脚本 |
 | [scripts/smoke.py](scripts/smoke.py) | 端到端冒烟测试 |
 | [eval/](eval/) | 对比实验：B0 朴素重试 / B1 请求级幂等 / B2 参数哈希去重 / Full，报告见 [eval/report.md](eval/report.md) |
+| [docs/architecture.md](docs/architecture.md) | 架构：组件、一个动作的一生、三跳去重、多 Agent 协作、离线降级 |
+| [docs/adr/](docs/adr/) | 8 篇架构决定记录 |
+| [docs/demo.md](docs/demo.md) | 2 分钟演示的分镜和讲解 |
 | [docs/开发计划.md](docs/开发计划.md) | 分阶段开发计划 |
 
 ## 启动服务端
 
 ```sh
+scripts/up.sh                 # 没有 .env 时用随机密码生成一个 → docker compose up --wait → 冒烟测试
+```
+
+`.env` 里的 `GEMINI_API_KEY` 默认是空的，这时用药问答会显示"药学服务未配置"，其他功能都正常。也可以手动启动：
+
+```sh
 cp .env.example .env          # 填三个数据库密码和 MEDSYNC_INTERNAL_SECRET；要回答用药问题再填 GEMINI_API_KEY
-docker compose up --build -d
-python3 scripts/smoke.py      # 6 项检查：重放、409、响应丢失、Agent 不可达、号源被抢、无重复副作用
+docker compose up --build -d --wait
+python3 scripts/smoke.py      # 12 项检查：重放、409、响应丢失、Agent 不可达、号源被抢、安全审核、跨 Agent 冲突、无重复副作用
 ```
 
 | 地址 | 用途 |
@@ -125,7 +150,15 @@ cd client
 
 <img src="docs/screenshots/10-model-red-flag.png" width="48%">
 
-界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
+界面右上角的开关可以**模拟离线**。标题下面有一块面板，标出每项功能在断网时的情况，离线时自动展开：
+
+| 状态 | 功能 |
+|---|---|
+| 离线可用 | 理解你的话、危险信号、记录服药和症状 |
+| 联网后执行 | 预约复诊、通知家属、相互作用检查 |
+| 需要联网 | 用药问答（离线时没有说明书依据，所以不回答） |
+
+`CapabilitiesTest` 会在离线状态下逐项检查，确保面板上的标签和 App 的实际行为一致。
 
 ## 测试
 
@@ -135,11 +168,12 @@ cd services/agent   && uv run pytest -q                                         
 cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 60 项
 cd services/rag     && .venv/bin/python -B evaluate_safety.py                      # 相互作用提醒评测，32 个用例
 cd services/mocks   && uv run pytest -q                                            # 4 项
-cd client           && ./gradlew :shared:jvmTest                                   # 共享逻辑 29 项
+cd client           && ./gradlew :shared:jvmTest :desktopApp:test                  # 共享逻辑 34 项 + 离线能力标签 1 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
 cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 2 项：真实 Ktor 客户端 → 三跳 → mocks / RAG
 cd client && MEDSYNC_WALKTHROUGH=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*WalkthroughTest*'   # 桌面端界面走查，截图存到 desktopApp/build/walkthrough
 cd client && MEDSYNC_ROUTING_EVAL=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*RoutingEvalTest*' && python3 ../eval/routing/score.py   # 端侧路由评测
+cd client && MEDSYNC_DEMO=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*DemoTest*' && uv run --with pillow python ../scripts/demo_gif.py   # 演示动图
 cd client && MEDSYNC_REDFLAG_EVAL=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*RedFlagEvalTest*' && python3 ../eval/redflag/score.py   # 危险信号评测
 ```
 

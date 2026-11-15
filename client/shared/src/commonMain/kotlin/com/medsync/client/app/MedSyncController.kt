@@ -63,6 +63,9 @@ class MedSyncController(
     private val _offline = MutableStateFlow(false)
     val offline: StateFlow<Boolean> = _offline
     val redFlag = MutableStateFlow<RedFlag?>(null)
+    /** What works offline, for the panel under the title. */
+    val capabilities: List<Capability> =
+        Capabilities.of(router.takeIf { it !== RuleBasedRouter }?.name?.substringBefore('+'))
     val notice = MutableStateFlow<String?>(null)
     val lastSync = MutableStateFlow<DrainReport?>(null)
 
