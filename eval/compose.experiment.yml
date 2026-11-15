@@ -8,9 +8,14 @@ services:
       # Ablation: MEDSYNC_EXPERIMENT_REPHRASE=0 docker compose ... up -d agent  (retries resend identical arguments)
       MEDSYNC_EXPERIMENT_REPHRASE: ${MEDSYNC_EXPERIMENT_REPHRASE:-1}
       MEDSYNC_EXTERNAL_TIMEOUT_S: "1"
+      # Agent → MCP tool server: give up after 3 s (default 15) so a lost MCP response is retried within an episode.
+      MEDSYNC_TOOLS_TIMEOUT_S: "3"
   tools:
     environment:
       MEDSYNC_EXTERNAL_TIMEOUT_S: "1"
+      # A crashed tool server leaves INTENT rows behind; with the 30 s default the next attempt would wait that long
+      # before looking the side effect up. 3 s is still well above the 1 s external timeout.
+      MEDSYNC_TOOL_LEASE_S: "3"
   gateway:
     environment:
       MEDSYNC_AGENT_READ_TIMEOUT: 2s

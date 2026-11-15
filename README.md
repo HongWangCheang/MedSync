@@ -111,12 +111,31 @@ python3 scripts/langfuse_check.py   # 发一个两步的 plan，检查它在 Lan
 | 重复副作用率 IVR | 50% | 33% | 33% | **0%** |
 | 过期 / 契约变更的动作被执行 | 20/20 | 20/20 | 20/20 | **0/20** |
 
-完整结果、消融实验和局限见 [eval/report.md](eval/report.md)，复现：
+完整结果、消融实验和局限见 [eval/report.md](eval/report.md)。
+
+**补充场景**（200 个回合，[eval/extra/REPORT.md](eval/extra/REPORT.md)）：进程被杀、多个故障叠加、并发重复提交，正是"只执行一次"最容易出事的地方：
+
+| | B0 | B1 | B2 | **Full** |
+|---|---|---|---|---|
+| Agent 进程在外部调用途中被杀（SIGKILL） | 100% | 100% | 100% | **0%** |
+| MCP 工具服务在外部调用途中被杀 | 100% | 100% | 100% | **0%** |
+| ②③ 同时丢响应 | 100% | 100% | 100% | **0%** |
+| 同一步骤被 5 个 worker 同时提交 | 100% | 100% | 100% | **0%** |
+| ① 离线 + ③ 不可达（对照组：故障在提交之前） | 0% | 0% | 0% | 0% |
+
+表里是出现重复副作用的回合占比。请求级幂等（B1）挡得住串行重试，挡不住并发提交：同一个 key 还在处理中时，网关每次都会再派发一次。
+
+**多 Agent 场景 × 故障矩阵**（[eval/matrix/REPORT.md](eval/matrix/REPORT.md)）：不只看有没有重复，还检查多 Agent 协作在每种故障下是否仍然正确。两个场景分别是安全审核提醒，以及冲突暂停后附上提醒再发；检查项包括提醒有没有发出、消息有没有暂停、暂停期间有没有漏发、确认后是否恰好发出 1 次。在 8 种故障下（①②丢响应、②断开、RAG 宕机、MCP 丢响应、agent 被杀、工具服务被杀）全部通过（42/42）。
+
+第一次跑矩阵时发现了一个 bug：用户确认之后、消息发送途中进程被杀，这一步会一直卡在"需要你确认"。现在两边都已修复，详见矩阵报告。
+
+复现：
 
 ```sh
 docker compose -f docker-compose.yml -f eval/compose.experiment.yml up -d --build
-python3 eval/run_experiment.py --reps 10
-uv run --with matplotlib python eval/report.py
+python3 eval/run_experiment.py --reps 10 && uv run --with matplotlib python eval/report.py   # 主实验
+python3 eval/run_experiment.py --extra --reps 5 && python3 eval/report_extra.py             # 补充场景
+python3 eval/run_matrix.py --reps 3                                                         # 多 Agent × 故障矩阵
 ```
 
 ## 运行客户端
@@ -179,8 +198,8 @@ cd client
 ## 测试
 
 ```sh
-cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest,AgentClientTest' test   # 20 项
-cd services/agent   && uv run pytest -q                                            # 60 项（含 MCP 6 项、Langfuse 追踪 3 项）
+cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest,AgentClientTest' test   # 21 项
+cd services/agent   && uv run pytest -q                                            # 61 项（含 MCP 6 项、Langfuse 追踪 3 项）
 cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 60 项
 cd services/rag     && .venv/bin/python -B evaluate_safety.py                      # 相互作用提醒评测，32 个用例
 cd services/mocks   && uv run pytest -q                                            # 4 项

@@ -20,6 +20,7 @@ import hashlib
 import json
 import random
 import socket
+import subprocess
 import sys
 import threading
 import time
@@ -35,6 +36,16 @@ TOXIPROXY = "http://127.0.0.1:8474"
 
 MODES = ["naive", "request_id", "args_hash", "full"]
 FAULTS = ["none", "hop1_offline", "hop1_lost_response", "hop2_lost_response", "hop3_down", "hop3_lost_response"]
+# Supplementary scenarios (--extra), reported separately in eval/extra/ so the main tables stay comparable:
+#   agent_crash            the agent process is SIGKILLed while its external call is in flight (the call commits)
+#   tools_crash            the MCP tool server is SIGKILLed mid-call (only Full goes through it; for B0–B2 this is
+#                          the same as hop3_lost_response)
+#   hop2_hop3_lost         two lost responses at once: agent → external and gateway → agent
+#   hop1_offline_hop3_down device offline for 2 s, and the external systems unreachable until 5 s
+#   concurrent_5           the same step submitted by 5 workers at the same moment (double sync, double tap)
+EXTRA = ["agent_crash", "tools_crash", "hop2_hop3_lost", "hop1_offline_hop3_down", "concurrent_5"]
+ROOT = Path(__file__).resolve().parent.parent
+COMPOSE = ["docker", "compose", "-f", "docker-compose.yml", "-f", "eval/compose.experiment.yml"]
 STALE = {"slot_taken": "book_appointment", "expired": "notify_family",
          "tool_changed": "book_appointment", "still_valid": "book_appointment"}
 TOOLS = ["book_appointment", "notify_family"]
@@ -42,6 +53,7 @@ TERMINAL = {"DONE", "NEEDS_USER", "FAILED", "CANCELLED"}
 
 CLIENT_TIMEOUT_S = 3.0      # device → gateway
 BUDGET_S = 25.0             # per episode
+CRASH_BUDGET_S = 90.0       # crash episodes include restarting the killed process
 POLL_S = 0.4
 OFFLINE_S = 2.0             # hop1_offline: how long the device has no network
 
@@ -76,7 +88,7 @@ def toxi(method: str, path: str, body: dict | None = None) -> None:
 
 
 def clear_faults() -> None:
-    for hop in ("device_gateway", "gateway_agent", "agent_external"):
+    for hop in ("device_gateway", "gateway_agent", "agent_tools", "agent_external"):
         toxi("POST", f"/proxies/{hop}", {"enabled": True})
         _, toxics = http("GET", f"{TOXIPROXY}/proxies/{hop}/toxics")
         for toxic in toxics or []:
@@ -89,9 +101,35 @@ def latency(hop: str, ms: int) -> None:
          {"name": "lat", "type": "latency", "stream": "downstream", "toxicity": 1.0, "attributes": {"latency": ms}})
 
 
-def arm(fault: str, tool: str) -> tuple[callable, threading.Timer | None]:
-    """Injects `fault`; returns the callback that lifts it after the device's first attempt (and a timer, if any)."""
+def compose(*args: str) -> str:
+    return subprocess.run([*COMPOSE, *args], cwd=ROOT, check=True, capture_output=True, text=True).stdout
+
+
+def wait_healthy(service: str, timeout_s: float = 120.0) -> None:
+    deadline = time.monotonic() + timeout_s
+    while time.monotonic() < deadline:
+        state = compose("ps", "--format", "{{.State}} {{.Health}}", service).strip()
+        if state == "running healthy":
+            return
+        time.sleep(0.5)
+    raise RuntimeError(f"{service} did not come back healthy ({state})")
+
+
+def crash(service: str) -> None:
+    """SIGKILL: no shutdown hooks, no flushing, exactly like the OOM killer or a pulled plug."""
+    compose("kill", "-s", "SIGKILL", service)
+    compose("start", service)
+
+
+def lost_after_commit(tool: str, delay_s: float) -> None:
+    path = "/hospital/bookings" if tool == "book_appointment" else "/notify"
+    http("POST", f"{MOCKS}/admin/faults", {"path": path, "delay_s": delay_s, "count": 1})
+
+
+def arm(fault: str, tool: str) -> tuple[callable, list[threading.Timer]]:
+    """Injects `fault`; returns the callback that lifts it after the device's first attempt (and timers, if any)."""
     lift = clear_faults
+    timers: list[threading.Timer] = []
     timer = None
     if fault == "hop1_offline":
         toxi("POST", "/proxies/device_gateway", {"enabled": False})
@@ -105,9 +143,26 @@ def arm(fault: str, tool: str) -> tuple[callable, threading.Timer | None]:
     elif fault == "hop3_down":
         toxi("POST", "/proxies/agent_external", {"enabled": False})
     elif fault == "hop3_lost_response":
-        path = "/hospital/bookings" if tool == "book_appointment" else "/notify"
-        http("POST", f"{MOCKS}/admin/faults", {"path": path, "delay_s": 2, "count": 1})  # commits, agent (1 s) times out
-    return lift, timer
+        lost_after_commit(tool, 2)                                      # commits, agent (1 s) times out
+    elif fault in ("agent_crash", "tools_crash"):
+        # The external call commits at once and answers after 3 s; the process is killed while it waits.
+        lost_after_commit(tool, 3)
+        timers.append(threading.Timer(0.7, crash, ["agent" if fault == "agent_crash" else "tools"]))
+        lift = lambda: None
+    elif fault == "hop2_hop3_lost":
+        latency("gateway_agent", 3000)
+        lost_after_commit(tool, 2)
+    elif fault == "hop1_offline_hop3_down":
+        toxi("POST", "/proxies/device_gateway", {"enabled": False})
+        toxi("POST", "/proxies/agent_external", {"enabled": False})
+        timers.append(threading.Timer(OFFLINE_S, lambda: toxi("POST", "/proxies/device_gateway", {"enabled": True})))
+        timers.append(threading.Timer(5.0, lambda: toxi("POST", "/proxies/agent_external", {"enabled": True})))
+        lift = lambda: None
+    for t in timers:
+        t.start()
+    if timer:  # hop1_offline starts its own
+        timers.append(timer)
+    return lift, timers
 
 
 # ---------- the device ----------
@@ -116,7 +171,7 @@ def fresh_key() -> str:
     return hashlib.sha256(uuid.uuid4().bytes).hexdigest()
 
 
-def device_run(mode: str, token: str, step: dict, on_first: callable) -> dict:
+def device_run(mode: str, token: str, step: dict, on_first: callable, budget_s: float = BUDGET_S) -> dict:
     started = time.monotonic()
     persistent = step["stepKey"]
     keys: list[str] = []
@@ -129,7 +184,7 @@ def device_run(mode: str, token: str, step: dict, on_first: callable) -> dict:
             first = False
             on_first()
 
-    while time.monotonic() - started < BUDGET_S:
+    while time.monotonic() - started < budget_s:
         key = fresh_key() if mode == "naive" else persistent
         keys.append(key)
         attempts += 1
@@ -146,7 +201,7 @@ def device_run(mode: str, token: str, step: dict, on_first: callable) -> dict:
             time.sleep(0.5)
             continue
         status, reason = view["status"], view.get("reason")
-        while status == "ACCEPTED" and time.monotonic() - started < BUDGET_S:
+        while status == "ACCEPTED" and time.monotonic() - started < budget_s:
             time.sleep(POLL_S)
             try:
                 code, view = http("GET", f"{GATEWAY}/v1/actions/{key}", None, token, CLIENT_TIMEOUT_S)
@@ -159,6 +214,27 @@ def device_run(mode: str, token: str, step: dict, on_first: callable) -> dict:
         if status in TERMINAL:
             return result(status, reason, attempts, keys, started)
     return result("TIMEOUT", None, attempts, keys, started)
+
+
+def concurrent(mode: str, token: str, step: dict, workers: int) -> dict:
+    """The same step from several workers at the same moment; each behaves like its own device loop."""
+    outcomes: list[dict] = []
+    barrier = threading.Barrier(workers)
+
+    def worker() -> None:
+        barrier.wait()
+        outcomes.append(device_run(mode, token, step, lambda: None))
+
+    threads = [threading.Thread(target=worker) for _ in range(workers)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    statuses = sorted({o["status"] for o in outcomes})
+    return {"status": statuses[0] if len(statuses) == 1 else "+".join(statuses),
+            "reason": outcomes[0]["reason"], "attempts": sum(o["attempts"] for o in outcomes),
+            "distinct_keys": sum(o["distinct_keys"] for o in outcomes),
+            "duration_s": max(o["duration_s"] for o in outcomes)}
 
 
 def result(status: str, reason: str | None, attempts: int, keys: list[str], started: float) -> dict:
@@ -201,12 +277,19 @@ def episode(mode: str, kind: str, scenario: str, tool: str, rep: int, day: str, 
         expires = int(time.time() * 1000) - 3_600_000                       # "tell my daughter" an hour too late
     step = make_step(mode, tool, day, trace, preconditions, expires)
 
-    lift, timer = arm(scenario, tool) if kind == "fault" else (lambda: None, None)
+    lift, timers = arm(scenario, tool) if kind == "fault" else (lambda: None, [])
+    budget = CRASH_BUDGET_S if scenario.endswith("_crash") else BUDGET_S
     try:
-        outcome = device_run(mode, token, step, lift)
+        if scenario == "concurrent_5":
+            outcome = concurrent(mode, token, step, 5)
+        else:
+            outcome = device_run(mode, token, step, lift, budget)
     finally:
-        if timer:
-            timer.join()
+        for t in timers:
+            t.join()
+        if scenario.endswith("_crash"):
+            wait_healthy("agent")
+            wait_healthy("tools")
         clear_faults()
     time.sleep(0.3)  # let any held response finish before counting
     _, effects = http("GET", f"{MOCKS}/metrics/trace/{trace}")
@@ -221,6 +304,8 @@ def main() -> int:
     parser.add_argument("--condition", default="rephrase", choices=["rephrase", "identical"],
                         help="label only: must match the agent's MEDSYNC_EXPERIMENT_REPHRASE setting")
     parser.add_argument("--faults-only", action="store_true")
+    parser.add_argument("--extra", action="store_true", help="only the supplementary scenarios → eval/extra/")
+    parser.add_argument("--only", help="comma-separated scenarios to run (debugging)")
     args = parser.parse_args()
 
     code, session = http("POST", f"{GATEWAY}/v1/auth/register",
@@ -230,11 +315,15 @@ def main() -> int:
         return 1
     token = session["token"]
 
-    plan = [("fault", f, t) for f in FAULTS for t in TOOLS]
-    if not args.faults_only:
+    plan = [("fault", f, t) for f in (EXTRA if args.extra else FAULTS) for t in TOOLS]
+    if not args.faults_only and not args.extra:
         plan += [("stale", s, t) for s, t in STALE.items()]
+    if args.only:
+        plan = [p for p in plan if p[1] in args.only.split(",")]
     rng = random.Random(args.seed)
-    out = Path(__file__).parent / "results" / f"{time.strftime('%Y%m%d-%H%M%S')}-{args.condition}.jsonl"
+    out_dir = Path(__file__).parent / ("extra" if args.extra else "results")
+    out_dir.mkdir(exist_ok=True)
+    out = out_dir / f"{time.strftime('%Y%m%d-%H%M%S')}-{args.condition}.jsonl"
     total = args.reps * len(plan) * len(MODES)
     day0 = date(2027, 1, 1)
     n = 0

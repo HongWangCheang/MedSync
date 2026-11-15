@@ -74,3 +74,17 @@ def test_http_api_round_trip() -> None:
         resumed = client.post("/v1/actions/k1/resume", json={"account_id": "acct", "decision": "choose",
                                                              "date": "2026-11-20"})
         assert resumed.json()["status"] == "DONE"
+
+
+def test_a_decision_cut_off_mid_execution_is_finished_when_sent_again() -> None:
+    # Found by eval/run_matrix.py: the user chose, the external call could not complete, the app re-sent the choice.
+    runner, ext = make()
+    ext.slots["2026-11-18"] = {"available": 0, "version": 4}
+    assert runner.run(booking()).status == "NEEDS_USER"
+    ext.fault = "down"
+    assert runner.resume("acct", "k1", {"decision": "choose", "date": "2026-11-19"}).status == "PENDING"
+    ext.fault = None
+    # A different answer the second time does not replace the first: that one is already under way.
+    again = runner.resume("acct", "k1", {"decision": "cancel"})
+    assert again.status == "DONE" and again.result["date"] == "2026-11-19"
+    assert ext.count("k1") == 1

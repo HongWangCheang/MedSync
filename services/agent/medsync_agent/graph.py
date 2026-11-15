@@ -311,6 +311,11 @@ class StepRunner:
         if not snapshot.interrupts:
             if snapshot.values.get("outcome"):
                 return Outcome(**snapshot.values["outcome"])
+            if snapshot.next:
+                # The decision was already taken and is being carried out; an earlier resume was cut off (crash,
+                # timeout) and the app sent it again. Finish the first decision: it may already have reached the
+                # outside world, so it cannot be swapped for a different one now.
+                return self._invoke(None, config)
             raise LookupError("step is not waiting for the user")
         return self._invoke(Command(resume=answer), config)
 

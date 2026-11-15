@@ -11,13 +11,17 @@ differently (another note, another date format), so deduplicating on the tool ar
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from typing import Any, Literal
 
 from .external import External, Rejected, Unreachable
 from .tool_ledger import Claim, ToolLedger
 
-LEASE_S = 30.0
+# How long an INTENT row blocks other attempts of the same step. After it lapses, the next attempt looks the side
+# effect up by step_key instead of waiting. Must exceed the external call's timeout (MEDSYNC_EXTERNAL_TIMEOUT_S), or a
+# slow but healthy call could be looked up (and found missing) while it is still in flight.
+LEASE_S = float(os.environ.get("MEDSYNC_TOOL_LEASE_S", "30"))
 
 
 @dataclass

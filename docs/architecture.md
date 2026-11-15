@@ -109,6 +109,8 @@ sequenceDiagram
 | Agent→工具服务（MCP） | 同一个 step_key 作为工具参数 | MCP 回复丢了算"结果未知"，下次用同一个 step_key 重试，由工具服务的 tool_ledger 返回原结果（[ADR 0009](adr/0009-mcp-tool-server-owns-exactly-once.md)） |
 | ③ 工具服务→外部 | `tool_ledger`（Postgres，由 tools 服务独占） | 调用前写 INTENT，成功后改 COMMITTED；已 COMMITTED 直接返回缓存结果；INTENT 但结果不明时，先按 step_key 去外部系统查，查到就不再调用 |
 
+补充场景（[eval/extra/REPORT.md](../eval/extra/REPORT.md)）又测了进程被杀、多个故障叠加和并发重复提交，Full 在这些场景下仍然没有重复执行。
+
 第③跳最容易出问题：外部系统已经提交了，但响应丢了。这时请求级幂等和参数哈希去重都挡不住重复执行。对比实验专门测了这个情况，见 [eval/report.md](../eval/report.md)：640 个故障回合中，重复副作用率朴素重试是 50%，请求级幂等和参数哈希去重都是 33%，MedSync 是 0%。
 
 ## 4. 排队期间情况变了：revalidate
@@ -126,7 +128,7 @@ sequenceDiagram
 | 号源被抢光 | 列出可改约的日期 + 取消 |
 | 号源版本变了，但还有号 | 照常执行 |
 
-问用户用的是 LangGraph 的 `interrupt()`；客户端把卡片显示成"需要你确认"，用户的选择通过 `Command(resume=…)` 送回同一个线程。对比实验里，过期和契约变更的动作 30/30 被拦下，仍然有效的动作误拦 0/10。见 [ADR 0003](adr/0003-revalidate-with-interrupt.md)。
+问用户用的是 LangGraph 的 `interrupt()`；客户端把卡片显示成"需要你确认"，用户的选择通过 `Command(resume=…)` 送回同一个线程。对比实验里，过期和契约变更的动作 30/30 被拦下，仍然有效的动作误拦 0/10。用户的决定一旦交给网关，这一步就回到"处理中"：执行途中进程被杀，下次轮询会把第一次的决定执行完，不会再问一遍。见 [ADR 0003](adr/0003-revalidate-with-interrupt.md)。
 
 ## 5. 多 Agent 协作
 

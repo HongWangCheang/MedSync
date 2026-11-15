@@ -80,4 +80,24 @@ class DelegationTest {
         verify(issuer, never()).issue(eq("acct"), eq("actions:write"));
         verify(mapper, never()).insert(anyString(), anyString(), anyString(), any(Long.class));
     }
+
+    @Test
+    void aDecisionWhoseAnswerIsLostLeavesTheStepMovingNotWaitingForTheUserAgain() {
+        // Found by eval/run_matrix.py: the agent was killed while sending the message the user had just approved.
+        ObjectMapper json = new ObjectMapper();
+        ActionLedger ledger = mock(ActionLedger.class);
+        AgentClient agent = mock(AgentClient.class);
+        ActionService service = new ActionService(ledger, agent, mock(Delegation.class), json);
+        ActionMapper.Row waiting = new ActionMapper.Row("k", "p", 1, "notify_family", "f", "{}", "NEEDS_USER", null,
+            "conflict_with_later_finding");
+        ActionMapper.Row moving = new ActionMapper.Row("k", "p", 1, "notify_family", "f", "{}", "DISPATCHED", null, null);
+        when(ledger.find("acct", "k")).thenReturn(waiting);
+        when(ledger.settle("acct", "k", "DISPATCHED", null, null)).thenReturn(moving);
+        when(agent.resume(eq("k"), any())).thenThrow(new AgentClient.Unavailable(new RuntimeException("reset")));
+
+        ActionService.View view = service.resume("acct", "k", json.createObjectNode().put("decision", "send_with_note"));
+
+        assertThat(view.status()).isEqualTo("ACCEPTED");  // not NEEDS_USER: the app must not ask again
+        verify(ledger).settle("acct", "k", "DISPATCHED", null, null);
+    }
 }
