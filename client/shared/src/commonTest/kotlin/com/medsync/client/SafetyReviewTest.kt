@@ -45,6 +45,23 @@ class SafetyReviewTest {
     }
 
     @Test
+    fun aPairWithoutLabelsIsNeverShownAsCompared() {
+        // The blind test's B01: diclofenac + warfarin, both recognised, neither label in the snapshot.
+        val review = SafetyReview.parse("""{"tool": "record_medication", "safety": {"status": "ok",
+            "medication": {"name": "双氯芬酸"}, "checked": [], "no_label": [{"name": "华法林"}], "unresolved": [],
+            "not_recent": [], "alerts": [], "note": "只根据说明书原文判断"}}""")!!
+        assertEquals(listOf("华法林"), review.noLabel)
+        assertEquals("安全审核：没有可查的说明书，只核对了是否含相同成分", review.headline)
+        assertEquals(listOf("没有说明书可查（只核对了是否含相同成分）：华法林"), review.coverage)
+        assertTrue(review.coverage.none { it.startsWith("已对照") })
+        // An older server without no_label still parses, as before.
+        val old = SafetyReview.parse("""{"safety": {"status": "ok", "medication": {"name": "布洛芬"},
+            "checked": [{"name": "舍曲林"}], "alerts": []}}""")!!
+        assertEquals("安全审核：说明书里没有找到相关提醒", old.headline)
+        assertEquals(listOf("已对照：舍曲林"), old.coverage)
+    }
+
+    @Test
     fun askPharmacistQuestionIsAQuestionNotANewRecord() {
         val review = SafetyReview.parse(result)!!
         val routed = RuleRouter.route(review.question(review.alerts.single()), LocalDate(2026, 11, 14), 0L)

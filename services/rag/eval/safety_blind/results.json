@@ -1,0 +1,984 @@
+{
+  "summary": {
+    "cases": 32,
+    "expected_pairs": 21,
+    "caught": 8,
+    "recall": 0.38095238095238093,
+    "recall_ci": [
+      0.20750767797982506,
+      0.5912170418449848
+    ],
+    "alerts": 8,
+    "false_alerts": 0,
+    "precision": 1.0,
+    "precision_ci": [
+      0.6755843804891231,
+      1.0
+    ],
+    "negative_cases": 11,
+    "negatives_clean": 11,
+    "high_grading_ok": 0,
+    "high_cases": 2,
+    "positive_cases": 21
+  },
+  "rows": [
+    {
+      "id": "B01",
+      "new": "双氯芬酸",
+      "existing": [
+        "华法林"
+      ],
+      "expected": [
+        "华法林"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "华法林"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "双氯芬酸",
+        "ingredients": [
+          "diclofenac"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "NSAID + anticoagulant: bleeding",
+      "high": false
+    },
+    {
+      "id": "B02",
+      "new": "阿司匹林",
+      "existing": [
+        "利伐沙班"
+      ],
+      "expected": [
+        "利伐沙班"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "利伐沙班"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "阿司匹林",
+        "ingredients": [
+          "aspirin"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "antiplatelet + anticoagulant: bleeding",
+      "high": false
+    },
+    {
+      "id": "B03",
+      "new": "布洛芬",
+      "existing": [
+        "呋塞米"
+      ],
+      "expected": [
+        "呋塞米"
+      ],
+      "alerted": [
+        "呋塞米"
+      ],
+      "caught": [
+        "呋塞米"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "布洛芬",
+        "ingredients": [
+          "ibuprofen"
+        ],
+        "label": "Motrin IB Migraine"
+      },
+      "findings": [
+        {
+          "with": "呋塞米",
+          "severity": "moderate",
+          "summary": "布洛芬（参照 Motrin IB Migraine 说明书）在「用药前咨询医生」里提到了利尿剂（呋塞米）。",
+          "label": "Motrin IB Migraine",
+          "section": "Ask a doctor before use",
+          "excerpt": "…re, heart disease, liver cirrhosis, kidney disease, asthma, or had a stroke you are taking a diuretic"
+        }
+      ],
+      "why": "NSAIDs blunt loop diuretics and stress the kidneys",
+      "high": false
+    },
+    {
+      "id": "B04",
+      "new": "萘普生",
+      "existing": [
+        "氢氯噻嗪"
+      ],
+      "expected": [
+        "氢氯噻嗪"
+      ],
+      "alerted": [
+        "氢氯噻嗪"
+      ],
+      "caught": [
+        "氢氯噻嗪"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "萘普生",
+        "ingredients": [
+          "naproxen"
+        ],
+        "label": "Aleve Gelcaps"
+      },
+      "findings": [
+        {
+          "with": "氢氯噻嗪",
+          "severity": "moderate",
+          "summary": "萘普生（参照 Aleve Gelcaps 说明书）在「用药前咨询医生」里提到了利尿剂（氢氯噻嗪）。",
+          "label": "Aleve Gelcaps",
+          "section": "Ask a doctor before use",
+          "excerpt": "…re, heart disease, liver cirrhosis, kidney disease, asthma, or had a stroke you are taking a diuretic you have problems or serious side effects from taking pain relievers or fever reducers"
+        }
+      ],
+      "why": "NSAID + thiazide: reduced diuretic effect, kidney risk",
+      "high": false
+    },
+    {
+      "id": "B05",
+      "new": "氟西汀",
+      "existing": [
+        "阿司匹林"
+      ],
+      "expected": [
+        "阿司匹林"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "阿司匹林"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "氟西汀",
+        "ingredients": [
+          "fluoxetine"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "SSRI + antiplatelet: bleeding",
+      "high": false
+    },
+    {
+      "id": "B06",
+      "new": "萘普生",
+      "existing": [
+        "泼尼松"
+      ],
+      "expected": [
+        "泼尼松"
+      ],
+      "alerted": [
+        "泼尼松"
+      ],
+      "caught": [
+        "泼尼松"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "萘普生",
+        "ingredients": [
+          "naproxen"
+        ],
+        "label": "Aleve Gelcaps"
+      },
+      "findings": [
+        {
+          "with": "泼尼松",
+          "severity": "moderate",
+          "summary": "萘普生（参照 Aleve Gelcaps 说明书）在「警告」里提到了糖皮质激素（泼尼松）。",
+          "label": "Aleve Gelcaps",
+          "section": "Warnings",
+          "excerpt": "…older have had stomach ulcers or bleeding problems take a blood thinning (anticoagulant) or steroid drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while using this produc…"
+        }
+      ],
+      "why": "NSAID + corticosteroid: GI bleeding",
+      "high": false
+    },
+    {
+      "id": "B07",
+      "new": "埃索美拉唑",
+      "existing": [
+        "氯吡格雷"
+      ],
+      "expected": [
+        "氯吡格雷"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "氯吡格雷"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "埃索美拉唑",
+        "ingredients": [
+          "esomeprazole"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "esomeprazole inhibits CYP2C19 activation of clopidogrel",
+      "high": false
+    },
+    {
+      "id": "B08",
+      "new": "伪麻黄碱",
+      "existing": [
+        "去氧肾上腺素"
+      ],
+      "expected": [
+        "去氧肾上腺素"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "去氧肾上腺素"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "伪麻黄碱",
+        "ingredients": [
+          "pseudoephedrine"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "two decongestants: blood pressure, heart rate",
+      "high": false
+    },
+    {
+      "id": "B09",
+      "new": "氯苯那敏",
+      "existing": [
+        "苯海拉明"
+      ],
+      "expected": [
+        "苯海拉明"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "苯海拉明"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "氯苯那敏",
+        "ingredients": [
+          "chlorpheniramine"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "two sedating antihistamines",
+      "high": false
+    },
+    {
+      "id": "B10",
+      "new": "地塞米松",
+      "existing": [
+        "布洛芬"
+      ],
+      "expected": [
+        "布洛芬"
+      ],
+      "alerted": [
+        "布洛芬"
+      ],
+      "caught": [
+        "布洛芬"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "地塞米松",
+        "ingredients": [
+          "dexamethasone"
+        ],
+        "label": null
+      },
+      "findings": [
+        {
+          "with": "布洛芬",
+          "severity": "moderate",
+          "summary": "布洛芬（参照 Motrin IB Migraine 说明书）在「警告」里提到了糖皮质激素（地塞米松）。",
+          "label": "Motrin IB Migraine",
+          "section": "Warnings",
+          "excerpt": "…older have had stomach ulcers or bleeding problems take a blood thinning (anticoagulant) or steroid drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while using this produc…"
+        }
+      ],
+      "why": "corticosteroid + NSAID: GI bleeding",
+      "high": false
+    },
+    {
+      "id": "B11",
+      "new": "舍曲林",
+      "existing": [
+        "氟西汀"
+      ],
+      "expected": [
+        "氟西汀"
+      ],
+      "alerted": [
+        "氟西汀"
+      ],
+      "caught": [
+        "氟西汀"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "舍曲林",
+        "ingredients": [
+          "sertraline"
+        ],
+        "label": "Zoloft"
+      },
+      "findings": [
+        {
+          "with": "氟西汀",
+          "severity": "moderate",
+          "summary": "舍曲林（参照 Zoloft 说明书）在「药物相互作用」里提到了抗抑郁药（SSRI）（氟西汀）。",
+          "label": "Zoloft",
+          "section": "Drug interactions",
+          "excerpt": "…ons with ZOLOFT Monoamine Oxidase Inhibitors (MAOIs) Clinical Impact: The concomitant use of SSRIs including ZOLOFT and MAOIs increases the risk of serotonin syndrome. Intervention: ZOLOFT is contraindicated in patients taking MAOIs, including MAOIs such as linezolid or intraveno…"
+        }
+      ],
+      "why": "two SSRIs: serotonin syndrome",
+      "high": false
+    },
+    {
+      "id": "B12",
+      "new": "白加黑",
+      "existing": [
+        "泰诺"
+      ],
+      "expected": [
+        "泰诺"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "泰诺"
+      ],
+      "false": [],
+      "high_ok": false,
+      "status": "unresolved_medication",
+      "unresolved": [],
+      "medication": {
+        "name": "白加黑",
+        "ingredients": [],
+        "label": null
+      },
+      "findings": [],
+      "why": "白加黑 contains acetaminophen: duplicate ingredient",
+      "high": true
+    },
+    {
+      "id": "B13",
+      "new": "新康泰克",
+      "existing": [
+        "苯海拉明"
+      ],
+      "expected": [
+        "苯海拉明"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "苯海拉明"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "unresolved_medication",
+      "unresolved": [],
+      "medication": {
+        "name": "新康泰克",
+        "ingredients": [],
+        "label": null
+      },
+      "findings": [],
+      "why": "新康泰克 contains chlorpheniramine: two sedating antihistamines",
+      "high": false
+    },
+    {
+      "id": "B14",
+      "new": "感冒灵颗粒",
+      "existing": [
+        "对乙酰氨基酚"
+      ],
+      "expected": [
+        "对乙酰氨基酚"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "对乙酰氨基酚"
+      ],
+      "false": [],
+      "high_ok": false,
+      "status": "unresolved_medication",
+      "unresolved": [],
+      "medication": {
+        "name": "感冒灵颗粒",
+        "ingredients": [],
+        "label": null
+      },
+      "findings": [],
+      "why": "感冒灵 contains acetaminophen: duplicate ingredient",
+      "high": true
+    },
+    {
+      "id": "B15",
+      "new": "华法林",
+      "existing": [
+        "阿司匹林"
+      ],
+      "expected": [
+        "阿司匹林"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "阿司匹林"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "华法林",
+        "ingredients": [
+          "warfarin"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "anticoagulant + antiplatelet: bleeding",
+      "high": false
+    },
+    {
+      "id": "B16",
+      "new": "利伐沙班",
+      "existing": [
+        "萘普生"
+      ],
+      "expected": [
+        "萘普生"
+      ],
+      "alerted": [
+        "萘普生"
+      ],
+      "caught": [
+        "萘普生"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "利伐沙班",
+        "ingredients": [
+          "rivaroxaban"
+        ],
+        "label": null
+      },
+      "findings": [
+        {
+          "with": "萘普生",
+          "severity": "moderate",
+          "summary": "萘普生（参照 Aleve Gelcaps 说明书）在「警告」里提到了抗凝药（利伐沙班）。",
+          "label": "Aleve Gelcaps",
+          "section": "Warnings",
+          "excerpt": "…you: are age 60 or older have had stomach ulcers or bleeding problems take a blood thinning (anticoagulant) or steroid drug take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) have 3 or more alcoholic drinks every day while…"
+        }
+      ],
+      "why": "anticoagulant + NSAID: bleeding",
+      "high": false
+    },
+    {
+      "id": "B17",
+      "new": "左甲状腺素",
+      "existing": [
+        "埃索美拉唑"
+      ],
+      "expected": [
+        "埃索美拉唑"
+      ],
+      "alerted": [
+        "埃索美拉唑"
+      ],
+      "caught": [
+        "埃索美拉唑"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "左甲状腺素",
+        "ingredients": [
+          "levothyroxine"
+        ],
+        "label": "Synthroid"
+      },
+      "findings": [
+        {
+          "with": "埃索美拉唑",
+          "severity": "moderate",
+          "summary": "左甲状腺素（参照 Synthroid 说明书）在「药物相互作用」里提到了质子泵抑制剂（埃索美拉唑）。",
+          "label": "Synthroid",
+          "section": "Drug interactions",
+          "excerpt": "…bsorption. Administer SYNTHROID at least 4 hours prior to these drugs or monitor TSH levels. Proton Pump Inhibitors Sucralfate Antacids (e.g., aluminum & magnesium hydroxides, simethicone) Gastric acidity is an essential requirement for adequate absorption of levothyroxine."
+        }
+      ],
+      "why": "PPI reduces levothyroxine absorption",
+      "high": false
+    },
+    {
+      "id": "B18",
+      "new": "辛伐他汀",
+      "existing": [
+        "克拉霉素"
+      ],
+      "expected": [
+        "克拉霉素"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "克拉霉素"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "unresolved_medication",
+      "unresolved": [],
+      "medication": {
+        "name": "辛伐他汀",
+        "ingredients": [],
+        "label": null
+      },
+      "findings": [],
+      "why": "CYP3A4 inhibitor raises simvastatin levels: myopathy",
+      "high": false
+    },
+    {
+      "id": "B19",
+      "new": "甲硝唑",
+      "existing": [
+        "华法林"
+      ],
+      "expected": [
+        "华法林"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "华法林"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "unresolved_medication",
+      "unresolved": [],
+      "medication": {
+        "name": "甲硝唑",
+        "ingredients": [],
+        "label": null
+      },
+      "findings": [],
+      "why": "metronidazole raises INR on warfarin",
+      "high": false
+    },
+    {
+      "id": "B20",
+      "new": "地高辛",
+      "existing": [
+        "呋塞米"
+      ],
+      "expected": [
+        "呋塞米"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "呋塞米"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "unresolved_medication",
+      "unresolved": [],
+      "medication": {
+        "name": "地高辛",
+        "ingredients": [],
+        "label": null
+      },
+      "findings": [],
+      "why": "loop diuretic hypokalaemia raises digoxin toxicity",
+      "high": false
+    },
+    {
+      "id": "B21",
+      "new": "双氯芬酸",
+      "existing": [
+        "舍曲林"
+      ],
+      "expected": [
+        "舍曲林"
+      ],
+      "alerted": [
+        "舍曲林"
+      ],
+      "caught": [
+        "舍曲林"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "双氯芬酸",
+        "ingredients": [
+          "diclofenac"
+        ],
+        "label": null
+      },
+      "findings": [
+        {
+          "with": "舍曲林",
+          "severity": "moderate",
+          "summary": "舍曲林（参照 Zoloft 说明书）在「警告与注意事项」里提到了非甾体抗炎药（双氯芬酸）。",
+          "label": "Zoloft",
+          "section": "Warnings and precautions",
+          "excerpt": "…ncreased Risk of Bleeding: Concomitant use of aspirin, nonsteroidal anti-inflammatory drugs (NSAIDs), other antiplatelet drugs, warfarin, and other anticoagulants may increase this risk. ( 5.3 ) • Activation of Mania/Hypomania: Screen patients for bipolar disorder. ( 5.4 ) •"
+        }
+      ],
+      "why": "NSAID + SSRI: bleeding",
+      "high": false
+    },
+    {
+      "id": "BN01",
+      "new": "氯雷他定",
+      "existing": [
+        "碳酸钙"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "氯雷他定",
+        "ingredients": [
+          "loratadine"
+        ],
+        "label": "Claritin Chewable Grape and Bubblegum"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "BN02",
+      "new": "西替利嗪",
+      "existing": [
+        "阿托伐他汀"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "西替利嗪",
+        "ingredients": [
+          "cetirizine"
+        ],
+        "label": "ZYRTEC Allergy"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "BN03",
+      "new": "法莫替丁",
+      "existing": [
+        "布洛芬"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "法莫替丁",
+        "ingredients": [
+          "famotidine"
+        ],
+        "label": "PEPCID AC Maximum Strength"
+      },
+      "findings": [],
+      "why": "no meaningful interaction (an H2 blocker is often given with NSAIDs)",
+      "high": false
+    },
+    {
+      "id": "BN04",
+      "new": "泰诺",
+      "existing": [
+        "氯雷他定"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "泰诺",
+        "ingredients": [
+          "acetaminophen"
+        ],
+        "label": "TYLENOL Regular Strength"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "BN05",
+      "new": "埃索美拉唑",
+      "existing": [
+        "氯雷他定"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "埃索美拉唑",
+        "ingredients": [
+          "esomeprazole"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "BN06",
+      "new": "呋塞米",
+      "existing": [
+        "法莫替丁"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "呋塞米",
+        "ingredients": [
+          "furosemide"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "BN07",
+      "new": "二甲双胍",
+      "existing": [
+        "阿托伐他汀"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "unresolved_medication",
+      "unresolved": [],
+      "medication": {
+        "name": "二甲双胍",
+        "ingredients": [],
+        "label": null
+      },
+      "findings": [],
+      "why": "commonly co-prescribed, no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "BN08",
+      "new": "对乙酰氨基酚",
+      "existing": [
+        "萘普生"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "对乙酰氨基酚",
+        "ingredients": [
+          "acetaminophen"
+        ],
+        "label": "TYLENOL Regular Strength"
+      },
+      "findings": [],
+      "why": "commonly combined; different ingredients",
+      "high": false
+    },
+    {
+      "id": "BN09",
+      "new": "双氯芬酸",
+      "existing": [
+        "华法林"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "双氯芬酸",
+        "ingredients": [
+          "diclofenac"
+        ],
+        "label": null
+      },
+      "findings": [],
+      "why": "last warfarin record ten days ago, outside the review window",
+      "high": false
+    },
+    {
+      "id": "BN10",
+      "new": "苯海拉明",
+      "existing": [
+        "对乙酰氨基酚"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "苯海拉明",
+        "ingredients": [
+          "diphenhydramine"
+        ],
+        "label": "Benadryl"
+      },
+      "findings": [],
+      "why": "often combined in night-time products; no interaction",
+      "high": false
+    },
+    {
+      "id": "BN11",
+      "new": "芬必得",
+      "existing": [
+        "布洛芬"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "芬必得",
+        "ingredients": [
+          "ibuprofen"
+        ],
+        "label": "Motrin IB Migraine"
+      },
+      "findings": [],
+      "why": "same ingredient, but four days apart: dosing, not a combination",
+      "high": false
+    }
+  ]
+}

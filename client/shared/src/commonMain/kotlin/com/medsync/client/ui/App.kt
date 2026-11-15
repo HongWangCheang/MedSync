@@ -268,14 +268,7 @@ private fun SafetyView(review: SafetyReview, onAsk: (String) -> Unit) {
     }
     Card(colors = CardDefaults.cardColors(containerColor = container), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            val title = when {
-                review.status == "skipped" -> "安全审核未执行（${review.skippedReason ?: "未知原因"}）"
-                review.status == "unresolved_medication" -> "安全审核：没认出「${review.medication}」，没有检查"
-                review.high -> "安全审核：有需要马上留意的提醒"
-                review.alerts.isNotEmpty() -> "安全审核：有用药提醒"
-                review.checked.isEmpty() && review.unresolved.isEmpty() -> "安全审核：最近一周没有其他服药记录，无需对照"
-                else -> "安全审核：说明书里没有找到相关提醒"
-            }
+            val title = review.headline
             Text(title, style = MaterialTheme.typography.labelLarge)
             review.alerts.forEach { alert ->
                 alert.findings.forEach { f ->
@@ -292,11 +285,7 @@ private fun SafetyView(review: SafetyReview, onAsk: (String) -> Unit) {
                 }
                 OutlinedButton(onClick = { onAsk(review.question(alert)) }) { Text("问药师：和${alert.with}能一起吃吗") }
             }
-            val coverage = buildList {
-                if (review.checked.isNotEmpty()) add("已对照：${review.checked.joinToString("、")}")
-                if (review.unresolved.isNotEmpty()) add("没认出、未检查：${review.unresolved.joinToString("、")}")
-                if (review.notRecent.isNotEmpty()) add("一周前的记录未对照：${review.notRecent.joinToString("、")}")
-            }
+            val coverage = review.coverage
             if (coverage.isNotEmpty()) Text(coverage.joinToString("；"), style = MaterialTheme.typography.labelSmall)
             review.note?.let { Text(it, style = MaterialTheme.typography.labelSmall) }
         }

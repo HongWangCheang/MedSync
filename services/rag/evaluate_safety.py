@@ -75,11 +75,25 @@ def summarize(rows: list[dict]) -> dict:
     }
 
 
-def report(rows: list[dict], summary: dict) -> str:
+DEV_NOTE = [
+    "**这是开发集，不是盲测。** 写检查器时用这批用例调过三处：过敏语境里的提及不算（“allergic to aspirin”）、"
+    "否定句不算（Lipitor “no clinically significant effect … warfarin”）、同成分多个说明书时选有相互作用章节的那份。"
+    "所以数字偏乐观，换一批新用例才是真实水平（见 [../safety_blind/REPORT.md](../safety_blind/REPORT.md)）。",
+    "",
+    "漏报都是数据或词表覆盖不到：说明书没写（布洛芬或奥美拉唑与氯吡格雷）、名字不在别名表（克拉霉素，会作为“未识别”"
+    "明确告诉用户）、两种抗组胺药的说明书互不提及。检查器只说“说明书写了什么”，不凭常识补。",
+]
+BLIND_NOTE = [
+    "**这是盲测集。** 用例在检查器规则定下之后按一般药理常识编写，先提交到 git、后运行，"
+    "没有在这些药对上调过规则，结果出来以后也不改规则。所以这里的数字才是检查器在新数据上的水平。",
+]
+
+
+def report(rows: list[dict], summary: dict, blind: bool = False) -> str:
     pct = lambda x: f"{100 * x:.0f}%"
     ci = lambda pair: f"{pct(pair[0])}–{pct(pair[1])}"
     lines = [
-        "# 安全审核评测：相互作用提醒",
+        "# 安全审核评测：相互作用提醒" + ("（盲测）" if blind else ""),
         "",
         f"用例 {summary['cases']} 个（正例 {summary['positive_cases']}，负例 {summary['negative_cases']}），"
         "预期答案按一般药理常识预先写好，不是照着检查器的输出写的。",
@@ -93,12 +107,7 @@ def report(rows: list[dict], summary: dict) -> str:
         f"| 负例无误报 | {summary['negatives_clean']}/{summary['negative_cases']} |",
         f"| 标为 high 的用例判成 high | {summary['high_grading_ok']}/{summary['high_cases']} |",
         "",
-        "**这是开发集，不是盲测。** 写检查器时用这批用例调过三处：过敏语境里的提及不算（“allergic to aspirin”）、"
-        "否定句不算（Lipitor “no clinically significant effect … warfarin”）、同成分多个说明书时选有相互作用章节的那份。"
-        "所以数字偏乐观，换一批新用例才是真实水平。",
-        "",
-        "漏报都是数据或词表覆盖不到：说明书没写（布洛芬或奥美拉唑与氯吡格雷）、名字不在别名表（克拉霉素，会作为“未识别”"
-        "明确告诉用户）、两种抗组胺药的说明书互不提及。检查器只说“说明书写了什么”，不凭常识补。",
+        *(BLIND_NOTE if blind else DEV_NOTE),
         "",
         "## 逐条结果",
         "",
@@ -129,20 +138,24 @@ def main() -> None:
     parser.add_argument("--corpus", default=str(DEFAULT_CORPUS))
     parser.add_argument("--cases", default=str(CASES))
     parser.add_argument("--no-write", action="store_true")
+    parser.add_argument("--blind", action="store_true",
+                        help="score eval/safety_blind_cases.json into eval/safety_blind/ (run once; do not tune on it)")
     args = parser.parse_args()
     records = json.loads(Path(args.corpus).read_text(encoding="utf-8"))["results"]
     checker = SafetyChecker(LabelIndex(LabelSnapshot(records, public=True), model=None))
-    rows = run(checker, json.loads(Path(args.cases).read_text(encoding="utf-8"))["cases"])
+    cases = HERE / "eval" / "safety_blind_cases.json" if args.blind else Path(args.cases)
+    out = HERE / "eval" / "safety_blind" if args.blind else OUT
+    rows = run(checker, json.loads(cases.read_text(encoding="utf-8"))["cases"])
     summary = summarize(rows)
     for r in rows:
         print(f"{r['id']:4} expected={r['expected']} alerted={r['alerted']} high_ok={r['high_ok']} "
               f"unresolved={r['unresolved']} med={r['medication']}")
     print(json.dumps({k: v for k, v in summary.items()}, ensure_ascii=False))
     if not args.no_write:
-        OUT.mkdir(parents=True, exist_ok=True)
-        (OUT / "results.json").write_text(json.dumps({"summary": summary, "rows": rows}, ensure_ascii=False, indent=2)
+        out.mkdir(parents=True, exist_ok=True)
+        (out / "results.json").write_text(json.dumps({"summary": summary, "rows": rows}, ensure_ascii=False, indent=2)
                                           + "\n", encoding="utf-8")
-        (OUT / "REPORT.md").write_text(report(rows, summary), encoding="utf-8")
+        (out / "REPORT.md").write_text(report(rows, summary, args.blind), encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -14,8 +14,9 @@ data class SafetyAlert(val with: String, val high: Boolean, val findings: List<S
 
 /**
  * The safety review attached to a synced medication record (server: services/rag/safety_review.py).
- * `checked` / `unresolved` / `notRecent` say what the review actually covered, so "no alert" is never shown as
- * "safe": a name the server could not recognise is listed as not checked.
+ * `checked` / `noLabel` / `unresolved` / `notRecent` say what the review actually covered, so "no alert" is never
+ * shown as "safe": a name the server could not recognise is listed as not checked, and a pair for which neither
+ * label is in the snapshot is listed as such, not as compared.
  */
 data class SafetyReview(
     val status: String,
@@ -26,8 +27,29 @@ data class SafetyReview(
     val notRecent: List<String>,
     val note: String?,
     val skippedReason: String? = null,
+    /** Recognised, but neither this drug's label nor the new one's is in the snapshot: only shared ingredients checked. */
+    val noLabel: List<String> = emptyList(),
 ) {
     val high: Boolean get() = alerts.any { it.high }
+
+    /** The card's title: what happened, never more than the review covered. */
+    val headline: String get() = when {
+        status == "skipped" -> "安全审核未执行（${skippedReason ?: "未知原因"}）"
+        status == "unresolved_medication" -> "安全审核：没认出「$medication」，没有检查"
+        high -> "安全审核：有需要马上留意的提醒"
+        alerts.isNotEmpty() -> "安全审核：有用药提醒"
+        checked.isEmpty() && noLabel.isEmpty() && unresolved.isEmpty() -> "安全审核：最近一周没有其他服药记录，无需对照"
+        checked.isEmpty() && noLabel.isNotEmpty() -> "安全审核：没有可查的说明书，只核对了是否含相同成分"
+        else -> "安全审核：说明书里没有找到相关提醒"
+    }
+
+    /** What was and was not compared, one clause each. */
+    val coverage: List<String> get() = buildList {
+        if (checked.isNotEmpty()) add("已对照：${checked.joinToString("、")}")
+        if (noLabel.isNotEmpty()) add("没有说明书可查（只核对了是否含相同成分）：${noLabel.joinToString("、")}")
+        if (unresolved.isNotEmpty()) add("没认出、未检查：${unresolved.joinToString("、")}")
+        if (notRecent.isNotEmpty()) add("一周前的记录未对照：${notRecent.joinToString("、")}")
+    }
 
     /** What to ask the pharmacist about an alert; routed like any typed question (RuleRouter → ask_pharmacist). */
     fun question(alert: SafetyAlert): String = "我在用${alert.with}，现在加上${medication}，这两个能一起用吗？"
@@ -53,6 +75,7 @@ data class SafetyReview(
                 notRecent = safety.array("not_recent").mapNotNull { (it as? JsonPrimitive)?.contentOrNull },
                 note = safety.str("note"),
                 skippedReason = safety.str("reason"),
+                noLabel = safety.array("no_label").mapNotNull { (it as? JsonObject)?.str("name") },
             )
         }.getOrNull()
 
