@@ -155,16 +155,17 @@ class WalkthroughTest {
 
     @Test
     fun aPairWithNoLabelsIsNotShownAsCompared() = runDesktopComposeUiTest(width = 760, height = 900) {
-        // Found by the blind test: diclofenac + warfarin are both recognised, but neither label is in the snapshot.
+        // Found by the blind test. Every single-ingredient drug in the table now has a label; two Chinese combination
+        // products still have none, so only their shared ingredient (pseudoephedrine) can be checked.
         assumeTrue(System.getenv("MEDSYNC_WALKTHROUGH") == "1")
         val app = controller()
         setContent { App(app) }
-        say("我吃了华法林")
+        say("我吃了新康泰克")
         waitForText("无需对照")
-        say("我吃了双氯芬酸")
-        waitForText("没有可查的说明书")
-        onNodeWithText("没有说明书可查（只核对了是否含相同成分）：华法林", substring = true).assertExists()
-        assertTrue(onAllNodesWithText("已对照：华法林", substring = true).fetchSemanticsNodes().isEmpty())
+        say("我吃了白加黑")
+        waitForText("没有说明书可查（只核对了是否含相同成分）：新康泰克")
+        onNodeWithText("有需要马上留意的提醒", substring = true).assertExists()  // same ingredient within a day
+        assertTrue(onAllNodesWithText("已对照：新康泰克", substring = true).fetchSemanticsNodes().isEmpty())
         shot("11-no-label-pair")
     }
 
@@ -187,12 +188,13 @@ class WalkthroughTest {
 
         toggleOffline()
         waitForText("已暂停", timeoutMs = 60_000)
-        // The user's own word for the drug, with the label it was read from (on the alert and on the pause).
-        assertTrue(onAllNodesWithText("布洛芬（参照", substring = true).fetchSemanticsNodes().size >= 2)
+        // The user's own word for the drug, with the label it was read from (on the alert and on the pause). Either
+        // label may be cited: ibuprofen's names anticoagulants, warfarin's (prescription snapshot) lists NSAIDs.
+        assertTrue(onAllNodesWithText("（参照", substring = true).fetchSemanticsNodes().size >= 2)
         onNodeWithText("照原样发送").assertExists()
         shot("6-alert-and-paused-message")
 
-        onNodeWithText("点开看原文", substring = true).performClick()
+        onAllNodesWithText("点开看原文", substring = true)[0].performClick()  // both labels are cited now
         shot("7-excerpt-open")
 
         onNodeWithText("附上提醒再发").performClick()

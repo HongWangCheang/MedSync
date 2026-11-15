@@ -1,0 +1,1345 @@
+{
+  "summary": {
+    "cases": 35,
+    "expected_pairs": 23,
+    "caught": 21,
+    "recall": 0.9130434782608695,
+    "recall_ci": [
+      0.7320359570190598,
+      0.9758205045927666
+    ],
+    "alerts": 22,
+    "false_alerts": 1,
+    "precision": 0.9545454545454546,
+    "precision_ci": [
+      0.7820151050048196,
+      0.9919307806988522
+    ],
+    "negative_cases": 12,
+    "negatives_clean": 11,
+    "high_grading_ok": 3,
+    "high_cases": 3,
+    "positive_cases": 23
+  },
+  "rows": [
+    {
+      "id": "V01",
+      "new": "胺碘酮",
+      "existing": [
+        "华法林"
+      ],
+      "expected": [
+        "华法林"
+      ],
+      "alerted": [
+        "华法林"
+      ],
+      "caught": [
+        "华法林"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "胺碘酮",
+        "ingredients": [
+          "amiodarone"
+        ],
+        "label": "Amiodarone Hydrochloride"
+      },
+      "findings": [
+        {
+          "with": "华法林",
+          "severity": "moderate",
+          "summary": "胺碘酮（参照 Amiodarone Hydrochloride 说明书）在「药物相互作用」里提到了华法林。",
+          "label": "Amiodarone Hydrochloride",
+          "section": "Drug interactions",
+          "excerpt": "Lower starting dose of other CYP3A4 substrates may be required. Warfarin Potentiates anticoagulant response and can result in serious or fatal bleeding. Coadministration increases prothrombin time by 100% after 3 to 4 days. Reduce warfarin dose by one-third to one-half and monito…"
+        },
+        {
+          "with": "华法林",
+          "severity": "moderate",
+          "summary": "华法林（参照 Warfarin Sodium 说明书）在「药物相互作用」里提到了胺碘酮。",
+          "label": "Warfarin Sodium",
+          "section": "Drug interactions",
+          "excerpt": "Table 2: Examples of CYP450 Interactions with Warfarin Enzyme Inhibitors Inducers CYP2C9 amiodarone, capecitabine, cotrimoxazole, etravirine, fluconazole, fluvastatin, fluvoxamine, metronidazole, miconazole, oxandrolone, sulfinpyrazone, tigecycline, voriconazole, zafirlukast apre…"
+        }
+      ],
+      "why": "amiodarone inhibits warfarin metabolism: INR rises, bleeding",
+      "high": false
+    },
+    {
+      "id": "V02",
+      "new": "克拉霉素",
+      "existing": [
+        "秋水仙碱"
+      ],
+      "expected": [
+        "秋水仙碱"
+      ],
+      "alerted": [
+        "秋水仙碱"
+      ],
+      "caught": [
+        "秋水仙碱"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "克拉霉素",
+        "ingredients": [
+          "clarithromycin"
+        ],
+        "label": "Clarithromycin"
+      },
+      "findings": [
+        {
+          "with": "秋水仙碱",
+          "severity": "high",
+          "summary": "克拉霉素（参照 Clarithromycin 说明书）在「禁忌」里提到了秋水仙碱。",
+          "label": "Clarithromycin",
+          "section": "Contraindications",
+          "excerpt": "…4.2 ) History of cholestatic jaundice/hepatic dysfunction with use of clarithromycin ( 4.3 ) Colchicine in renal or hepatic impairment ( 4.4 ) Lomitapide, lovastatin, and simvastatin ( 4.5 ) Ergot alkaloids (ergotamine or dihydroergotamine) ( 4.6 ) Lurasidone ( 4.7 ) 4.1 Hypersen…"
+        },
+        {
+          "with": "秋水仙碱",
+          "severity": "high",
+          "summary": "秋水仙碱（参照 colchicine 说明书）在「药物相互作用」里提到了克拉霉素。",
+          "label": "colchicine",
+          "section": "Drug interactions",
+          "excerpt": "…e; rhabdomyolysis has been reported Coadministration of P-gp and/or CYP3A4 inhibitors (e.g., clarithromycin or cyclosporine) have been demonstrated to alter the concentration of colchicine."
+        }
+      ],
+      "why": "CYP3A4/P-gp inhibition: colchicine toxicity",
+      "high": false
+    },
+    {
+      "id": "V03",
+      "new": "氟康唑",
+      "existing": [
+        "华法林"
+      ],
+      "expected": [
+        "华法林"
+      ],
+      "alerted": [
+        "华法林"
+      ],
+      "caught": [
+        "华法林"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "氟康唑",
+        "ingredients": [
+          "fluconazole"
+        ],
+        "label": "Fluconazole"
+      },
+      "findings": [
+        {
+          "with": "华法林",
+          "severity": "moderate",
+          "summary": "氟康唑（参照 Fluconazole 说明书）在「药物相互作用」里提到了华法林。",
+          "label": "Fluconazole",
+          "section": "Drug interactions",
+          "excerpt": "…ation with increases in prothrombin time in patients receiving fluconazole concurrently with warfarin. Careful monitoring of prothrombin time in patients receiving fluconazole and coumarin-type anticoagulants is recommended. Dose adjustment of warfarin may be necessary."
+        },
+        {
+          "with": "华法林",
+          "severity": "moderate",
+          "summary": "华法林（参照 Warfarin Sodium 说明书）在「药物相互作用」里提到了氟康唑。",
+          "label": "Warfarin Sodium",
+          "section": "Drug interactions",
+          "excerpt": "…farin Enzyme Inhibitors Inducers CYP2C9 amiodarone, capecitabine, cotrimoxazole, etravirine, fluconazole, fluvastatin, fluvoxamine, metronidazole, miconazole, oxandrolone, sulfinpyrazone, tigecycline, voriconazole, zafirlukast aprepitant, bosentan, carbamazepine, phenobarbital, r…"
+        }
+      ],
+      "why": "fluconazole raises INR on warfarin",
+      "high": false
+    },
+    {
+      "id": "V04",
+      "new": "环丙沙星",
+      "existing": [
+        "华法林"
+      ],
+      "expected": [
+        "华法林"
+      ],
+      "alerted": [
+        "华法林"
+      ],
+      "caught": [
+        "华法林"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "环丙沙星",
+        "ingredients": [
+          "ciprofloxacin"
+        ],
+        "label": "Ciprofloxacin"
+      },
+      "findings": [
+        {
+          "with": "华法林",
+          "severity": "moderate",
+          "summary": "环丙沙星（参照 Ciprofloxacin 说明书）在「药物相互作用」里提到了华法林。",
+          "label": "Ciprofloxacin",
+          "section": "Drug interactions",
+          "excerpt": "…d shortly after co-administration of Ciprofloxacin with an oral anti-coagulant (for example, warfarin). Methotrexate Use with caution Inhibition of methotrexate renal tubular transport potentially leading to increased methotrexate plasma levels Potential increase in the risk of m…"
+        },
+        {
+          "with": "华法林",
+          "severity": "moderate",
+          "summary": "华法林（参照 Warfarin Sodium 说明书）在「药物相互作用」里提到了环丙沙星。",
+          "label": "Warfarin Sodium",
+          "section": "Drug interactions",
+          "excerpt": "…carbamazepine, phenobarbital, rifampin CYP1A2 acyclovir, allopurinol, caffeine, cimetidine, ciprofloxacin, disulfiram, enoxacin, famotidine, fluvoxamine, methoxsalen, mexiletine, norfloxacin, oral contraceptives, phenylpropanolamine, propafenone, propranolol, terbinafine,"
+        }
+      ],
+      "why": "fluoroquinolones raise INR on warfarin",
+      "high": false
+    },
+    {
+      "id": "V05",
+      "new": "螺内酯",
+      "existing": [
+        "赖诺普利"
+      ],
+      "expected": [
+        "赖诺普利"
+      ],
+      "alerted": [
+        "赖诺普利"
+      ],
+      "caught": [
+        "赖诺普利"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "螺内酯",
+        "ingredients": [
+          "spironolactone"
+        ],
+        "label": "Spironolactone"
+      },
+      "findings": [
+        {
+          "with": "赖诺普利",
+          "severity": "moderate",
+          "summary": "赖诺普利（参照 LISINOPRIL 说明书）在「药物相互作用」里提到了螺内酯。",
+          "label": "LISINOPRIL",
+          "section": "Drug interactions",
+          "excerpt": "…il attenuates potassium loss caused by thiazide-type diuretics. Potassium-sparing diuretics (spironolactone, amiloride, triamterene, and others) can increase the risk of hyperkalemia."
+        },
+        {
+          "with": "赖诺普利",
+          "severity": "moderate",
+          "summary": "螺内酯（参照 Spironolactone 说明书）在「药物相互作用」里提到了ACE 抑制剂（普利类）（赖诺普利）。",
+          "label": "Spironolactone",
+          "section": "Drug interactions",
+          "excerpt": "Drug interactions: ACE inhibitors: Concomitant administration of ACE inhibitors with potassium-sparing diuretics has been associated with severe hyperkalemia. Angiotensin II antagonists, aldosterone blockers, heparin, low molecular weight heparin, and other drugs known to cause h…"
+        }
+      ],
+      "why": "potassium-sparing diuretic + ACE inhibitor: hyperkalaemia",
+      "high": false
+    },
+    {
+      "id": "V06",
+      "new": "布洛芬",
+      "existing": [
+        "依那普利"
+      ],
+      "expected": [
+        "依那普利"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "依那普利"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "布洛芬",
+        "ingredients": [
+          "ibuprofen"
+        ],
+        "label": "Motrin IB Migraine"
+      },
+      "findings": [],
+      "why": "NSAID + ACE inhibitor: kidney injury, weaker blood-pressure control",
+      "high": false
+    },
+    {
+      "id": "V07",
+      "new": "氯沙坦",
+      "existing": [
+        "螺内酯"
+      ],
+      "expected": [
+        "螺内酯"
+      ],
+      "alerted": [
+        "螺内酯"
+      ],
+      "caught": [
+        "螺内酯"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "氯沙坦",
+        "ingredients": [
+          "losartan"
+        ],
+        "label": "Losartan Potassium"
+      },
+      "findings": [
+        {
+          "with": "螺内酯",
+          "severity": "moderate",
+          "summary": "氯沙坦（参照 Losartan Potassium 说明书）在「药物相互作用」里提到了利尿剂（螺内酯）。",
+          "label": "Losartan Potassium",
+          "section": "Drug interactions",
+          "excerpt": "…um: Risk of lithium toxicity. ( 7.2 ) NSAIDs: Increased risk of renal impairment and reduced diuretic, natriuretic, and antihypertensive effects. ( 7.3 ) Dual Inhibition of the Renin-Angiotensin System: Increased risk of renal impairment, hypotension, syncope, and hyperkalemia. (…"
+        }
+      ],
+      "why": "ARB + potassium-sparing diuretic: hyperkalaemia",
+      "high": false
+    },
+    {
+      "id": "V08",
+      "new": "曲马多",
+      "existing": [
+        "帕罗西汀"
+      ],
+      "expected": [
+        "帕罗西汀"
+      ],
+      "alerted": [
+        "帕罗西汀"
+      ],
+      "caught": [
+        "帕罗西汀"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "曲马多",
+        "ingredients": [
+          "tramadol"
+        ],
+        "label": "Tramadol Hydrochloride"
+      },
+      "findings": [
+        {
+          "with": "帕罗西汀",
+          "severity": "moderate",
+          "summary": "曲马多（参照 Tramadol Hydrochloride 说明书）在「药物相互作用」里提到了帕罗西汀。",
+          "label": "Tramadol Hydrochloride",
+          "section": "Drug interactions",
+          "excerpt": "…verse events including respiratory depression and sedation. Examples: Quinidine, fluoxetine, paroxetine and bupropion Inhibitors of CYP3A4 Clinical Impact: The concomitant use of tramadol hydrochloride tablets and CYP3A4 inhibitors can increase the plasma concentration of tramado…"
+        },
+        {
+          "with": "帕罗西汀",
+          "severity": "moderate",
+          "summary": "帕罗西汀（参照 Paroxetine 说明书）在「药物相互作用」里提到了阿片类镇痛药（曲马多）。",
+          "label": "Paroxetine",
+          "section": "Drug interactions",
+          "excerpt": "Examples other SSRIs, SNRIs, triptans, tricyclic antidepressants, opioids, lithium, tryptophan, buspirone, amphetamines, and St. John’s Wort. Drugs that Interfere with Hemostasis (antiplatelet agents and anticoagulants) Clinical Impact The concurrent use of an antiplatelet agent…"
+        }
+      ],
+      "why": "tramadol + SSRI: serotonin syndrome, seizures",
+      "high": false
+    },
+    {
+      "id": "V09",
+      "new": "艾司西酞普兰",
+      "existing": [
+        "阿司匹林"
+      ],
+      "expected": [
+        "阿司匹林"
+      ],
+      "alerted": [
+        "阿司匹林"
+      ],
+      "caught": [
+        "阿司匹林"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "艾司西酞普兰",
+        "ingredients": [
+          "escitalopram"
+        ],
+        "label": "escitalopram"
+      },
+      "findings": [
+        {
+          "with": "阿司匹林",
+          "severity": "moderate",
+          "summary": "艾司西酞普兰（参照 escitalopram 说明书）在「药物相互作用」里提到了阿司匹林。",
+          "label": "escitalopram",
+          "section": "Drug interactions",
+          "excerpt": "…c drugs [see Warning and Precautions ( 5.2 )]. Drugs That Interfere With Hemostasis (NSAIDs, Aspirin, Warfarin, etc.) Clinical Impact: Concomitant use of Escitalopram tablets and an antiplatelet or anticoagulant may potentiate the risk of bleeding. Intervention: Inform patients o…"
+        }
+      ],
+      "why": "SSRI + antiplatelet: bleeding",
+      "high": false
+    },
+    {
+      "id": "V10",
+      "new": "阿普唑仑",
+      "existing": [
+        "曲马多"
+      ],
+      "expected": [
+        "曲马多"
+      ],
+      "alerted": [
+        "曲马多"
+      ],
+      "caught": [
+        "曲马多"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "阿普唑仑",
+        "ingredients": [
+          "alprazolam"
+        ],
+        "label": "Alprazolam"
+      },
+      "findings": [
+        {
+          "with": "曲马多",
+          "severity": "moderate",
+          "summary": "阿普唑仑（参照 Alprazolam 说明书）在「药物相互作用」里提到了曲马多。",
+          "label": "Alprazolam",
+          "section": "Drug interactions",
+          "excerpt": "…nol, codeine, dihydrocodeine, meperidine, pentazocine, remifentanil, sufentanil, tapentadol, tramadol."
+        },
+        {
+          "with": "曲马多",
+          "severity": "moderate",
+          "summary": "曲马多（参照 Tramadol Hydrochloride 说明书）在「药物相互作用」里提到了苯二氮䓬类（阿普唑仑）。",
+          "label": "Tramadol Hydrochloride",
+          "section": "Drug interactions",
+          "excerpt": "Examples: Rifampin, carbamazepine, phenytoin Benzodiazepines and Other Central Nervous System (CNS) Depressants Clinical Impact: Due to additive pharmacologic effect, the concomitant use of benzodiazepines or other CNS depressants, including alcohol, increases the risk of respira…"
+        }
+      ],
+      "why": "benzodiazepine + opioid: respiratory depression",
+      "high": false
+    },
+    {
+      "id": "V11",
+      "new": "唑吡坦",
+      "existing": [
+        "阿普唑仑"
+      ],
+      "expected": [
+        "阿普唑仑"
+      ],
+      "alerted": [
+        "阿普唑仑"
+      ],
+      "caught": [
+        "阿普唑仑"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "唑吡坦",
+        "ingredients": [
+          "zolpidem"
+        ],
+        "label": "ZOLPIDEM TARTRATE"
+      },
+      "findings": [
+        {
+          "with": "阿普唑仑",
+          "severity": "moderate",
+          "summary": "唑吡坦（参照 ZOLPIDEM TARTRATE 说明书）在「警告与注意事项」里提到了苯二氮䓬类（阿普唑仑）。",
+          "label": "ZOLPIDEM TARTRATE",
+          "section": "Warnings and precautions",
+          "excerpt": "…he day after use. Additive effects occur with concomitant use of other CNS depressants (e.g. benzodiazepines, opioids, tricyclic antidepressants, alcohol), including daytime use [see DRUG INTERACTIONS ( 7.1 )]."
+        }
+      ],
+      "why": "two CNS depressants",
+      "high": false
+    },
+    {
+      "id": "V12",
+      "new": "卡马西平",
+      "existing": [
+        "阿哌沙班"
+      ],
+      "expected": [
+        "阿哌沙班"
+      ],
+      "alerted": [
+        "阿哌沙班"
+      ],
+      "caught": [
+        "阿哌沙班"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "卡马西平",
+        "ingredients": [
+          "carbamazepine"
+        ],
+        "label": "Carbamazepine"
+      },
+      "findings": [
+        {
+          "with": "阿哌沙班",
+          "severity": "moderate",
+          "summary": "阿哌沙班（参照 ELIQUIS 说明书）在「药物相互作用」里提到了卡马西平。",
+          "label": "ELIQUIS",
+          "section": "Drug interactions",
+          "excerpt": "…id concomitant use of ELIQUIS with combined P-gp and strong CYP3A4 inducers (e.g., rifampin, carbamazepine, phenytoin, St. John’s wort) because such drugs will decrease exposure to apixaban [see Clinical Pharmacology (12.3) ] ."
+        }
+      ],
+      "why": "strong CYP3A4/P-gp inducer lowers apixaban: clot risk",
+      "high": false
+    },
+    {
+      "id": "V13",
+      "new": "胺碘酮",
+      "existing": [
+        "达比加群"
+      ],
+      "expected": [
+        "达比加群"
+      ],
+      "alerted": [
+        "达比加群"
+      ],
+      "caught": [
+        "达比加群"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "胺碘酮",
+        "ingredients": [
+          "amiodarone"
+        ],
+        "label": "Amiodarone Hydrochloride"
+      },
+      "findings": [
+        {
+          "with": "达比加群",
+          "severity": "moderate",
+          "summary": "达比加群（参照 Dabigatran Etexilate 说明书）在「药物相互作用」里提到了胺碘酮。",
+          "label": "Dabigatran Etexilate",
+          "section": "Drug interactions",
+          "excerpt": "The use of the P-gp inhibitors verapamil, amiodarone, quinidine, clarithromycin, and ticagrelor does not require a dosage adjustment of dabigatran etexilate capsules. These results should not be extrapolated to other P-gp inhibitors [see Warnings and Precautions ( 5.5 ), Use in S…"
+        },
+        {
+          "with": "达比加群",
+          "severity": "moderate",
+          "summary": "胺碘酮（参照 Amiodarone Hydrochloride 说明书）在「药物相互作用」里提到了抗凝药（达比加群）。",
+          "label": "Amiodarone Hydrochloride",
+          "section": "Drug interactions",
+          "excerpt": "Lower starting dose of other CYP3A4 substrates may be required. Warfarin Potentiates anticoagulant response and can result in serious or fatal bleeding. Coadministration increases prothrombin time by 100% after 3 to 4 days. Reduce warfarin dose by one-third to one-half and monito…"
+        }
+      ],
+      "why": "P-gp inhibitor raises dabigatran: bleeding",
+      "high": false
+    },
+    {
+      "id": "V14",
+      "new": "地高辛",
+      "existing": [
+        "胺碘酮"
+      ],
+      "expected": [
+        "胺碘酮"
+      ],
+      "alerted": [
+        "胺碘酮"
+      ],
+      "caught": [
+        "胺碘酮"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "地高辛",
+        "ingredients": [
+          "digoxin"
+        ],
+        "label": "Digoxin"
+      },
+      "findings": [
+        {
+          "with": "胺碘酮",
+          "severity": "moderate",
+          "summary": "地高辛（参照 Digoxin 说明书）在「药物相互作用」里提到了胺碘酮。",
+          "label": "Digoxin",
+          "section": "Drug interactions",
+          "excerpt": "…d greater than 50% Digoxin Serum concentration increase Digoxin AUC increase Recommendations Amiodarone 70% NA Measure serum digoxin concentrations before initiating concomitant drugs. Reduce digoxin concentrations by decreasing dose by approximately 30-50% or by modifying the do…"
+        },
+        {
+          "with": "胺碘酮",
+          "severity": "moderate",
+          "summary": "胺碘酮（参照 Amiodarone Hydrochloride 说明书）在「药物相互作用」里提到了地高辛。",
+          "label": "Amiodarone Hydrochloride",
+          "section": "Drug interactions",
+          "excerpt": "of Torsade de Pointes. Avoid concomitant use. Negative Chronotropes digoxin, beta blockers, verapamil, diltiazem, clonidine, ivabradine Potentiates the electrophysiologic and hemodynamic effects of amiodarone, resulting in bradycardia, sinus arrest, and AV block. Monitor heart ra…"
+        }
+      ],
+      "why": "amiodarone raises digoxin levels",
+      "high": false
+    },
+    {
+      "id": "V15",
+      "new": "左氧氟沙星",
+      "existing": [
+        "格列美脲"
+      ],
+      "expected": [
+        "格列美脲"
+      ],
+      "alerted": [
+        "格列美脲"
+      ],
+      "caught": [
+        "格列美脲"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "左氧氟沙星",
+        "ingredients": [
+          "levofloxacin"
+        ],
+        "label": "Levofloxacin"
+      },
+      "findings": [
+        {
+          "with": "格列美脲",
+          "severity": "moderate",
+          "summary": "格列美脲（参照 Glimepiride 说明书）在「药物相互作用」里提到了喹诺酮类抗生素（左氧氟沙星）。",
+          "label": "Glimepiride",
+          "section": "Drug interactions",
+          "excerpt": "…dol, guanethidine, fluconazole, sulfinpyrazone, tetracyclines, clarithromycin, disopyramide, quinolones, and those drugs that"
+        }
+      ],
+      "why": "fluoroquinolone + sulfonylurea: severe hypoglycaemia",
+      "high": false
+    },
+    {
+      "id": "V16",
+      "new": "帕罗西汀",
+      "existing": [
+        "美托洛尔"
+      ],
+      "expected": [
+        "美托洛尔"
+      ],
+      "alerted": [
+        "美托洛尔"
+      ],
+      "caught": [
+        "美托洛尔"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "帕罗西汀",
+        "ingredients": [
+          "paroxetine"
+        ],
+        "label": "Paroxetine"
+      },
+      "findings": [
+        {
+          "with": "美托洛尔",
+          "severity": "moderate",
+          "summary": "帕罗西汀（参照 Paroxetine 说明书）在「药物相互作用」里提到了美托洛尔。",
+          "label": "Paroxetine",
+          "section": "Drug interactions",
+          "excerpt": "…discontinued. Examples propafenone, flecainide, atomoxetine, desipramine, dextromethorphan, metoprolol, nebivolol, perphenazine, tolterodine, venlafaxine, risperidone. Tamoxifen Clinical Impact Concomitant use of tamoxifen with paroxetine tablets may lead to reduced plasma conce…"
+        },
+        {
+          "with": "美托洛尔",
+          "severity": "moderate",
+          "summary": "美托洛尔（参照 Metoprolol succinate 说明书）在「药物相互作用」里提到了帕罗西汀。",
+          "label": "Metoprolol succinate",
+          "section": "Drug interactions",
+          "excerpt": "…hypotension. 7.2 CYP2D6 Inhibitors Drugs that inhibit CYP2D6 such as quinidine, fluoxetine, paroxetine, and propafenone are likely to increase metoprolol concentration."
+        }
+      ],
+      "why": "CYP2D6 inhibition raises metoprolol: bradycardia",
+      "high": false
+    },
+    {
+      "id": "V17",
+      "new": "阿莫西林",
+      "existing": [
+        "别嘌醇"
+      ],
+      "expected": [
+        "别嘌醇"
+      ],
+      "alerted": [
+        "别嘌醇"
+      ],
+      "caught": [
+        "别嘌醇"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "阿莫西林",
+        "ingredients": [
+          "amoxicillin"
+        ],
+        "label": "Amoxicillin"
+      },
+      "findings": [
+        {
+          "with": "别嘌醇",
+          "severity": "moderate",
+          "summary": "阿莫西林（参照 Amoxicillin 说明书）在「药物相互作用」里提到了别嘌醇。",
+          "label": "Amoxicillin",
+          "section": "Drug interactions",
+          "excerpt": "…icoagulants may increase the prolongation of prothrombin time. ( 7.2 ) Coadministration with allopurinol increases the risk of rash. ( 7.3 ) Amoxicillin may reduce the efficacy of oral contraceptives. ( 7.4 ) 7.1 Probenecid Probenecid decreases the renal tubular secretion of amox…"
+        },
+        {
+          "with": "别嘌醇",
+          "severity": "moderate",
+          "summary": "别嘌醇（参照 Allopurinol 说明书）在「药物相互作用」里提到了阿莫西林。",
+          "label": "Allopurinol",
+          "section": "Drug interactions",
+          "excerpt": "…ncrease the risk of serious skin reactions: bendamustine, thiazide diuretics, ampicillin and amoxicillin. ( 7.1 ) Capecitabine: Avoid concomitant use. ( 7.2 ) Mercaptopurine or Azathioprine: Reduce mercaptopurine or azathioprine dose as recommended in the respective prescribing i…"
+        }
+      ],
+      "why": "allopurinol increases amoxicillin/ampicillin rash",
+      "high": false
+    },
+    {
+      "id": "V18",
+      "new": "快克",
+      "existing": [
+        "泰诺"
+      ],
+      "expected": [
+        "泰诺"
+      ],
+      "alerted": [
+        "泰诺"
+      ],
+      "caught": [
+        "泰诺"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "快克",
+        "ingredients": [
+          "acetaminophen",
+          "amantadine",
+          "chlorpheniramine"
+        ],
+        "label": null
+      },
+      "findings": [
+        {
+          "with": "泰诺",
+          "severity": "high",
+          "summary": "快克 和 泰诺 含有相同成分（对乙酰氨基酚），24 小时内一起用可能超过每日最大剂量；如果这是同一种药的两种叫法，可以忽略。",
+          "label": "TYLENOL Regular Strength",
+          "section": "Do not use",
+          "excerpt": "Do not use with any other drug containing acetaminophen (prescription or nonprescription). If you are not sure whether a drug contains acetaminophen, ask a doctor or pharmacist. if you are allergic to acetaminophen or any of the inactive ingredients in this product"
+        }
+      ],
+      "why": "快克 contains acetaminophen: duplicate ingredient",
+      "high": true
+    },
+    {
+      "id": "V19",
+      "new": "日夜百服咛",
+      "existing": [
+        "对乙酰氨基酚"
+      ],
+      "expected": [
+        "对乙酰氨基酚"
+      ],
+      "alerted": [
+        "对乙酰氨基酚"
+      ],
+      "caught": [
+        "对乙酰氨基酚"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "日夜百服咛",
+        "ingredients": [
+          "acetaminophen",
+          "chlorpheniramine",
+          "dextromethorphan",
+          "pseudoephedrine"
+        ],
+        "label": null
+      },
+      "findings": [
+        {
+          "with": "对乙酰氨基酚",
+          "severity": "high",
+          "summary": "日夜百服咛 和 对乙酰氨基酚 含有相同成分（对乙酰氨基酚），24 小时内一起用可能超过每日最大剂量；如果这是同一种药的两种叫法，可以忽略。",
+          "label": "TYLENOL Regular Strength",
+          "section": "Do not use",
+          "excerpt": "Do not use with any other drug containing acetaminophen (prescription or nonprescription). If you are not sure whether a drug contains acetaminophen, ask a doctor or pharmacist. if you are allergic to acetaminophen or any of the inactive ingredients in this product"
+        }
+      ],
+      "why": "contains acetaminophen: duplicate ingredient",
+      "high": true
+    },
+    {
+      "id": "V20",
+      "new": "维C银翘片",
+      "existing": [
+        "氯苯那敏"
+      ],
+      "expected": [
+        "氯苯那敏"
+      ],
+      "alerted": [
+        "氯苯那敏"
+      ],
+      "caught": [
+        "氯苯那敏"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "维C银翘片",
+        "ingredients": [
+          "acetaminophen",
+          "chlorpheniramine"
+        ],
+        "label": null
+      },
+      "findings": [
+        {
+          "with": "氯苯那敏",
+          "severity": "high",
+          "summary": "维C银翘片 和 氯苯那敏 含有相同成分（氯苯那敏），24 小时内一起用可能超过每日最大剂量；如果这是同一种药的两种叫法，可以忽略。",
+          "label": "Aller-chlor",
+          "section": "Active ingredients",
+          "excerpt": "Active ingredient (in each tablet) Chlorpheniramine maleate 4 mg"
+        }
+      ],
+      "why": "contains chlorpheniramine: duplicate ingredient",
+      "high": true
+    },
+    {
+      "id": "V21",
+      "new": "银杏叶片",
+      "existing": [
+        "华法林"
+      ],
+      "expected": [
+        "华法林"
+      ],
+      "alerted": [],
+      "caught": [],
+      "missed": [
+        "华法林"
+      ],
+      "false": [],
+      "high_ok": true,
+      "status": "unresolved_medication",
+      "unresolved": [],
+      "medication": {
+        "name": "银杏叶片",
+        "ingredients": [],
+        "label": null
+      },
+      "findings": [],
+      "why": "ginkgo + anticoagulant: bleeding",
+      "high": false
+    },
+    {
+      "id": "V22",
+      "new": "塞来昔布",
+      "existing": [
+        "氯吡格雷"
+      ],
+      "expected": [
+        "氯吡格雷"
+      ],
+      "alerted": [
+        "氯吡格雷"
+      ],
+      "caught": [
+        "氯吡格雷"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "塞来昔布",
+        "ingredients": [
+          "celecoxib"
+        ],
+        "label": "Celecoxib"
+      },
+      "findings": [
+        {
+          "with": "氯吡格雷",
+          "severity": "moderate",
+          "summary": "塞来昔布（参照 Celecoxib 说明书）在「药物相互作用」里提到了抗血小板药（氯吡格雷）。",
+          "label": "Celecoxib",
+          "section": "Drug interactions",
+          "excerpt": "…on: Monitor patients with concomitant use of celecoxib with anticoagulants (e.g., warfarin), antiplatelet drugs (e.g., aspirin), SSRIs, and SNRIs for signs of bleeding [ see Warnings and Precautions ( 5.12 ) ]."
+        },
+        {
+          "with": "氯吡格雷",
+          "severity": "moderate",
+          "summary": "氯吡格雷（参照 Clopidogrel Bisulfate 说明书）在「药物相互作用」里提到了非甾体抗炎药（塞来昔布）。",
+          "label": "Clopidogrel Bisulfate",
+          "section": "Drug interactions",
+          "excerpt": "…Consider use of parenteral antiplatelet agent. ( 7.3 ) Nonsteroidal anti-inflammatory drugs (NSAIDs), warfarin, selective serotonin and serotonin norepinephrine reuptake inhibitors (SSRIs, SNRIs): Increases risk of bleeding. ( 7.4 , 7.5 , 7.6 ) Other Antiplatelet Agents: Increase…"
+        }
+      ],
+      "why": "NSAID + antiplatelet: bleeding",
+      "high": false
+    },
+    {
+      "id": "V23",
+      "new": "硝苯地平",
+      "existing": [
+        "克拉霉素"
+      ],
+      "expected": [
+        "克拉霉素"
+      ],
+      "alerted": [
+        "克拉霉素"
+      ],
+      "caught": [
+        "克拉霉素"
+      ],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "硝苯地平",
+        "ingredients": [
+          "nifedipine"
+        ],
+        "label": "Nifedipine"
+      },
+      "findings": [
+        {
+          "with": "克拉霉素",
+          "severity": "moderate",
+          "summary": "硝苯地平（参照 Nifedipine 说明书）在「药物相互作用」里提到了克拉霉素。",
+          "label": "Nifedipine",
+          "section": "Drug interactions",
+          "excerpt": "CYP3A inhibitors such as fluconazole, itraconazole, clarithromycin, erythromycin, nefazodone, fluoxetine, saquinavir, indinavir, and nelfinavir may result in increased exposure to nifedipine when co-administered. Careful monitoring and dose adjustment may be necessary; consider i…"
+        },
+        {
+          "with": "克拉霉素",
+          "severity": "moderate",
+          "summary": "克拉霉素（参照 Clarithromycin 说明书）在「药物相互作用」里提到了硝苯地平。",
+          "label": "Clarithromycin",
+          "section": "Drug interactions",
+          "excerpt": "…5.4 )] . Amlodipine Diltiazem Amlodipine, Diltiazem: [See Warnings and Precautions ( 5.4 )] Nifedipine Nifedipine: Nifedipine is a substrate for CYP3A. Clarithromycin and other macrolides are known to inhibit CYP3A. There is potential of CYP3A‑mediated interaction between nifedi…"
+        }
+      ],
+      "why": "CYP3A4 inhibitor raises nifedipine: hypotension",
+      "high": false
+    },
+    {
+      "id": "VN01",
+      "new": "氨氯地平",
+      "existing": [
+        "二甲双胍"
+      ],
+      "expected": [],
+      "alerted": [
+        "二甲双胍"
+      ],
+      "caught": [],
+      "missed": [],
+      "false": [
+        "二甲双胍"
+      ],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "氨氯地平",
+        "ingredients": [
+          "amlodipine"
+        ],
+        "label": "Amlodipine Besylate"
+      },
+      "findings": [
+        {
+          "with": "二甲双胍",
+          "severity": "moderate",
+          "summary": "二甲双胍（参照 Metformin Hydrochloride 说明书）在「药物相互作用」里提到了钙通道阻滞剂（地平类）（氨氯地平）。",
+          "label": "Metformin Hydrochloride",
+          "section": "Drug interactions",
+          "excerpt": "…yroid products, estrogens, oral contraceptives, phenytoin, nicotinic acid, sympathomimetics, calcium channel blockers, and isoniazid. Carbonic anhydrase inhibitors may increase risk of lactic acidosis. Consider more frequent monitoring. ( 7 ) Drugs that reduce metformin clearance…"
+        }
+      ],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "VN02",
+      "new": "阿莫西林",
+      "existing": [
+        "泰诺"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "阿莫西林",
+        "ingredients": [
+          "amoxicillin"
+        ],
+        "label": "Amoxicillin"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "VN03",
+      "new": "瑞舒伐他汀",
+      "existing": [
+        "氨氯地平"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "瑞舒伐他汀",
+        "ingredients": [
+          "rosuvastatin"
+        ],
+        "label": "Rosuvastatin Calcium"
+      },
+      "findings": [],
+      "why": "rosuvastatin is not a CYP3A4 substrate; commonly co-prescribed",
+      "high": false
+    },
+    {
+      "id": "VN04",
+      "new": "泮托拉唑",
+      "existing": [
+        "美托洛尔"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "泮托拉唑",
+        "ingredients": [
+          "pantoprazole"
+        ],
+        "label": "PANTOPRAZOLE SODIUM"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "VN05",
+      "new": "缬沙坦",
+      "existing": [
+        "二甲双胍"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "缬沙坦",
+        "ingredients": [
+          "valsartan"
+        ],
+        "label": "valsartan"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "VN06",
+      "new": "阿奇霉素",
+      "existing": [
+        "对乙酰氨基酚"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "阿奇霉素",
+        "ingredients": [
+          "azithromycin"
+        ],
+        "label": "Azithromycin"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "VN07",
+      "new": "别嘌醇",
+      "existing": [
+        "氨氯地平"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "别嘌醇",
+        "ingredients": [
+          "allopurinol"
+        ],
+        "label": "Allopurinol"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "VN08",
+      "new": "左甲状腺素",
+      "existing": [
+        "氨氯地平"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "左甲状腺素",
+        "ingredients": [
+          "levothyroxine"
+        ],
+        "label": "Synthroid"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "VN09",
+      "new": "西替利嗪",
+      "existing": [
+        "二甲双胍"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "西替利嗪",
+        "ingredients": [
+          "cetirizine"
+        ],
+        "label": "ZYRTEC Allergy"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "VN10",
+      "new": "氯沙坦",
+      "existing": [
+        "阿托伐他汀"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "氯沙坦",
+        "ingredients": [
+          "losartan"
+        ],
+        "label": "Losartan Potassium"
+      },
+      "findings": [],
+      "why": "no meaningful interaction",
+      "high": false
+    },
+    {
+      "id": "VN11",
+      "new": "环丙沙星",
+      "existing": [
+        "华法林"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "环丙沙星",
+        "ingredients": [
+          "ciprofloxacin"
+        ],
+        "label": "Ciprofloxacin"
+      },
+      "findings": [],
+      "why": "last warfarin record nine days ago, outside the review window",
+      "high": false
+    },
+    {
+      "id": "VN12",
+      "new": "泰诺",
+      "existing": [
+        "快克"
+      ],
+      "expected": [],
+      "alerted": [],
+      "caught": [],
+      "missed": [],
+      "false": [],
+      "high_ok": true,
+      "status": "ok",
+      "unresolved": [],
+      "medication": {
+        "name": "泰诺",
+        "ingredients": [
+          "acetaminophen"
+        ],
+        "label": "TYLENOL Regular Strength"
+      },
+      "findings": [],
+      "why": "same ingredient, three days apart: not taken together",
+      "high": false
+    }
+  ]
+}

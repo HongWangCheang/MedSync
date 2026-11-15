@@ -167,9 +167,11 @@ cd client
 **安全审核**：每条服药记录同步到服务器时，会和你最近一周记录过的其他药对照一遍（例如先记了"华法林"，再记"布洛芬"）。依据只有 openFDA 说明书原文，不调用大模型：一种药的说明书在"禁用 / 用药前咨询医生或药师 / 药物相互作用 / 警告"里提到另一种药的成分或类别（如"blood thinning (anticoagulant)"），或者两种产品 24 小时内含有相同成分（如两种都含对乙酰氨基酚），就在这条记录下方提醒，点开能看到引用的原文，还可以一键转给药学 Agent 追问。药已经吃了，所以只提醒、不拦截；认不出的药名会列为"未检查"，没有提醒也不代表可以一起吃。审核服务暂时连不上时，这条记录会在服务器排队，恢复后补做审核，不会跳过。
 
 安全审核的评测：
-- **开发集**：召回 16/20，精确率 16/16（[REPORT](services/rag/eval/safety/REPORT.md)）。写规则时用这批用例调过，所以偏乐观。
-- **盲测**：先提交用例、后运行，结果出来以后不改规则。召回 **8/21 = 38%**，精确率 8/8，负例无误报（[REPORT](services/rag/eval/safety_blind/REPORT.md)，[分析](services/rag/eval/safety_blind/NOTES.md)）。
-- **漏报的原因**：漏掉的 13 个药对都出在数据上，不在规则上。一类是药名认不出（白加黑、甲硝唑等），一类是两边都没有说明书（快照以 OTC 为主，华法林、氟西汀这类处方药大多没有收录）。
+- **依据**：openFDA 说明书原文，包括主快照（以 OTC 为主），以及按机械规则补的 52 份处方药说明书（华法林、胺碘酮、克拉霉素、地高辛等）。中文名经别名表映射到成分，复方感冒药（白加黑、感冒灵、快克等）按通用名拆成分。
+- **开发集**：召回 19/20，精确率 19/20（[REPORT](services/rag/eval/safety/REPORT.md)）。写规则时用这批用例调过，所以偏乐观。
+- **第一批盲测**（补数据前）：召回 **8/21 = 38%**，精确率 8/8。漏报全部来自数据：药名认不出，或两边都没有说明书（[分析](services/rag/eval/safety_blind/NOTES.md)）。
+- **第二批盲测**（补数据后，新写的 35 个用例，先提交、后运行）：召回 **21/23 = 91%**，精确率 21/22，负例 11/12，重复成分判成高风险 3/3（[REPORT](services/rag/eval/safety_blind_v2/REPORT.md)，[分析](services/rag/eval/safety_blind_v2/NOTES.md)）。
+- **剩下的问题**：漏掉的是说明书没写的（布洛芬 + 依那普利）和草药（银杏叶片）。误报是处方药说明书的长串列举，比如二甲双胍的说明书里写了钙通道阻滞剂。
 - **提醒的可信度**：提醒一旦发出就是对的，并附说明书原文；没有提醒，不代表可以一起吃。两种药都没有说明书可查时，界面会直说"没有可查的说明书，只核对了是否含相同成分"，不会显示"已对照"。
 
 **跨 Agent 冲突检测**：离线时手机按当时的理解排好了动作，例如"吃了对乙酰氨基酚，告诉女儿我没事"会生成一条服药记录和一条待发消息。联网后，安全审核（以及药学问答里查到的说明书相互作用提醒）会把结论写到服务器的"发现板"上；不可逆的动作执行前，先查有没有排队时还不知道的结论和它矛盾。规则很少，写在 `services/agent/medsync_agent/conflicts.py`：
@@ -212,9 +214,10 @@ cd client
 ```sh
 cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest,AgentClientTest' test   # 21 项
 cd services/agent   && uv run pytest -q                                            # 61 项（含 MCP 6 项、Langfuse 追踪 3 项）
-cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 61 项
+cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 62 项
 cd services/rag     && .venv/bin/python -B evaluate_safety.py                      # 相互作用提醒评测，开发集 32 例
-cd services/rag     && .venv/bin/python -B evaluate_safety.py --blind              # 盲测 32 例（只跑，不据此调规则）
+cd services/rag     && .venv/bin/python -B evaluate_safety.py --blind v2           # 第二批盲测 35 例（只跑，不据此调规则）
+cd services/rag     && .venv/bin/python -B fetch_rx_labels.py                      # 重新抓取处方药说明书快照
 cd services/mocks   && uv run pytest -q                                            # 4 项
 cd client           && ./gradlew :shared:jvmTest :desktopApp:test                  # 共享逻辑 36 项 + 离线能力标签 1 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行

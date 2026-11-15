@@ -142,9 +142,11 @@ def main() -> int:
     second = record("布洛芬")
     safety = (second.get("result") or {}).get("safety") or {}
     alert = next((a for a in safety.get("alerts", []) if a["with"] == "华法林"), None)
-    excerpt = alert["findings"][0]["citation"]["excerpt"] if alert else ""
+    # Either label may be cited first: ibuprofen's names anticoagulants, warfarin's lists NSAIDs including ibuprofen.
+    excerpts = " ".join(f["citation"]["excerpt"].lower() for f in alert["findings"]) if alert else ""
     results.append(check("ibuprofen after warfarin raises a cited alert", second["status"] == "DONE"
-                         and second["reason"] == "safety_alert_moderate" and "anticoagulant" in excerpt,
+                         and second["reason"] == "safety_alert_moderate"
+                         and ("anticoagulant" in excerpts or "ibuprofen" in excerpts),
                          second.get("reason") or second["status"]))
     record("泰诺", minutes_ago=30)
     dup = record("FLONASE Headache and Allergy Relief")

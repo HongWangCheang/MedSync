@@ -78,10 +78,14 @@ def summarize(rows: list[dict]) -> dict:
 DEV_NOTE = [
     "**这是开发集，不是盲测。** 写检查器时用这批用例调过三处：过敏语境里的提及不算（“allergic to aspirin”）、"
     "否定句不算（Lipitor “no clinically significant effect … warfarin”）、同成分多个说明书时选有相互作用章节的那份。"
-    "所以数字偏乐观，换一批新用例才是真实水平（见 [../safety_blind/REPORT.md](../safety_blind/REPORT.md)）。",
+    "所以数字偏乐观，换一批新用例才是真实水平（见两批盲测：[第一批](../safety_blind/REPORT.md)、[第二批](../safety_blind_v2/REPORT.md)）。",
     "",
-    "漏报都是数据或词表覆盖不到：说明书没写（布洛芬或奥美拉唑与氯吡格雷）、名字不在别名表（克拉霉素，会作为“未识别”"
-    "明确告诉用户）、两种抗组胺药的说明书互不提及。检查器只说“说明书写了什么”，不凭常识补。",
+    "现在的漏报和误报（加入 52 份处方药说明书之后）：",
+    "",
+    "- **漏报 P17**（西替利嗪 + 苯海拉明）：两种抗组胺药的说明书互不提及。检查器只说\"说明书写了什么\"，不凭常识补。",
+    "- **误报 N06**（阿托伐他汀 + 华法林）：华法林的说明书把阿托伐他汀列在可能影响 INR 的 CYP3A4 抑制剂表里，"
+    "立普妥的说明书则写\"对凝血酶原时间没有临床意义的影响\"。检查器照实引用了华法林的说明书，临床上属于弱提示。"
+    "这里没有为了数字好看去特别处理它。",
 ]
 BLIND_NOTE = [
     "**这是盲测集。** 用例在检查器规则定下之后按一般药理常识编写，先提交到 git、后运行，"
@@ -93,7 +97,7 @@ def report(rows: list[dict], summary: dict, blind: bool = False) -> str:
     pct = lambda x: f"{100 * x:.0f}%"
     ci = lambda pair: f"{pct(pair[0])}–{pct(pair[1])}"
     lines = [
-        "# 安全审核评测：相互作用提醒" + ("（盲测）" if blind else ""),
+        "# 安全审核评测：相互作用提醒" + (f"（盲测 {blind}）" if blind else ""),
         "",
         f"用例 {summary['cases']} 个（正例 {summary['positive_cases']}，负例 {summary['negative_cases']}），"
         "预期答案按一般药理常识预先写好，不是照着检查器的输出写的。",
@@ -139,13 +143,14 @@ def main() -> None:
     parser.add_argument("--rx-corpus", default=str(RX_CORPUS), help="prescription labels; a missing file is skipped")
     parser.add_argument("--cases", default=str(CASES))
     parser.add_argument("--no-write", action="store_true")
-    parser.add_argument("--blind", action="store_true",
-                        help="score eval/safety_blind_cases.json into eval/safety_blind/ (run once; do not tune on it)")
+    parser.add_argument("--blind", nargs="?", const="v1", choices=["v1", "v2"],
+                        help="score a blind set into eval/safety_blind[_v2]/ (run once; do not tune on it)")
     args = parser.parse_args()
     records = safety_records(args.corpus, args.rx_corpus)
     checker = SafetyChecker(LabelIndex(LabelSnapshot(records, public=True), model=None))
-    cases = HERE / "eval" / "safety_blind_cases.json" if args.blind else Path(args.cases)
-    out = HERE / "eval" / "safety_blind" if args.blind else OUT
+    suffix = "" if args.blind == "v1" else f"_{args.blind}"
+    cases = HERE / "eval" / f"safety_blind{suffix}_cases.json" if args.blind else Path(args.cases)
+    out = HERE / "eval" / f"safety_blind{suffix}" if args.blind else OUT
     rows = run(checker, json.loads(cases.read_text(encoding="utf-8"))["cases"])
     summary = summarize(rows)
     for r in rows:
