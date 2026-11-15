@@ -9,7 +9,7 @@
     python3 chaos/toxic.py up agent_external
     python3 chaos/toxic.py clear                          # remove every toxic on every hop
 
-Hops: device_gateway (①), gateway_agent (②), agent_external (③).
+Hops: device_gateway (①), gateway_agent (②), agent_tools (agent → MCP tool server), agent_external (③).
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ import sys
 import urllib.request
 
 API = os.environ.get("TOXIPROXY_URL", "http://127.0.0.1:8474")
-HOPS = ("device_gateway", "gateway_agent", "agent_external")
+HOPS = ("device_gateway", "gateway_agent", "agent_tools", "agent_external")
 
 
 def call(method: str, path: str, body: dict | None = None):

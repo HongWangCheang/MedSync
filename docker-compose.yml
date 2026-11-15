@@ -2,7 +2,7 @@
 #
 #   device ──① 127.0.0.1:18081──▶ toxiproxy ──▶ gateway:8081
 #   gateway ──② toxiproxy:18000──▶ agent:8000
-#   agent ──③ toxiproxy:19000──▶ mocks:9000 (simulated hospital + notifications)
+#   agent ──MCP toxiproxy:19200──▶ tools:8200 ──③ toxiproxy:19000──▶ mocks:9000 (simulated hospital + notifications)
 #
 #   cp .env.example .env && docker compose up --build -d
 #   python3 chaos/toxic.py list
@@ -74,9 +74,11 @@ services:
       timeout: 4s
       retries: 10
 
-  agent:
+  # MCP tool server (streamable HTTP): book_appointment / notify_family / check_slot. Hop ③ starts here.
+  tools:
     build: ./services/agent
     restart: unless-stopped
+    command: ["/app/.venv/bin/python", "-m", "medsync_agent.mcp_server", "--http", "--port", "8200"]
     depends_on:
       postgres:
         condition: service_healthy
@@ -88,6 +90,37 @@ services:
       MEDSYNC_PG_DSN: postgresql://medsync:${POSTGRES_PASSWORD}@postgres:5432/medsync
       MEDSYNC_EXTERNAL_URL: http://toxiproxy:19000
       MEDSYNC_EXTERNAL_TIMEOUT_S: "5"
+    ports:
+      - "127.0.0.1:8200:8200"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('127.0.0.1', 8200), 3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+      start_period: 10s
+
+  agent:
+    build: ./services/agent
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mocks:
+        condition: service_healthy
+      toxiproxy:
+        condition: service_started
+      tools:
+        condition: service_healthy
+    environment:
+      MEDSYNC_PG_DSN: postgresql://medsync:${POSTGRES_PASSWORD}@postgres:5432/medsync
+      # Side effects go through the MCP tool server, which owns the tool ledger (exactly-once lives there).
+      # Through Toxiproxy like every other hop, so the MCP link can be cut too (chaos/toxic.py down agent_tools).
+      MEDSYNC_TOOLS_URL: http://toxiproxy:19200/mcp
+      MEDSYNC_TOOLS_TIMEOUT_S: "15"
+      # Only the comparison experiment's in-agent baselines (B0–B2) still call the external systems directly.
+      MEDSYNC_EXTERNAL_URL: http://toxiproxy:19000
+      MEDSYNC_EXTERNAL_TIMEOUT_S: "5"
+      # Langfuse tracing is off here; docker-compose.langfuse.yml turns it on.
       # Pharmacist step = MedTrack's label RAG agent. Not a side effect, so it bypasses the Toxiproxy hops.
       MEDSYNC_RAG_URL: http://rag:8765
       MEDSYNC_RAG_TIMEOUT_S: "60"

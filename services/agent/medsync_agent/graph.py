@@ -24,8 +24,7 @@ from typing import Any, Callable, TypedDict
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import Command, interrupt
 
-from . import conflicts
-from .executor import execute
+from . import conflicts, tracing
 from .experiment import Attempts, rephrase
 from .external import External, Unreachable
 from .findings import Finding, FindingsBoard
@@ -34,6 +33,7 @@ from .pharmacist import Pharmacist, PharmacistMisconfigured, PharmacistUnavailab
 from .revalidate import decide
 from .safety import SafetyReviewer, SafetyUnavailable
 from .tool_ledger import ToolLedger
+from .tools import LocalTools, Tools
 
 
 class StepState(TypedDict, total=False):
@@ -58,22 +58,25 @@ class ExternalPending(Exception):
     """The side effect's outcome is not known yet; the step stays parked at the executor."""
 
 
-def _alternatives(external: External, day: str, days: int = 3) -> list[dict[str, Any]]:
+def _alternatives(tools: Tools, day: str, days: int = 3) -> list[dict[str, Any]]:
     start = date.fromisoformat(day)
     found = []
     for offset in range(1, days + 1):
         candidate = (start + timedelta(days=offset)).isoformat()
-        slot = external.slot(candidate)
+        slot = tools.slot(candidate)
         if slot.get("available", 0) > 0:
             found.append({"date": candidate, "available": slot["available"]})
     return found
 
 
-def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
+def build_graph(ledger: ToolLedger | None, external: External | None, checkpointer: Any,
                 now_ms: Callable[[], int] = lambda: int(time.time() * 1000), attempts: Attempts | None = None,
                 pharmacist: Pharmacist | None = None, safety: SafetyReviewer | None = None,
-                board: FindingsBoard | None = None):
+                board: FindingsBoard | None = None, tools: Tools | None = None):
+    """`tools` is how the executor reaches the outside world: the MCP tool server in Compose, or (default) the
+    given ledger and external system in-process."""
     attempts = attempts or Attempts()
+    tools = tools or LocalTools(ledger, external)
 
     def post(finding: Finding) -> None:
         if board is not None:
@@ -109,9 +112,9 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
         world: dict[str, Any] = {}
         if request.tool == "book_appointment":
             day = request.payload.get("date", "")
-            world["slot"] = external.slot(day)
+            world["slot"] = tools.slot(day)
             if world["slot"].get("available", 0) <= 0:
-                world["alternatives"] = _alternatives(external, day)
+                world["alternatives"] = _alternatives(tools, day)
         return {"decision": asdict(decide(request, world, now_ms()))}
 
     def ask_user(state: StepState) -> dict:
@@ -196,14 +199,14 @@ def build_graph(ledger: ToolLedger, external: External, checkpointer: Any,
         if request.experiment_mode:
             # Same simulated LLM re-planning as the baselines: arguments are reworded on every re-execution.
             payload = rephrase(request.tool, payload, attempts.next(request.step_key))
-        result = execute(request.step_key, request.tool, payload, ledger, external)
+        result = tools.execute(request.step_key, request.tool, payload)
         if result.status == "PENDING":
             raise ExternalPending(result.reason)
         if result.status == "REJECTED":
             options = [{"decision": "cancel"}]
             if result.reason == "slot_full":
                 day = request.payload.get("date", "")
-                options = [{"decision": "choose", "date": a["date"]} for a in _alternatives(external, day)] + options
+                options = [{"decision": "choose", "date": a["date"]} for a in _alternatives(tools, day)] + options
             return {"decision": {"kind": "ASK_USER", "reason": result.reason, "options": options}}
         return {"outcome": {"status": "DONE", "result": result.result, "reason": result.reason}}
 
@@ -268,11 +271,20 @@ class StepRunner:
 
     def run(self, request: ActionRequest) -> Outcome:
         config = self._config(request.account_id, request.step_key)
-        return self._exclusive(config, lambda: self._run(request, config))
+        with tracing.step(request, "run") as observation:
+            outcome = self._exclusive(config, lambda: self._run(request, config))
+            observation.update(output=outcome.model_dump())
+        return outcome
 
     def resume(self, account_id: str, step_key: str, answer: dict[str, Any]) -> Outcome:
         config = self._config(account_id, step_key)
-        return self._exclusive(config, lambda: self._resume(answer, config))
+        stored = self.graph.get_state(config).values.get("request")
+        if stored is None:
+            return self._exclusive(config, lambda: self._resume(answer, config))
+        with tracing.step(ActionRequest.model_validate(stored), "resume") as observation:
+            outcome = self._exclusive(config, lambda: self._resume(answer, config))
+            observation.update(output=outcome.model_dump())
+        return outcome
 
     def _exclusive(self, config: dict, body: Callable[[], Outcome]) -> Outcome:
         # Guards reading the state as well as running it: a half-finished thread looks like neither "parked"
@@ -304,7 +316,7 @@ class StepRunner:
 
     def _invoke(self, payload: Any, config: dict) -> Outcome:
         try:
-            out = self.graph.invoke(payload, config)
+            out = self.graph.invoke(payload, {**config, "callbacks": tracing.callbacks()})
         except ExternalPending as pending:
             return Outcome(status="PENDING", reason=str(pending))
         except Unreachable as unreachable:

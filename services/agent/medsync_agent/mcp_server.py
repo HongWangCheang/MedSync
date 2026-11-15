@@ -1,53 +1,86 @@
-"""The same exactly-once tools, exposed over MCP so any MCP client (Claude, Cursor, an LLM planner) can call them.
+"""The exactly-once tools as an MCP server. The agent's executor calls them through an MCP client
+(`tools.McpTools`); any other MCP client (Claude, Cursor, an LLM planner) can call the same tools.
 
 Every side-effecting tool takes a step_key. Calling it twice with the same key returns the first result instead of
-booking twice — the guarantee comes from the tool ledger, not from the caller behaving well.
+booking twice: the guarantee comes from the tool ledger this server owns, not from the caller behaving well.
+With MEDSYNC_PG_DSN set the ledger is the Postgres `tool_ledger` table, shared by every replica of this server.
 
-    uv run python -m medsync_agent.mcp_server            # stdio
+    uv run python -m medsync_agent.mcp_server                       # stdio, in-memory ledger
+    uv run python -m medsync_agent.mcp_server --http --port 8200    # streamable HTTP at /mcp (Compose service "tools")
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 from typing import Any
 
 from mcp.server.mcpserver import MCPServer
 
 from .executor import execute
-from .external import HttpExternal
-from .tool_ledger import InMemoryToolLedger
+from .external import External, HttpExternal
+from .tool_ledger import InMemoryToolLedger, PostgresToolLedger, ToolLedger
 
-server = MCPServer("medsync-tools", instructions=(
+INSTRUCTIONS = (
     "Medication-management tools. Side-effecting tools require a step_key: reuse the same key when retrying the "
-    "same logical step, and generate a new one only for a genuinely new step."))
-_external = HttpExternal(os.environ.get("MEDSYNC_EXTERNAL_URL", "http://127.0.0.1:9000"))
-# TODO(phase 1 week 2): share PostgresToolLedger with the API process instead of a per-process in-memory ledger.
-_ledger = InMemoryToolLedger()
+    "same logical step, and generate a new one only for a genuinely new step. A result with status PENDING means "
+    "the outcome is not known yet: retry later with the same step_key, never with a new one.")
 
 
-def _run(step_key: str, tool: str, payload: dict[str, Any]) -> dict[str, Any]:
-    result = execute(step_key, tool, payload, _ledger, _external)
-    return {"status": result.status, "result": result.result, "reason": result.reason}
+def build_server(ledger: ToolLedger, external: External) -> MCPServer:
+    server = MCPServer("medsync-tools", instructions=INSTRUCTIONS)
+
+    def run(step_key: str, tool: str, payload: dict[str, Any]) -> dict[str, Any]:
+        result = execute(step_key, tool, {k: v for k, v in payload.items() if v != ""}, ledger, external)
+        return {"status": result.status, "result": result.result, "reason": result.reason}
+
+    @server.tool()
+    def book_appointment(step_key: str, patient_id: str, department: str, date: str, note: str = "",
+                         trace: str = "") -> dict[str, Any]:
+        """Book a hospital follow-up. date is YYYY-MM-DD. Irreversible: retries must reuse the same step_key.
+        status is DONE (booked, or the earlier booking for this step_key), REJECTED (e.g. slot_full) or PENDING."""
+        return run(step_key, "book_appointment",
+                   {"patient_id": patient_id, "department": department, "date": date, "note": note, "trace": trace})
+
+    @server.tool()
+    def notify_family(step_key: str, to: str, message: str, trace: str = "") -> dict[str, Any]:
+        """Send a message to a family contact. Irreversible: retries must reuse the same step_key."""
+        return run(step_key, "notify_family", {"to": to, "message": message, "trace": trace})
+
+    @server.tool()
+    def check_slot(date: str) -> dict[str, Any]:
+        """Read-only: remaining appointment slots for a date (YYYY-MM-DD)."""
+        return external.slot(date)
+
+    return server
 
 
-@server.tool()
-def book_appointment(step_key: str, patient_id: str, department: str, date: str, note: str = "") -> dict[str, Any]:
-    """Book a hospital follow-up. date is YYYY-MM-DD. Irreversible: retries must reuse the same step_key."""
-    return _run(step_key, "book_appointment",
-                {"patient_id": patient_id, "department": department, "date": date, "note": note})
+def _ledger_from_env() -> ToolLedger:
+    dsn = os.environ.get("MEDSYNC_PG_DSN")
+    if not dsn:
+        return InMemoryToolLedger()
+    from psycopg.rows import dict_row
+    from psycopg_pool import ConnectionPool
+
+    pool = ConnectionPool(dsn, max_size=10, open=True,
+                          kwargs={"autocommit": True, "prepare_threshold": 0, "row_factory": dict_row})
+    return PostgresToolLedger(pool)
 
 
-@server.tool()
-def notify_family(step_key: str, to: str, message: str) -> dict[str, Any]:
-    """Send a message to a family contact. Irreversible: retries must reuse the same step_key."""
-    return _run(step_key, "notify_family", {"to": to, "message": message})
-
-
-@server.tool()
-def check_slot(date: str) -> dict[str, Any]:
-    """Read-only: remaining appointment slots for a date (YYYY-MM-DD)."""
-    return _external.slot(date)
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--http", action="store_true", help="streamable HTTP instead of stdio")
+    parser.add_argument("--host", default="0.0.0.0")
+    parser.add_argument("--port", type=int, default=8200)
+    args = parser.parse_args()
+    external = HttpExternal(os.environ.get("MEDSYNC_EXTERNAL_URL", "http://127.0.0.1:9000"),
+                            float(os.environ.get("MEDSYNC_EXTERNAL_TIMEOUT_S", "5")))
+    server = build_server(_ledger_from_env(), external)
+    if args.http:
+        server.run("streamable-http", host=args.host, port=args.port, stateless_http=True, json_response=True)
+    else:
+        server.run("stdio")
 
 
 if __name__ == "__main__":
-    server.run("stdio")
+    main()

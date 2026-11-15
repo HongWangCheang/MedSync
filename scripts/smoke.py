@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""End-to-end check of the three-hop exactly-once path against the running Compose stack (stdlib only).
+"""End-to-end check of the exactly-once path (three hops plus the MCP link) against the running Compose stack (stdlib only).
 
     docker compose up --build -d && python3 scripts/smoke.py
 
@@ -50,6 +50,18 @@ def step(tool: str, payload: dict, **extra) -> dict:
 
 def bookings_for(ref: str) -> int:
     return len(http("GET", f"{MOCKS}/hospital/bookings?ref={ref}")[1])
+
+
+def poll(step_key: str, token: str, seconds: float = 30) -> str:
+    """Poll like the device does until the step settles (the gateway re-dispatches PENDING steps on each poll)."""
+    deadline, status = time.time() + seconds, "?"
+    while time.time() < deadline:
+        _, view = http("GET", f"{GATEWAY}/v1/actions/{step_key}", token=token)
+        status = (view or {}).get("status", "?")
+        if status not in ("ACCEPTED", "PENDING"):
+            return status
+        time.sleep(1)
+    return status
 
 
 def check(name: str, ok: bool, detail: str = "") -> bool:
@@ -139,7 +151,28 @@ def main() -> int:
     results.append(check("same ingredient twice in a day is graded high", dup.get("reason") == "safety_alert_high",
                          dup.get("reason") or dup["status"]))
 
-    print("6. cross-agent conflict: a message queued offline vs the safety review that came after")
+    print("6. MCP link agent → tool server: down, then a response lost after the tool server sent the message")
+    toxic("down", "agent_tools")
+    s7 = step("notify_family", {"to": "son", "message": "arrived at the clinic"})
+    _, v = http("POST", f"{GATEWAY}/v1/actions", s7, token)
+    toxic("up", "agent_tools")
+    polled = poll(s7["stepKey"], token)
+    sent = len(http("GET", f"{MOCKS}/notify?ref={s7['stepKey']}")[1])
+    results.append(check("queued while the MCP link is down, sent exactly once after",
+                         v["status"] in ("ACCEPTED", "PENDING") and polled == "DONE" and sent == 1,
+                         f"{v['status']} → {polled}, notifications={sent}"))
+    # The tool server does the work, its answer is held back past the agent's MCP timeout (15 s).
+    toxic("lost-response", "agent_tools", "40000")
+    s7b = step("notify_family", {"to": "son", "message": "back home"})
+    _, v = http("POST", f"{GATEWAY}/v1/actions", s7b, token)
+    time.sleep(16)
+    toxic("clear", "agent_tools")
+    polled = poll(s7b["stepKey"], token, seconds=60)
+    sent = len(http("GET", f"{MOCKS}/notify?ref={s7b['stepKey']}")[1])
+    results.append(check("MCP response lost after the send: the retry replays, no second message",
+                         polled == "DONE" and sent == 1, f"{v['status']} → {polled}, notifications={sent}"))
+
+    print("7. cross-agent conflict: a message queued offline vs the safety review that came after")
     plan = uuid.uuid4().hex
     rec = step("record_medication", {"name": "对乙酰氨基酚", "takenAt": now, "note": ""}, toolClass="WRITE_IDEMPOTENT",
                planId=plan)

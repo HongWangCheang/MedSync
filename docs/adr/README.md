@@ -10,3 +10,4 @@
 - [0006](0006-no-offline-medical-answers.md) 离线时不回答用药问题
 - [0007](0007-findings-board-conflicts.md) 跨 Agent 冲突：发现板 + 不可逆动作前检查
 - [0008](0008-delegated-read-token.md) 药学 Agent 用委托令牌读用药清单
+- [0009](0009-mcp-tool-server-owns-exactly-once.md) executor 通过 MCP 调用工具，只执行一次的保证放在工具服务里
