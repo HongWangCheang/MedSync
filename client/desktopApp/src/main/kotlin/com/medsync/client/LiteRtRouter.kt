@@ -7,6 +7,7 @@ import com.google.ai.edge.litertlm.Contents
 import com.google.ai.edge.litertlm.Engine
 import com.google.ai.edge.litertlm.EngineConfig
 import com.google.ai.edge.litertlm.LogSeverity
+import com.google.ai.edge.litertlm.Message
 import com.google.ai.edge.litertlm.OpenApiTool
 import com.google.ai.edge.litertlm.SamplerConfig
 import com.google.ai.edge.litertlm.ThinkingConfig
@@ -34,7 +35,8 @@ class LiteRtRouter(
     private val backend: Backend = if (System.getenv("MEDSYNC_BACKEND") == "gpu") Backend.GPU() else Backend.CPU(),
 ) : ModelRouter {
     private var engine: Engine? = null
-    private var base: Conversation? = null  // instructions + tool schemas already prefilled; cloned per sentence
+    // Instructions + tool schemas already prefilled, one per task (routing, red flags); cloned per sentence.
+    private val bases = mutableMapOf<String, Conversation>()
     private val lock = Mutex()  // one inference at a time; the engine is not shared across threads
 
     val available: Boolean get() = File(modelPath).isFile
@@ -43,7 +45,10 @@ class LiteRtRouter(
      * Loads the model and prefills the instructions now instead of on the first sentence (about 7 s on this Mac's
      * CPU). Without it the first sentence can exceed [com.medsync.client.agents.FallbackRouter]'s limit and fall back.
      */
-    suspend fun warmUp() = lock.withLock { withContext(Dispatchers.IO) { prefilled() } }
+    suspend fun warmUp() = exclusive { routing() }
+
+    /** Runs [block] with the engine to itself: one inference at a time, off the caller's thread. */
+    internal suspend fun <T> exclusive(block: () -> T): T = lock.withLock { withContext(Dispatchers.IO) { block() } }
 
     private fun engineOrLoad(): Engine = engine ?: run {
         Engine.setNativeMinLogSeverity(LogSeverity.ERROR)
@@ -57,7 +62,7 @@ class LiteRtRouter(
     override suspend fun tryRoute(text: String, today: LocalDate, nowMs: Long): RuleRouter.Routed? {
         if (!available) return null
         return ModelPlan.plan(text, today, nowMs) { piece ->
-            lock.withLock { withContext(Dispatchers.IO) { calls(piece) } }
+            exclusive { calls(piece) }
         }
     }
 
@@ -65,28 +70,34 @@ class LiteRtRouter(
     fun calls(text: String): List<ModelPlan.Call> {
         // The instructions and tool schemas are the same every time: prefill them once and clone that state, so a
         // sentence only pays for its own tokens.
-        return prefilled().clone().use { conversation ->
-            conversation.sendMessage(text).toolCalls.map { ModelPlan.Call(it.name, it.arguments) }
-        }
+        return send(routing(), text).toolCalls.map { ModelPlan.Call(it.name, it.arguments) }
     }
 
-    private fun prefilled(): Conversation = base ?: engineOrLoad().createConversation(ConversationConfig(
-            systemInstruction = Contents.of(SYSTEM),
-            tools = TOOLS.map { tool(it) },
+    private fun routing() = prefilled("routing", SYSTEM, TOOLS)
+
+    /** One message on a fresh copy of [base]; call inside [exclusive]. */
+    internal fun send(base: Conversation, text: String): Message = base.clone().use { it.sendMessage(text) }
+
+    /** The conversation for [key] with [system] and [tools] prefilled, created on first use; call inside [exclusive]. */
+    internal fun prefilled(key: String, system: String, tools: List<OpenApiTool>): Conversation = bases.getOrPut(key) {
+        engineOrLoad().createConversation(ConversationConfig(
+            systemInstruction = Contents.of(system),
+            tools = tools.map { tool(it) },
             samplerConfig = SamplerConfig(topK = 1, topP = 1.0, temperature = 0.0, seed = 0),
             automaticToolCalling = false,
             prefillPrefaceOnInit = true,
             thinkingConfig = ThinkingConfig(enableThinking = false),
-        )).also { base = it }
+        ))
+    }
 
     fun close() {
-        base?.close()
-        base = null
+        bases.values.forEach { it.close() }
+        bases.clear()
         engine?.close()
         engine = null
     }
 
-    private class Spec(private val json: String) : OpenApiTool {
+    internal class Spec(private val json: String) : OpenApiTool {
         override fun getToolDescriptionJsonString() = json
         override fun execute(paramsJsonString: String) = "{}"  // never called: automaticToolCalling = false
     }
@@ -117,7 +128,7 @@ class LiteRtRouter(
             用户：早上好呀 → 不调用工具
         """.trimIndent()
 
-        private fun spec(name: String, description: String, properties: String, required: String) = Spec(
+        internal fun spec(name: String, description: String, properties: String, required: String) = Spec(
             """{"name":"$name","description":"$description","parameters":{"type":"object","properties":{$properties},"required":[$required]}}"""
         )
 

@@ -15,6 +15,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.DesktopComposeUiTest
 import androidx.room.Room
 import com.medsync.client.agents.FallbackRouter
+import com.medsync.client.agents.RedFlagDetector
+import com.medsync.client.agents.RedFlagScreen
 import com.medsync.client.agents.OnDeviceRouter
 import com.medsync.client.agents.RuleBasedRouter
 import com.medsync.client.app.MedSyncController
@@ -44,10 +46,12 @@ class WalkthroughTest {
     private val mocks = System.getenv("MEDSYNC_MOCKS") ?: "http://127.0.0.1:9100"
     private val out = File("build/walkthrough").apply { mkdirs() }
 
-    private fun controller(router: OnDeviceRouter = RuleBasedRouter): MedSyncController {
+    private fun controller(router: OnDeviceRouter = RuleBasedRouter,
+                           redFlags: RedFlagScreen = RedFlagScreen()): MedSyncController {
         val file = File.createTempFile("walkthrough", ".db").apply { delete(); deleteOnExit() }
         val db = buildDatabase(Room.databaseBuilder<MedSyncDatabase>(name = file.absolutePath))
-        return MedSyncController(db, gateway, CoroutineScope(SupervisorJob() + Dispatchers.Default), router = router)
+        return MedSyncController(db, gateway, CoroutineScope(SupervisorJob() + Dispatchers.Default), router = router,
+            redFlags = redFlags)
     }
 
     private fun post(url: String, body: String = "{}") {
@@ -121,6 +125,31 @@ class WalkthroughTest {
         onNodeWithText("药物：降压药").assertExists()
         onNodeWithText("症状：乏力", substring = true).assertExists()
         onNodeWithText("发给儿子", substring = true).assertExists()
+        model.close()
+    }
+
+    @Test
+    fun onDeviceModelCatchesADangerSignTheRulesMiss() = runDesktopComposeUiTest(width = 760, height = 900) {
+        assumeTrue(System.getenv("MEDSYNC_WALKTHROUGH") == "1")
+        val model = LiteRtRouter()
+        assumeTrue("model file missing", model.available)
+        val redFlag = LiteRtRedFlag(model)
+        kotlinx.coroutines.runBlocking { model.warmUp(); redFlag.warmUp() }
+        val screen = RedFlagScreen(redFlag)
+        val app = controller(FallbackRouter(model), screen)
+        setContent { App(app) }
+
+        toggleOffline()
+        // Not in the eval set, and no rule keyword in it (no 胸痛, no 呼吸困难).
+        val text = "胸口像被人攥住一样，出了一身冷汗"
+        assertTrue(RedFlagDetector.detect(text) == null)
+        say(text)
+        waitForText("可能是危险信号", timeoutMs = 60_000)
+        onNodeWithText("拨打 120", substring = true).assertExists()
+        onNodeWithText("由本机模型判断", substring = true).assertExists()
+        // The alert comes before routing; let routing finish too (it records the symptom) before the model closes.
+        waitUntil(timeoutMillis = 60_000) { onAllNodesWithText("本机模型理解中", substring = true).fetchSemanticsNodes().isEmpty() }
+        shot("10-model-red-flag")
         model.close()
     }
 

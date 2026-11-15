@@ -121,6 +121,10 @@ cd client
 
 **端侧路由**：桌面端如果在 `~/.medsync/models/` 里找到 Qwen3-0.6B（LiteRT-LM 格式，328 MB），就用它在本机理解用户的话，不需要联网；模型不可用、超时或出错时自动退回规则路由。在 210 句中文评测集的 test 部分，整句完全正确率 87%（规则 48%），在 Apple M4 Pro 的 CPU 上每句 p50 约 2 秒。方法、结果和局限见 [eval/routing/README.md](eval/routing/README.md)。没有在 Android 真机上测过。
 
+**危险信号**：规则词库先判断，命中就立刻提醒；规则没命中时，再让同一个端侧模型判断一次。模型只能增加提醒，而且必须照抄用户原话里说明危险的那几个字作为依据，找不到就不提醒。在 127 句评测集的 test 部分，召回率从规则的 31% 提高到 92%，代价是误报率从 23% 升到 36%。详见 [eval/redflag/README.md](eval/redflag/README.md)。
+
+<img src="docs/screenshots/10-model-red-flag.png" width="48%">
+
 界面右上角的开关可以**模拟离线**。离线时：记录服药和症状会直接保存在本机；预约、通知家属进入队列；用药问答会被拒绝（没有说明书依据就不回答）；危险信号识别始终在本机完成。
 
 ## 测试
@@ -136,6 +140,7 @@ python3 scripts/smoke.py                                                        
 cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 2 项：真实 Ktor 客户端 → 三跳 → mocks / RAG
 cd client && MEDSYNC_WALKTHROUGH=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*WalkthroughTest*'   # 桌面端界面走查，截图存到 desktopApp/build/walkthrough
 cd client && MEDSYNC_ROUTING_EVAL=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*RoutingEvalTest*' && python3 ../eval/routing/score.py   # 端侧路由评测
+cd client && MEDSYNC_REDFLAG_EVAL=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*RedFlagEvalTest*' && python3 ../eval/redflag/score.py   # 危险信号评测
 ```
 
 ## 来源
