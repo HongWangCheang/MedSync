@@ -9,7 +9,7 @@
 | 负例无误报 | 12/12 |
 | 标为 high 的用例判成 high | 4/4 |
 
-**这是开发集，不是盲测。** 写检查器时用这批用例调过三处：过敏语境里的提及不算（“allergic to aspirin”）、否定句不算（Lipitor “no clinically significant effect … warfarin”）、同成分多个说明书时选有相互作用章节的那份。所以数字偏乐观，换一批新用例才是真实水平。
+**这是开发集，不是盲测。** 写检查器时用这批用例调过三处：过敏语境里的提及不算（“allergic to aspirin”）、否定句不算（Lipitor “no clinically significant effect … warfarin”）、同成分多个说明书时选有相互作用章节的那份。所以数字偏乐观，换一批新用例才是真实水平（见 [../safety_blind/REPORT.md](../safety_blind/REPORT.md)）。
 
 漏报都是数据或词表覆盖不到：说明书没写（布洛芬或奥美拉唑与氯吡格雷）、名字不在别名表（克拉霉素，会作为“未识别”明确告诉用户）、两种抗组胺药的说明书互不提及。检查器只说“说明书写了什么”，不凭常识补。
 

@@ -113,6 +113,12 @@ python3 scripts/langfuse_check.py   # 发一个两步的 plan，检查它在 Lan
 
 完整结果、消融实验和局限见 [eval/report.md](eval/report.md)。
 
+**真实 LLM 的参数漂移**（[eval/drift/REPORT.md](eval/drift/REPORT.md)）：实验里"LLM 重试时改写参数"原本是模拟的（每次都改写）。改用 `gemini-3.5-flash-lite` 实测，67 句话、362 次重试：
+- 重新规划时，只有 54% 的重试参数和第一次完全相同。温度设成 0 也一样（53%）。
+- 科室这类身份字段也有 21%–30% 会变，比如"复诊"变成"复诊科室"。
+- 换成这个实测漂移率，B2 的 IVR 从模拟的 33% 降到约 24%，Full 仍是 0%。模拟夸大了 B2 的重复率，但结论不变：B2 主要败在"已提交、响应丢失"，这跟漂移无关。
+- 在同一个对话里收到"超时、可能已执行"之后，模型一次都没有再调用工具。重复执行来自外层的重试，比如进程重启后重新规划、网关重派。
+
 **补充场景**（200 个回合，[eval/extra/REPORT.md](eval/extra/REPORT.md)）：进程被杀、多个故障叠加、并发重复提交，正是"只执行一次"最容易出事的地方：
 
 | | B0 | B1 | B2 | **Full** |
@@ -158,7 +164,13 @@ cd client
 
 同一个药名可能对应多个产品，这时会先反问是哪一款，并把候选产品列成按钮（标明厂商和版本）；点一下就会接着回答，也可以直接回复产品名。10 分钟内的追问（例如"它一天最多吃几片？"）也会接着同一段对话。没有配置 `GEMINI_API_KEY` 时，这一步会失败并显示"药学服务未配置"。
 
-**安全审核**：每条服药记录同步到服务器时，会和你最近一周记录过的其他药对照一遍（例如先记了"华法林"，再记"布洛芬"）。依据只有 openFDA 说明书原文，不调用大模型：一种药的说明书在"禁用 / 用药前咨询医生或药师 / 药物相互作用 / 警告"里提到另一种药的成分或类别（如"blood thinning (anticoagulant)"），或者两种产品 24 小时内含有相同成分（如两种都含对乙酰氨基酚），就在这条记录下方提醒，点开能看到引用的原文，还可以一键转给药学 Agent 追问。药已经吃了，所以只提醒、不拦截；认不出的药名会列为"未检查"，没有提醒也不代表可以一起吃。审核服务暂时连不上时，这条记录会在服务器排队，恢复后补做审核，不会跳过。评测见 [services/rag/eval/safety/REPORT.md](services/rag/eval/safety/REPORT.md)。
+**安全审核**：每条服药记录同步到服务器时，会和你最近一周记录过的其他药对照一遍（例如先记了"华法林"，再记"布洛芬"）。依据只有 openFDA 说明书原文，不调用大模型：一种药的说明书在"禁用 / 用药前咨询医生或药师 / 药物相互作用 / 警告"里提到另一种药的成分或类别（如"blood thinning (anticoagulant)"），或者两种产品 24 小时内含有相同成分（如两种都含对乙酰氨基酚），就在这条记录下方提醒，点开能看到引用的原文，还可以一键转给药学 Agent 追问。药已经吃了，所以只提醒、不拦截；认不出的药名会列为"未检查"，没有提醒也不代表可以一起吃。审核服务暂时连不上时，这条记录会在服务器排队，恢复后补做审核，不会跳过。
+
+安全审核的评测：
+- **开发集**：召回 16/20，精确率 16/16（[REPORT](services/rag/eval/safety/REPORT.md)）。写规则时用这批用例调过，所以偏乐观。
+- **盲测**：先提交用例、后运行，结果出来以后不改规则。召回 **8/21 = 38%**，精确率 8/8，负例无误报（[REPORT](services/rag/eval/safety_blind/REPORT.md)，[分析](services/rag/eval/safety_blind/NOTES.md)）。
+- **漏报的原因**：漏掉的 13 个药对都出在数据上，不在规则上。一类是药名认不出（白加黑、甲硝唑等），一类是两边都没有说明书（快照以 OTC 为主，华法林、氟西汀这类处方药大多没有收录）。
+- **提醒的可信度**：提醒一旦发出就是对的，并附说明书原文；没有提醒，不代表可以一起吃。两种药都没有说明书可查时，界面会直说"没有可查的说明书，只核对了是否含相同成分"，不会显示"已对照"。
 
 **跨 Agent 冲突检测**：离线时手机按当时的理解排好了动作，例如"吃了对乙酰氨基酚，告诉女儿我没事"会生成一条服药记录和一条待发消息。联网后，安全审核（以及药学问答里查到的说明书相互作用提醒）会把结论写到服务器的"发现板"上；不可逆的动作执行前，先查有没有排队时还不知道的结论和它矛盾。规则很少，写在 `services/agent/medsync_agent/conflicts.py`：
 
@@ -200,10 +212,11 @@ cd client
 ```sh
 cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest,AgentClientTest' test   # 21 项
 cd services/agent   && uv run pytest -q                                            # 61 项（含 MCP 6 项、Langfuse 追踪 3 项）
-cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 60 项
-cd services/rag     && .venv/bin/python -B evaluate_safety.py                      # 相互作用提醒评测，32 个用例
+cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 61 项
+cd services/rag     && .venv/bin/python -B evaluate_safety.py                      # 相互作用提醒评测，开发集 32 例
+cd services/rag     && .venv/bin/python -B evaluate_safety.py --blind              # 盲测 32 例（只跑，不据此调规则）
 cd services/mocks   && uv run pytest -q                                            # 4 项
-cd client           && ./gradlew :shared:jvmTest :desktopApp:test                  # 共享逻辑 34 项 + 离线能力标签 1 项
+cd client           && ./gradlew :shared:jvmTest :desktopApp:test                  # 共享逻辑 36 项 + 离线能力标签 1 项
 python3 scripts/smoke.py                                                           # 端到端，需要 Compose 在运行
 cd client && MEDSYNC_LIVE=1 ./gradlew :shared:jvmTest   # 再加 2 项：真实 Ktor 客户端 → 三跳 → mocks / RAG
 cd client && MEDSYNC_WALKTHROUGH=1 ./gradlew --no-configuration-cache :desktopApp:test --tests '*WalkthroughTest*'   # 桌面端界面走查，截图存到 desktopApp/build/walkthrough

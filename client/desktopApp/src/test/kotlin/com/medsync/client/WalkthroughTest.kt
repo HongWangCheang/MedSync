@@ -154,6 +154,21 @@ class WalkthroughTest {
     }
 
     @Test
+    fun aPairWithNoLabelsIsNotShownAsCompared() = runDesktopComposeUiTest(width = 760, height = 900) {
+        // Found by the blind test: diclofenac + warfarin are both recognised, but neither label is in the snapshot.
+        assumeTrue(System.getenv("MEDSYNC_WALKTHROUGH") == "1")
+        val app = controller()
+        setContent { App(app) }
+        say("我吃了华法林")
+        waitForText("无需对照")
+        say("我吃了双氯芬酸")
+        waitForText("没有可查的说明书")
+        onNodeWithText("没有说明书可查（只核对了是否含相同成分）：华法林", substring = true).assertExists()
+        assertTrue(onAllNodesWithText("已对照：华法林", substring = true).fetchSemanticsNodes().isEmpty())
+        shot("11-no-label-pair")
+    }
+
+    @Test
     fun safetyAlertAndConflictPause() = runDesktopComposeUiTest(width = 760, height = 1400) {
         assumeTrue(System.getenv("MEDSYNC_WALKTHROUGH") == "1")
         post("$mocks/admin/reset")

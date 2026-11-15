@@ -292,8 +292,10 @@ class SafetyChecker:
     def review(self, medication: str, medications: list[dict], taken_at: int | None = None) -> dict:
         taken_at = taken_at or int(time.time() * 1000)
         new = self.resolve(medication)
-        result = {"status": "ok", "medication": new.view(), "checked": [], "unresolved": [], "not_recent": [],
-                  "alerts": [], "severity": None, "note": NOTE}
+        # checked: at least one of the two labels was read. no_label: neither drug has a label in the snapshot, so
+        # only the shared-ingredient check could run; the UI must not present those as "compared".
+        result = {"status": "ok", "medication": new.view(), "checked": [], "no_label": [], "unresolved": [],
+                  "not_recent": [], "alerts": [], "severity": None, "note": NOTE}
         if new.problem:
             result.update(status="unresolved_medication", reason=new.problem)
             return result
@@ -312,7 +314,7 @@ class SafetyChecker:
             if other.problem:
                 result["unresolved"].append(name)
                 continue
-            result["checked"].append(other.view())
+            result["checked" if new.label or other.label else "no_label"].append(other.view())
             alert = self._pair(new, other, gap)
             if alert:
                 result["alerts"].append(alert)

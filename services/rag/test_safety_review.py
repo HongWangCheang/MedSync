@@ -75,6 +75,14 @@ class SafetyCheckerTests(unittest.TestCase):
         self.assertEqual((review["alerts"], review["unresolved"]), ([], ["克拉霉素"]))
         self.assertEqual(self.review("某种草药")["status"], "unresolved_medication")
 
+    def test_pairs_with_no_label_on_either_side_are_not_reported_as_compared(self):
+        # Found by the blind test (eval/safety_blind/NOTES.md): diclofenac and warfarin are both recognised, but the
+        # snapshot has neither label, so nothing about the combination could be read.
+        review = self.review("双氯芬酸", taken("华法林"), taken("舍曲林"))
+        self.assertEqual([m["name"] for m in review["no_label"]], ["华法林"])
+        self.assertEqual([m["name"] for m in review["checked"]], ["舍曲林"])  # Zoloft's label was read
+        self.assertEqual([a["with"] for a in review["alerts"]], ["舍曲林"])
+
     def test_both_labels_are_read(self):
         # Ibuprofen's label is silent about SSRIs; Zoloft's names NSAIDs.
         [alert] = self.review("布洛芬", taken("舍曲林"))["alerts"]
