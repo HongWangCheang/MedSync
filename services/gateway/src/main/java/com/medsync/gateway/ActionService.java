@@ -49,6 +49,11 @@ class ActionService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Step is not waiting for the user");
         }
         decision.put("account_id", account);
+        // The decision is taken: from here on the step is moving again, not waiting for the user. If the agent's
+        // answer is lost (crash, timeout), the step stays DISPATCHED, so the next poll re-dispatches it and the agent
+        // finishes the decision it already recorded. Left at NEEDS_USER it would never be re-dispatched, and the app
+        // would offer the same choice again for a message that may already be on its way.
+        row = ledger.settle(account, stepKey, "DISPATCHED", null, null);
         try {
             return settle(account, row, agent.resume(stepKey, decision));
         } catch (AgentClient.Unavailable unavailable) {
