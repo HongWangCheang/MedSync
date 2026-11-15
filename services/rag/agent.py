@@ -32,8 +32,8 @@ def plain(text):
     "co trimoxazole"."""
     return " " + NON_WORD.sub(" ", text.casefold()).strip() + " "
 # Ordered by how directly the section speaks to combining drugs; used to rank matches when no reranker is loaded.
-INTERACTION_SECTIONS = ("do_not_use", "ask_doctor_or_pharmacist", "drug_interactions", "boxed_warning",
-                        "warnings_and_cautions", "when_using", "ask_doctor", "warnings")
+INTERACTION_SECTIONS = ("do_not_use", "contraindications", "ask_doctor_or_pharmacist", "drug_interactions",
+                        "boxed_warning", "warnings_and_cautions", "when_using", "ask_doctor", "warnings")
 REFUSAL = ("I can't give a sourced answer to that. Please check the printed label or ask a pharmacist.")
 SYSTEM = """You answer questions about over-the-counter and prescription drug labels for a medication tracking app.
 Use tools to find evidence. Never answer from general knowledge.

@@ -15,6 +15,7 @@ SECTIONS = {
     "other_safety_information": "Other safety information",
     "warnings": "Warnings",
     "boxed_warning": "Boxed warning",
+    "contraindications": "Contraindications",
     "warnings_and_cautions": "Warnings and precautions",
     "do_not_use": "Do not use",
     "stop_use": "When to stop use",
@@ -36,6 +37,18 @@ SECTIONS = {
 }
 METADATA = ("brand_name", "generic_name", "manufacturer_name", "dosage_form",
             "route", "product_ndc", "substance_name")
+
+
+RX_CORPUS = DEFAULT_CORPUS.with_name("openfda_rx_labels.json")
+
+
+def safety_records(base=DEFAULT_CORPUS, extra=RX_CORPUS):
+    """Labels the safety review reads: the main snapshot plus the prescription-label snapshot (fetch_rx_labels.py).
+    The pharmacist reads only the main snapshot; its retrieval evaluation is pinned to that file."""
+    records = json.loads(Path(base).read_text(encoding="utf-8"))["results"]
+    if Path(extra).exists():
+        records = records + json.loads(Path(extra).read_text(encoding="utf-8"))["results"]
+    return records
 
 
 def read_dump(path):

@@ -26,13 +26,13 @@ from medtrack_server import ApiError, names, values
 HOUR_MS = 3_600_000
 INTERACTION_WINDOW_MS = 7 * 24 * HOUR_MS  # a record older than this is history, not a current medication
 DUPLICATE_WINDOW_MS = 24 * HOUR_MS        # same ingredient twice within a day can exceed the daily maximum
-HIGH_SECTIONS = {"do_not_use", "boxed_warning"}
+HIGH_SECTIONS = {"do_not_use", "contraindications", "boxed_warning"}
 EXCERPT_CHARS = 280
 MAX_FINDINGS = 3
 NOTE = "只根据说明书原文判断：没有提醒不代表可以一起用，有疑问请咨询医生或药师。"
 
 SECTION_ZH = {
-    "do_not_use": "禁用", "boxed_warning": "黑框警告", "ask_doctor_or_pharmacist": "用药前咨询医生或药师",
+    "do_not_use": "禁用", "contraindications": "禁忌", "boxed_warning": "黑框警告", "ask_doctor_or_pharmacist": "用药前咨询医生或药师",
     "drug_interactions": "药物相互作用", "warnings_and_cautions": "警告与注意事项", "when_using": "使用期间",
     "ask_doctor": "用药前咨询医生", "warnings": "警告", "active_ingredient": "有效成分",
 }
@@ -52,6 +52,22 @@ CLASSES: dict[str, tuple[str, list[str]]] = {
     "ppi": ("质子泵抑制剂", ["proton pump inhibitor", "proton pump inhibitors"]),
     "decongestant": ("减充血剂", ["decongestant", "nasal decongestant"]),
     "diuretic": ("利尿剂", ["diuretic", "diuretics"]),
+    # Classes prescription labels name in their interaction sections (added with the prescription-label snapshot).
+    "statin": ("他汀类降脂药", ["statin", "statins", "hmg coa reductase inhibitor", "hmg coa reductase inhibitors"]),
+    "beta_blocker": ("β 受体阻滞剂", ["beta blocker", "beta blockers", "beta adrenergic blocking agents",
+                                    "beta adrenergic blockers"]),
+    "ace_inhibitor": ("ACE 抑制剂（普利类）", ["ace inhibitor", "ace inhibitors",
+                                             "angiotensin converting enzyme inhibitors"]),
+    "arb": ("血管紧张素受体阻滞剂（沙坦类）", ["angiotensin receptor blockers", "angiotensin ii receptor blockers",
+                                         "angiotensin ii receptor antagonists", "arbs"]),
+    "ccb": ("钙通道阻滞剂（地平类）", ["calcium channel blocker", "calcium channel blockers"]),
+    "potassium_sparing": ("保钾利尿剂", ["potassium sparing diuretics", "potassium sparing diuretic"]),
+    "sulfonylurea": ("磺脲类降糖药", ["sulfonylurea", "sulfonylureas", "insulin secretagogues"]),
+    "macrolide": ("大环内酯类抗生素", ["macrolide", "macrolides", "macrolide antibiotics"]),
+    "fluoroquinolone": ("喹诺酮类抗生素", ["fluoroquinolone", "fluoroquinolones", "quinolones"]),
+    "azole": ("唑类抗真菌药", ["azole antifungals", "azole antifungal", "azole antifungal agents"]),
+    "opioid": ("阿片类镇痛药", ["opioid", "opioids", "opioid analgesics"]),
+    "benzodiazepine": ("苯二氮䓬类", ["benzodiazepine", "benzodiazepines"]),
 }
 
 # English ingredient → (Chinese names and common Chinese brands, other English names, classes).
@@ -85,11 +101,72 @@ INGREDIENTS: dict[str, tuple[list[str], list[str], list[str]]] = {
     "fluticasone": (["氟替卡松"], [], []),
     "hydrochlorothiazide": (["氢氯噻嗪"], [], ["diuretic"]),
     "furosemide": (["呋塞米", "速尿"], [], ["diuretic"]),
+    # Added with the prescription-label snapshot (data/openfda_rx_labels.json): common adult outpatient drugs.
+    "apixaban": (["阿哌沙班", "艾乐妥"], [], ["anticoagulant"]),
+    "dabigatran": (["达比加群", "泰毕全"], ["dabigatran etexilate"], ["anticoagulant"]),
+    "amlodipine": (["氨氯地平", "络活喜"], [], ["ccb"]),
+    "nifedipine": (["硝苯地平", "拜新同"], [], ["ccb"]),
+    "metoprolol": (["美托洛尔", "倍他乐克"], [], ["beta_blocker"]),
+    "bisoprolol": (["比索洛尔", "康忻", "博苏"], [], ["beta_blocker"]),
+    "lisinopril": (["赖诺普利"], [], ["ace_inhibitor"]),
+    "enalapril": (["依那普利"], [], ["ace_inhibitor"]),
+    "losartan": (["氯沙坦", "科素亚"], [], ["arb"]),
+    "valsartan": (["缬沙坦", "代文"], [], ["arb"]),
+    "spironolactone": (["螺内酯", "安体舒通"], [], ["diuretic", "potassium_sparing"]),
+    "digoxin": (["地高辛"], [], []),
+    "amiodarone": (["胺碘酮", "可达龙"], [], []),
+    "simvastatin": (["辛伐他汀", "舒降之"], [], ["statin"]),
+    "rosuvastatin": (["瑞舒伐他汀", "可定"], [], ["statin"]),
+    "metformin": (["二甲双胍", "格华止"], [], []),
+    "glimepiride": (["格列美脲", "亚莫利"], [], ["sulfonylurea"]),
+    "glipizide": (["格列吡嗪", "瑞易宁"], [], ["sulfonylurea"]),
+    "pantoprazole": (["泮托拉唑", "潘妥洛克"], [], ["ppi"]),
+    "escitalopram": (["艾司西酞普兰", "来士普"], [], ["ssri"]),
+    "paroxetine": (["帕罗西汀", "赛乐特"], [], ["ssri"]),
+    "alprazolam": (["阿普唑仑"], [], ["sedative", "benzodiazepine"]),
+    "zolpidem": (["唑吡坦", "思诺思"], [], ["sedative"]),
+    "tramadol": (["曲马多", "奇曼丁"], [], ["opioid"]),
+    "clarithromycin": (["克拉霉素", "克拉仙"], [], ["macrolide"]),
+    "azithromycin": (["阿奇霉素", "希舒美"], [], ["macrolide"]),
+    "metronidazole": (["甲硝唑", "灭滴灵"], [], []),
+    "ciprofloxacin": (["环丙沙星"], [], ["fluoroquinolone"]),
+    "levofloxacin": (["左氧氟沙星", "可乐必妥"], [], ["fluoroquinolone"]),
+    "fluconazole": (["氟康唑", "大扶康"], [], ["azole"]),
+    "amoxicillin": (["阿莫西林"], [], []),
+    "allopurinol": (["别嘌醇"], [], []),
+    "colchicine": (["秋水仙碱"], [], []),
+    "celecoxib": (["塞来昔布", "西乐葆"], [], ["nsaid"]),
+    "dextromethorphan": (["右美沙芬"], [], []),
+    "carbamazepine": (["卡马西平", "得理多"], [], []),
+    "amantadine": (["金刚烷胺"], [], []),
+}
+
+# Chinese combination products → their (Western) active ingredients, by the generic name on the Chinese label.
+# Herbal and minor ingredients (caffeine, vitamin C, 三叉苦…) are left out: the review only knows the ones above.
+# Compositions checked against NMPA label-revision notices and published assays where available; 白加黑 and 新康泰克
+# follow their generic names (氨酚伪麻美芬片 / 氨麻苯美片, 复方盐酸伪麻黄碱缓释胶囊). To be reviewed by a pharmacist.
+PRODUCTS: dict[str, list[str]] = {
+    "白加黑": ["acetaminophen", "pseudoephedrine", "dextromethorphan", "diphenhydramine"],
+    "氨麻苯美": ["acetaminophen", "pseudoephedrine", "dextromethorphan", "diphenhydramine"],
+    "氨酚伪麻美芬": ["acetaminophen", "pseudoephedrine", "dextromethorphan"],
+    "感冒灵": ["acetaminophen", "chlorpheniramine"],
+    "维C银翘": ["acetaminophen", "chlorpheniramine"],
+    "新康泰克": ["pseudoephedrine", "chlorpheniramine"],
+    "复方盐酸伪麻黄碱": ["pseudoephedrine", "chlorpheniramine"],
+    "快克": ["acetaminophen", "amantadine", "chlorpheniramine"],
+    "复方氨酚烷胺": ["acetaminophen", "amantadine", "chlorpheniramine"],
+    "泰诺感冒": ["acetaminophen", "pseudoephedrine", "dextromethorphan", "chlorpheniramine"],
+    "酚麻美敏": ["acetaminophen", "pseudoephedrine", "dextromethorphan", "chlorpheniramine"],
+    "日夜百服咛": ["acetaminophen", "pseudoephedrine", "dextromethorphan", "chlorpheniramine"],
+    "小儿氨酚黄那敏": ["acetaminophen", "chlorpheniramine"],
+    "氨酚黄那敏": ["acetaminophen", "chlorpheniramine"],
 }
 SALTS = {"hydrochloride", "hcl", "sodium", "magnesium", "maleate", "trihydrate", "furoate", "propionate",
          "unspecified", "form", "natural", "and", "zinc", "acetate"}
 CHILD = re.compile(r"child|junior|infant|jr\b", re.I)
-_ZH_ALIASES = sorted(((alias, key) for key, (zh, _, _) in INGREDIENTS.items() for alias in zh), key=lambda a: -len(a[0]))
+# Longest first, so "泰诺感冒" (four ingredients) wins over "泰诺" (acetaminophen) and "氨酚黄那敏" over "氨酚".
+_ZH_ALIASES = sorted([(alias, (key,)) for key, (zh, _, _) in INGREDIENTS.items() for alias in zh]
+                     + [(name, tuple(keys)) for name, keys in PRODUCTS.items()], key=lambda a: -len(a[0]))
 _EN_ALIASES = sorted(((plain(alias), key) for key, (_, en, _) in INGREDIENTS.items() for alias in [key, *en]),
                      key=lambda a: -len(a[0]))
 
@@ -171,9 +248,9 @@ class SafetyChecker:
         words inside it ("Advil Dual Action with Acetaminophen" is ibuprofen + acetaminophen, not acetaminophen)."""
         med = Med(name.strip(), last_taken_at=last_taken_at)
         found, rest = set(), med.name
-        for alias, key in _ZH_ALIASES:
+        for alias, keys in _ZH_ALIASES:
             if alias in rest:
-                found.add(key)
+                found.update(keys)
                 rest = rest.replace(alias, " ")
         if not found:
             problem = self._from_snapshot(med)

@@ -14,7 +14,7 @@ import json
 import math
 from pathlib import Path
 
-from label_corpus import DEFAULT_CORPUS
+from label_corpus import DEFAULT_CORPUS, RX_CORPUS, safety_records
 from label_retrieval import LabelIndex, LabelSnapshot
 from safety_review import HOUR_MS, SafetyChecker
 
@@ -136,12 +136,13 @@ def report(rows: list[dict], summary: dict, blind: bool = False) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--corpus", default=str(DEFAULT_CORPUS))
+    parser.add_argument("--rx-corpus", default=str(RX_CORPUS), help="prescription labels; a missing file is skipped")
     parser.add_argument("--cases", default=str(CASES))
     parser.add_argument("--no-write", action="store_true")
     parser.add_argument("--blind", action="store_true",
                         help="score eval/safety_blind_cases.json into eval/safety_blind/ (run once; do not tune on it)")
     args = parser.parse_args()
-    records = json.loads(Path(args.corpus).read_text(encoding="utf-8"))["results"]
+    records = safety_records(args.corpus, args.rx_corpus)
     checker = SafetyChecker(LabelIndex(LabelSnapshot(records, public=True), model=None))
     cases = HERE / "eval" / "safety_blind_cases.json" if args.blind else Path(args.cases)
     out = HERE / "eval" / "safety_blind" if args.blind else OUT
