@@ -13,7 +13,7 @@ from starlette.concurrency import run_in_threadpool
 
 from agent import LabelAgent, gemini_summarize, verified_owner
 from safety_review import SafetyChecker
-from label_corpus import DEFAULT_CORPUS
+from label_corpus import DEFAULT_CORPUS, safety_records
 from label_retrieval import LabelIndex, LabelSnapshot, load_model, load_reranker
 from medtrack_server import ApiError, DEMO_LABELS, DemoLabels, MedTrack, demo_select, live_service, load_local_config, route
 
@@ -77,7 +77,10 @@ def create_app(index=None, legacy=None, agent=None):
     async def lifespan(app):
         app.state.index = index or await run_in_threadpool(build_index)
         app.state.agent = agent or LabelAgent(app.state.index, summarize=gemini_summarize)
-        app.state.safety = SafetyChecker(app.state.index)
+        # The safety review also reads prescription labels (warfarin, digoxin…); no embeddings needed for it.
+        app.state.safety_index = None if index is not None or os.getenv("MEDTRACK_SYNTHETIC_LABELS") == "1" else \
+            await run_in_threadpool(lambda: LabelIndex(LabelSnapshot(safety_records(), public=True), model=None))
+        app.state.safety = SafetyChecker(app.state.safety_index or app.state.index)
         if legacy is not None:
             app.state.legacy = legacy
         elif os.getenv("MEDTRACK_SYNTHETIC_LABELS") == "1":
@@ -90,6 +93,8 @@ def create_app(index=None, legacy=None, agent=None):
         finally:
             if index is None:
                 app.state.index.db.close()
+            if app.state.safety_index is not None:
+                app.state.safety_index.db.close()
 
     app = FastAPI(title="MedTrack label search and question answering", version="1.0", lifespan=lifespan)
 

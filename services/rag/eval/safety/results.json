@@ -2,21 +2,21 @@
   "summary": {
     "cases": 32,
     "expected_pairs": 20,
-    "caught": 16,
-    "recall": 0.8,
+    "caught": 19,
+    "recall": 0.95,
     "recall_ci": [
-      0.5839782779742401,
-      0.9193436467288
+      0.7638641064874331,
+      0.9911187805671268
     ],
-    "alerts": 16,
-    "false_alerts": 0,
-    "precision": 1.0,
+    "alerts": 20,
+    "false_alerts": 1,
+    "precision": 0.95,
     "precision_ci": [
-      0.8063865817272802,
-      1.0
+      0.7638641064874331,
+      0.9911187805671268
     ],
     "negative_cases": 12,
-    "negatives_clean": 12,
+    "negatives_clean": 11,
     "high_grading_ok": 4,
     "high_cases": 4,
     "positive_cases": 20
@@ -50,6 +50,14 @@
         "label": "Motrin IB Migraine"
       },
       "findings": [
+        {
+          "with": "华法林",
+          "severity": "moderate",
+          "summary": "华法林（参照 Warfarin Sodium 说明书）在「药物相互作用」里提到了布洛芬。",
+          "label": "Warfarin Sodium",
+          "section": "Drug interactions",
+          "excerpt": "…opidine Nonsteroidal Anti-Inflammatory Agents celecoxib, diclofenac, diflunisal, fenoprofen, ibuprofen, indomethacin, ketoprofen, ketorolac, mefenamic acid, naproxen, oxaprozin, piroxicam, sulindac Serotonin Reuptake Inhibitors citalopram, desvenlafaxine, duloxetine, escitalopram…"
+        },
         {
           "with": "华法林",
           "severity": "moderate",
@@ -97,6 +105,14 @@
           "label": "Motrin IB Migraine",
           "section": "Ask a doctor or pharmacist before use",
           "excerpt": "…r or pharmacist before use if you are under a doctor's care for any serious condition taking aspirin for heart attack or stroke, because ibuprofen may decrease this benefit of aspirin taking any other drug"
+        },
+        {
+          "with": "阿司匹林",
+          "severity": "moderate",
+          "summary": "阿司匹林（参照 Market Basket Effervescent Pain Relief 说明书）在「警告」里提到了布洛芬。",
+          "label": "Market Basket Effervescent Pain Relief",
+          "section": "Warnings",
+          "excerpt": "…steroid drug ■ take other drugs containing prescription or nonprescription NSAIDs (aspirin, ibuprofen, naproxen, or others) ■ have 3 or more alcoholic drinks every day while using this product ■ take more or for a longer time than directed"
         }
       ],
       "why": "two NSAIDs; ibuprofen blunts aspirin's cardioprotection",
@@ -455,7 +471,7 @@
         "ingredients": [
           "calcium carbonate"
         ],
-        "label": null
+        "label": "HEB Antacid Calcium Assorted Berry"
       },
       "findings": [
         {
@@ -498,6 +514,14 @@
         "label": "Motrin IB Migraine"
       },
       "findings": [
+        {
+          "with": "泼尼松",
+          "severity": "moderate",
+          "summary": "泼尼松（参照 Prednisone 说明书）在「药物相互作用」里提到了非甾体抗炎药（布洛芬）。",
+          "label": "Prednisone",
+          "section": "Drug interactions",
+          "excerpt": "Nonsteroidal Anti-Inflammatory Agents (NSAIDS) Concomitant use of aspirin (or other nonsteroidal anti-inflammatory agents ) and corticosteroids increases the risk of gastrointestinal side effects. Aspirin should be used cautiously in conjunction with corticosteroids in hypoprothr…"
+        },
         {
           "with": "泼尼松",
           "severity": "moderate",
@@ -560,11 +584,13 @@
       "expected": [
         "氯吡格雷"
       ],
-      "alerted": [],
-      "caught": [],
-      "missed": [
+      "alerted": [
         "氯吡格雷"
       ],
+      "caught": [
+        "氯吡格雷"
+      ],
+      "missed": [],
       "false": [],
       "high_ok": true,
       "status": "ok",
@@ -576,7 +602,16 @@
         ],
         "label": "Motrin IB Migraine"
       },
-      "findings": [],
+      "findings": [
+        {
+          "with": "氯吡格雷",
+          "severity": "moderate",
+          "summary": "氯吡格雷（参照 Clopidogrel Bisulfate 说明书）在「药物相互作用」里提到了非甾体抗炎药（布洛芬）。",
+          "label": "Clopidogrel Bisulfate",
+          "section": "Drug interactions",
+          "excerpt": "…Consider use of parenteral antiplatelet agent. ( 7.3 ) Nonsteroidal anti-inflammatory drugs (NSAIDs), warfarin, selective serotonin and serotonin norepinephrine reuptake inhibitors (SSRIs, SNRIs): Increases risk of bleeding. ( 7.4 , 7.5 , 7.6 ) Other Antiplatelet Agents: Increase…"
+        }
+      ],
       "why": "NSAID + antiplatelet: bleeding",
       "high": false
     },
@@ -589,11 +624,13 @@
       "expected": [
         "氯吡格雷"
       ],
-      "alerted": [],
-      "caught": [],
-      "missed": [
+      "alerted": [
         "氯吡格雷"
       ],
+      "caught": [
+        "氯吡格雷"
+      ],
+      "missed": [],
       "false": [],
       "high_ok": true,
       "status": "ok",
@@ -605,7 +642,16 @@
         ],
         "label": "Prilosec OTC"
       },
-      "findings": [],
+      "findings": [
+        {
+          "with": "氯吡格雷",
+          "severity": "moderate",
+          "summary": "氯吡格雷（参照 Clopidogrel Bisulfate 说明书）在「药物相互作用」里提到了奥美拉唑。",
+          "label": "Clopidogrel Bisulfate",
+          "section": "Drug interactions",
+          "excerpt": "…clopidogrel and a reduction in platelet inhibition [see Warnings and Precautions ( 5.1 )] . Omeprazole or Esomeprazole Avoid concomitant use of clopidogrel tablets with omeprazole or esomeprazole."
+        }
+      ],
       "why": "omeprazole inhibits CYP2C19 activation of clopidogrel",
       "high": false
     },
@@ -618,17 +664,17 @@
       "expected": [
         "克拉霉素"
       ],
-      "alerted": [],
-      "caught": [],
-      "missed": [
+      "alerted": [
         "克拉霉素"
       ],
+      "caught": [
+        "克拉霉素"
+      ],
+      "missed": [],
       "false": [],
       "high_ok": true,
       "status": "ok",
-      "unresolved": [
-        "克拉霉素"
-      ],
+      "unresolved": [],
       "medication": {
         "name": "阿托伐他汀",
         "ingredients": [
@@ -636,7 +682,24 @@
         ],
         "label": "Lipitor"
       },
-      "findings": [],
+      "findings": [
+        {
+          "with": "克拉霉素",
+          "severity": "moderate",
+          "summary": "阿托伐他汀（参照 Lipitor 说明书）在「药物相互作用」里提到了克拉霉素。",
+          "label": "Lipitor",
+          "section": "Drug interactions",
+          "excerpt": "…4 and/or transporters [see Clinical Pharmacology (12.3) ] . Intervention: In patients taking clarithromycin or itraconazole, do not exceed LIPITOR 20 mg [see Dosage and Administration (2.5) ] . Consider the risk/benefit of concomitant use of other azole antifungals or macrolide a…"
+        },
+        {
+          "with": "克拉霉素",
+          "severity": "moderate",
+          "summary": "克拉霉素（参照 Clarithromycin 说明书）在「药物相互作用」里提到了阿托伐他汀。",
+          "label": "Clarithromycin",
+          "section": "Drug interactions",
+          "excerpt": "…cities from these drugs [see Contraindications ( 4.5 ) and Warnings and Precautions ( 5.4 )] Atorvastatin, Pravastatin, Fluvastatin: [See Warnings and Precautions ( 5.4 )] Atorvastatin Pravastatin Use With Caution Fluvastatin No Dose Adjustment"
+        }
+      ],
       "why": "CYP3A4 inhibitor raises statin levels (myopathy)",
       "high": false
     },
@@ -700,6 +763,14 @@
         {
           "with": "华法林",
           "severity": "moderate",
+          "summary": "华法林（参照 Warfarin Sodium 说明书）在「药物相互作用」里提到了萘普生（Aleve）。",
+          "label": "Warfarin Sodium",
+          "section": "Drug interactions",
+          "excerpt": "…nac, diflunisal, fenoprofen, ibuprofen, indomethacin, ketoprofen, ketorolac, mefenamic acid, naproxen, oxaprozin, piroxicam, sulindac Serotonin Reuptake Inhibitors citalopram, desvenlafaxine, duloxetine, escitalopram, fluoxetine, fluvoxamine, milnacipran, paroxetine,"
+        },
+        {
+          "with": "华法林",
+          "severity": "moderate",
           "summary": "Aleve 的说明书在「警告」里提到了抗凝药（华法林）。",
           "label": "Aleve",
           "section": "Warnings",
@@ -738,6 +809,14 @@
         "label": "Motrin IB Migraine"
       },
       "findings": [
+        {
+          "with": "华法林",
+          "severity": "moderate",
+          "summary": "华法林（参照 Warfarin Sodium 说明书）在「药物相互作用」里提到了布洛芬。",
+          "label": "Warfarin Sodium",
+          "section": "Drug interactions",
+          "excerpt": "…opidine Nonsteroidal Anti-Inflammatory Agents celecoxib, diclofenac, diflunisal, fenoprofen, ibuprofen, indomethacin, ketoprofen, ketorolac, mefenamic acid, naproxen, oxaprozin, piroxicam, sulindac Serotonin Reuptake Inhibitors citalopram, desvenlafaxine, duloxetine, escitalopram…"
+        },
         {
           "with": "华法林",
           "severity": "moderate",
@@ -922,10 +1001,14 @@
         "华法林"
       ],
       "expected": [],
-      "alerted": [],
+      "alerted": [
+        "华法林"
+      ],
       "caught": [],
       "missed": [],
-      "false": [],
+      "false": [
+        "华法林"
+      ],
       "high_ok": true,
       "status": "ok",
       "unresolved": [],
@@ -936,7 +1019,16 @@
         ],
         "label": "Lipitor"
       },
-      "findings": [],
+      "findings": [
+        {
+          "with": "华法林",
+          "severity": "moderate",
+          "summary": "华法林（参照 Warfarin Sodium 说明书）在「药物相互作用」里提到了阿托伐他汀。",
+          "label": "Warfarin Sodium",
+          "section": "Drug interactions",
+          "excerpt": "…nytoin, cigarette smoking CYP3A4 alprazolam, amiodarone, amlodipine, amprenavir, aprepitant, atorvastatin, atazanavir, bicalutamide, cilostazol, cimetidine, ciprofloxacin, clarithromycin, conivaptan, cyclosporine, darunavir/ritonavir, diltiazem, erythromycin, fluconazole, fluoxet…"
+        }
+      ],
       "why": "atorvastatin has no clinically significant effect on warfarin",
       "high": false
     },

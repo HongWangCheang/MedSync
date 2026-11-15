@@ -4,13 +4,14 @@ import unittest
 from fastapi.testclient import TestClient
 
 from app import create_app
-from label_corpus import DEFAULT_CORPUS
+from label_corpus import DEFAULT_CORPUS, safety_records
 from label_retrieval import LabelIndex, LabelSnapshot
 from medtrack_server import DemoLabels, MedTrack, demo_select
 from safety_review import HOUR_MS, SafetyChecker, canonical
 
 NOW = 1_800_000_000_000
-RECORDS = json.loads(DEFAULT_CORPUS.read_text(encoding="utf-8"))["results"]
+RECORDS = safety_records()  # main snapshot + prescription labels, as the app's safety review reads them
+BASE = json.loads(DEFAULT_CORPUS.read_text(encoding="utf-8"))["results"]
 
 
 def taken(name, hours_ago=2):
@@ -34,8 +35,10 @@ class SafetyCheckerTests(unittest.TestCase):
         review = self.review("布洛芬", taken("华法林"))
         [alert] = review["alerts"]
         self.assertEqual((alert["with"], alert["severity"], alert["kinds"]), ("华法林", "moderate", ["label_warning"]))
-        citation = alert["findings"][0]["citation"]
-        self.assertIn("anticoagulant", citation["excerpt"])
+        # Both labels speak: ibuprofen's names anticoagulants, warfarin's (prescription snapshot) lists NSAIDs.
+        citations = {f["citation"]["label"]: f["citation"] for f in alert["findings"]}
+        citation = next(c for c in citations.values() if "anticoagulant" in c["excerpt"].lower())
+        self.assertIn("Warfarin Sodium", citations)
         self.assertTrue(citation["source_url"].startswith("https://api.fda.gov/drug/label.json"))
         # The excerpt is copied from the passage, never paraphrased.
         passage = next(p for p in self.index.passages if p.label_id == citation["label_id"]
@@ -67,21 +70,37 @@ class SafetyCheckerTests(unittest.TestCase):
     def test_allergy_and_negated_mentions_do_not_count(self):
         # ZYRTEC: "allergic reaction ... to an antihistamine containing hydroxyzine" is not an interaction.
         self.assertEqual(self.review("西替利嗪", taken("苯海拉明"))["alerts"], [])
-        # Lipitor: "no clinically significant effect on prothrombin time ... chronic warfarin treatment".
-        self.assertEqual(self.review("阿托伐他汀", taken("华法林"))["alerts"], [])
+        # Lipitor: "no clinically significant effect on prothrombin time ... chronic warfarin treatment". Read alone,
+        # Lipitor's label raises nothing. (Warfarin's own label does list atorvastatin among CYP3A4 inhibitors, so with
+        # the prescription snapshot the pair is flagged from that label instead: see eval/safety/REPORT.md, N06.)
+        lipitor_only = SafetyChecker(LabelIndex(LabelSnapshot(BASE, public=True), model=None))
+        self.assertEqual(lipitor_only.review("阿托伐他汀", [taken("华法林")], taken_at=NOW)["alerts"], [])
+        [alert] = self.review("阿托伐他汀", taken("华法林"))["alerts"]
+        self.assertEqual({f["citation"]["label"] for f in alert["findings"]}, {"Warfarin Sodium"})
 
     def test_unknown_names_are_reported_not_silently_passed(self):
-        review = self.review("阿托伐他汀", taken("克拉霉素"))
-        self.assertEqual((review["alerts"], review["unresolved"]), ([], ["克拉霉素"]))
+        review = self.review("阿托伐他汀", taken("替格瑞洛"))  # ticagrelor: not in the alias table
+        self.assertEqual((review["alerts"], review["unresolved"]), ([], ["替格瑞洛"]))
         self.assertEqual(self.review("某种草药")["status"], "unresolved_medication")
 
     def test_pairs_with_no_label_on_either_side_are_not_reported_as_compared(self):
-        # Found by the blind test (eval/safety_blind/NOTES.md): diclofenac and warfarin are both recognised, but the
-        # snapshot has neither label, so nothing about the combination could be read.
-        review = self.review("双氯芬酸", taken("华法林"), taken("舍曲林"))
-        self.assertEqual([m["name"] for m in review["no_label"]], ["华法林"])
+        # Found by the blind test (eval/safety_blind/NOTES.md). Every single-ingredient drug in the table now has a
+        # label; two Chinese combination products still have none, so only shared ingredients can be checked.
+        review = self.review("白加黑", taken("新康泰克"), taken("舍曲林"))
+        self.assertEqual([m["name"] for m in review["no_label"]], ["新康泰克"])
         self.assertEqual([m["name"] for m in review["checked"]], ["舍曲林"])  # Zoloft's label was read
-        self.assertEqual([a["with"] for a in review["alerts"]], ["舍曲林"])
+        alerts = {a["with"]: a for a in review["alerts"]}
+        self.assertEqual(alerts["新康泰克"]["kinds"], ["duplicate_ingredient"])  # both contain pseudoephedrine
+
+    def test_chinese_combination_products_resolve_to_all_their_ingredients(self):
+        self.assertEqual(self.checker.resolve("白加黑").ingredients,
+                         {"acetaminophen", "pseudoephedrine", "dextromethorphan", "diphenhydramine"})
+        self.assertEqual(self.checker.resolve("999感冒灵颗粒").ingredients, {"acetaminophen", "chlorpheniramine"})
+        # The longer name wins: 泰诺感冒片 is a four-ingredient cold remedy, 泰诺 alone is acetaminophen.
+        self.assertEqual(len(self.checker.resolve("泰诺感冒片").ingredients), 4)
+        self.assertEqual(self.checker.resolve("泰诺").ingredients, {"acetaminophen"})
+        [alert] = self.review("白加黑", taken("泰诺"))["alerts"]
+        self.assertEqual(alert["severity"], "high")  # duplicate acetaminophen within a day
 
     def test_both_labels_are_read(self):
         # Ibuprofen's label is silent about SSRIs; Zoloft's names NSAIDs.
