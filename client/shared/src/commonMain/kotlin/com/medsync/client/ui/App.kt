@@ -39,6 +39,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.medsync.client.agents.PharmacistAnswer
 import com.medsync.client.agents.SafetyReview
+import com.medsync.client.app.Availability
+import com.medsync.client.app.Capabilities
+import com.medsync.client.app.Capability
 import com.medsync.client.app.MedSyncController
 import com.medsync.client.data.ActionEntity
 import com.medsync.client.outbox.ActionState
@@ -73,6 +76,8 @@ fun App(controller: MedSyncController) {
                     TextButton(onClick = { controller.syncNow() }) { Text("同步") }
                 }
 
+                CapabilityPanel(controller.capabilities, offline)
+
                 redFlag?.let { flag ->
                     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
                         Column(Modifier.padding(12.dp)) {
@@ -106,6 +111,42 @@ fun App(controller: MedSyncController) {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+/**
+ * What works without a network. Offline it is always open, so the user sees what will wait and what is refused;
+ * online it is one line that opens on a tap.
+ */
+@Composable
+private fun CapabilityPanel(capabilities: List<Capability>, offline: Boolean) {
+    var details by remember { mutableStateOf(false) }
+    val colors = MaterialTheme.colorScheme
+    val tint = { a: Availability ->
+        when (a) {
+            Availability.OFFLINE -> colors.primary
+            Availability.QUEUED -> colors.tertiary
+            Availability.ONLINE_ONLY -> colors.error
+        }
+    }
+    Card(colors = CardDefaults.cardColors(containerColor = if (offline) colors.secondaryContainer else colors.surfaceVariant)) {
+        Column(Modifier.fillMaxWidth().clickable { details = !details }.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            if (!offline && !details) {
+                val local = capabilities.filter { it.availability == Availability.OFFLINE }.joinToString(" · ") { it.name }
+                Text("断网时仍可用：$local（点开看全部）", style = MaterialTheme.typography.bodySmall)
+                return@Column
+            }
+            Text(if (offline) "现在离线，各项功能：" else "断网时各项功能：", style = MaterialTheme.typography.labelLarge)
+            for ((availability, group) in Capabilities.grouped(capabilities)) {
+                Text(buildAnnotatedString {
+                    withStyle(SpanStyle(color = tint(availability), fontWeight = FontWeight.Bold)) {
+                        append("${availability.label}：")
+                    }
+                    append(group.joinToString(" · ") { if (details) "${it.name}（${it.note}）" else it.name })
+                }, style = MaterialTheme.typography.bodySmall)
             }
         }
     }

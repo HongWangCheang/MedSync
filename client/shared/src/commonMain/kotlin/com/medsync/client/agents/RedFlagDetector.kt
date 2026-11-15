@@ -108,6 +108,17 @@ class RedFlagScreen(
         // "不如死了算了" (intent) never match; pain ("疼死了") is left to the model.
         private val HYPERBOLE = Regex("[笑吓累热冷饿渴困烦忙气急馋美乐愁丑懒]死(了|我了|人了|啦)|要(了)?我的?(老)?命")
 
+        // "吃了华法林" is a medication record, not an overdose. Taking a drug is a danger sign only with a sign of
+        // excess somewhere in the sentence (多吃了, 一次全吃了, 误喝), or with a symptom in the evidence itself.
+        private val TAKING = Regex("^(我|刚|刚刚|刚才|已经|早上|中午|晚上|今天|睡前|饭后)*(吃|服用|服|喝|打|用|吞)(了|过|完)")
+        private val EXCESS = Regex("多|全|整|瓶|过量|一次|好几|误|一把|攒")
+        private val SYMPTOM = Regex("[疼痛晕肿紧喘吐血抖麻痒红热烧冷汗慌闷憋抽歪黑]")
+
+        private fun plainDose(text: String, evidence: String): Boolean {
+            val taking = TAKING.find(evidence) ?: return false
+            return !EXCESS.containsMatchIn(text) && !SYMPTOM.containsMatchIn(evidence.substring(taking.range.last + 1))
+        }
+
         /** The guards on a model opinion; public for unit tests. */
         fun accept(text: String, opinion: RedFlagOpinion, source: String): RedFlag? {
             // Small models change punctuation and join phrases ("憋气,嘴唇都发紫了"): keep the first phrase that is
@@ -115,6 +126,7 @@ class RedFlagScreen(
             val evidence = opinion.evidence.split(PHRASE).map { it.trim() }
                 .firstOrNull { it.length >= 2 && RedFlagDetector.hit(text, it) } ?: return null
             if (HYPERBOLE.containsMatchIn(evidence)) return null
+            if (plainDose(text, evidence)) return null
             val advice = if (opinion.kind == RedFlagKind.CRISIS) RedFlagDetector.CRISIS else RedFlagDetector.EMERGENCY
             return RedFlag(evidence, advice, opinion.kind, source)
         }

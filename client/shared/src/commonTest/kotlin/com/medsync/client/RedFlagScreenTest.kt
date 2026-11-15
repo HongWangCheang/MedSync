@@ -66,6 +66,15 @@ class RedFlagScreenTest {
     }
 
     @Test
+    fun takingADrugIsARecordUnlessThereIsTooMuchOrASymptom() {
+        assertNull(RedFlagScreen.accept("我吃了华法林", emergency("吃了华法林"), "m"))
+        assertNull(RedFlagScreen.accept("刚吃了两片泰诺", emergency("吃了两片泰诺"), "m"))
+        assertNotNull(RedFlagScreen.accept("不小心多吃了五片安眠药", emergency("多吃了五片安眠药"), "m"))
+        assertNotNull(RedFlagScreen.accept("把一个星期的降压药一次全吃了", emergency("一次全吃了"), "m"))
+        assertNotNull(RedFlagScreen.accept("吃了药以后嗓子发紧", emergency("吃了药以后嗓子发紧"), "m"))
+    }
+
+    @Test
     fun aMissingSlowOrBrokenModelLeavesTheRulesAnswer() = runTest {
         val broken = object : RedFlagModel {
             override val name = "broken"
