@@ -9,7 +9,7 @@ from typing import Any
 from fastapi import FastAPI, Header, HTTPException
 from langgraph.checkpoint.memory import InMemorySaver
 
-from . import experiment
+from . import experiment, tracing
 from .external import HttpExternal
 from .findings import InMemoryFindingsBoard, PostgresFindingsBoard
 from .graph import StepRunner, build_graph
@@ -17,6 +17,7 @@ from .models import ActionRequest, Outcome
 from .pharmacist import RagPharmacist, delegation
 from .safety import DELEGATED_TOOLS, RagSafetyReviewer
 from .tool_ledger import InMemoryToolLedger, PostgresToolLedger
+from .tools import McpTools
 
 
 def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
@@ -27,10 +28,14 @@ def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
     rag_url = os.environ.get("MEDSYNC_RAG_URL")
     pharmacist = RagPharmacist(rag_url, float(os.environ.get("MEDSYNC_RAG_TIMEOUT_S", "60"))) if rag_url else None
     safety = RagSafetyReviewer(rag_url, float(os.environ.get("MEDSYNC_SAFETY_TIMEOUT_S", "15"))) if rag_url else None
+    # The executor's side effects go through the MCP tool server when one is configured (Compose: the "tools"
+    # service, which owns the tool ledger); otherwise in-process with this process's ledger.
+    tools_url = os.environ.get("MEDSYNC_TOOLS_URL")
+    tools = McpTools(tools_url, float(os.environ.get("MEDSYNC_TOOLS_TIMEOUT_S", "15"))) if tools_url else None
     dsn = os.environ.get("MEDSYNC_PG_DSN")
     if not dsn:
         graph = build_graph(InMemoryToolLedger(), external, InMemorySaver(), attempts=attempts, pharmacist=pharmacist,
-                            safety=safety, board=InMemoryFindingsBoard())
+                            safety=safety, board=InMemoryFindingsBoard(), tools=tools)
         return StepRunner(graph), None, baseline
     from langgraph.checkpoint.postgres import PostgresSaver
     from psycopg.rows import dict_row
@@ -41,7 +46,7 @@ def runner_from_env() -> tuple[StepRunner, Any, experiment.BaselineRunner]:
     checkpointer = PostgresSaver(pool)
     checkpointer.setup()
     graph = build_graph(PostgresToolLedger(pool), external, checkpointer, attempts=attempts, pharmacist=pharmacist,
-                        safety=safety, board=PostgresFindingsBoard(pool))
+                        safety=safety, board=PostgresFindingsBoard(pool), tools=tools)
     return StepRunner(graph), pool, baseline
 
 
@@ -53,6 +58,7 @@ def create_app(runner: StepRunner | None = None, baseline: experiment.BaselineRu
         if runner is None:
             app.state.runner, pool, app.state.baseline = runner_from_env()
         yield
+        tracing.flush()
         if pool is not None:
             pool.close()
 

@@ -4,17 +4,19 @@
 #   scripts/up.sh            # services + end-to-end smoke test
 #   scripts/up.sh --model    # also fetch the on-device model (Qwen3-0.6B, 328 MB, checksum verified)
 #   scripts/up.sh --app      # also open the desktop app (needs JDK 21)
+#   scripts/up.sh --langfuse # also self-host Langfuse at http://localhost:3000 and trace every plan
 #
 # A missing .env is created with random local passwords; GEMINI_API_KEY stays empty (medication questions then
 # answer "药学服务未配置"; everything else works). An existing .env is never touched.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-want_model=false want_app=false
+want_model=false want_app=false want_langfuse=false
 for arg in "$@"; do
   case "$arg" in
     --model) want_model=true ;;
     --app) want_app=true ;;
+    --langfuse) want_langfuse=true ;;
     *) echo "unknown option: $arg" >&2; exit 2 ;;
   esac
 done
@@ -32,8 +34,22 @@ if [[ ! -f .env ]]; then
   echo "Add GEMINI_API_KEY to .env to answer medication questions."
 fi
 
+compose=(docker compose -f docker-compose.yml)
+if $want_langfuse; then
+  # Local secrets for the self-hosted Langfuse, added once; existing values are kept.
+  add() { grep -q "^$1=" .env || echo "$1=$2" >> .env; }
+  add LANGFUSE_DB_PASSWORD "$(openssl rand -hex 16)"
+  add LANGFUSE_SALT "$(openssl rand -hex 16)"
+  add LANGFUSE_ENCRYPTION_KEY "$(openssl rand -hex 32)"
+  add LANGFUSE_NEXTAUTH_SECRET "$(openssl rand -hex 32)"
+  add LANGFUSE_PUBLIC_KEY "pk-lf-$(openssl rand -hex 16)"
+  add LANGFUSE_SECRET_KEY "sk-lf-$(openssl rand -hex 16)"
+  add LANGFUSE_INIT_USER_PASSWORD "$(openssl rand -hex 12)"
+  compose+=(-f docker-compose.langfuse.yml)
+fi
+
 say "Starting services (first build takes a few minutes)"
-docker compose up --build -d --wait --wait-timeout 600
+"${compose[@]}" up --build -d --wait --wait-timeout 900
 
 say "End-to-end smoke test"
 python3 scripts/smoke.py
@@ -59,5 +75,6 @@ if $want_app; then
 else
   say "Ready"
   echo "Desktop app:  cd client && ./gradlew :desktopApp:run"
+  $want_langfuse && echo "Langfuse:     http://localhost:3000 (dev@medsync.localhost, password: LANGFUSE_INIT_USER_PASSWORD in .env)"
   echo "Demo script:  docs/demo.md"
 fi

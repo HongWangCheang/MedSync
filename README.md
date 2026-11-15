@@ -28,8 +28,11 @@ scripts/up.sh --model --app   # 启动全部服务 → 冒烟测试 → 准备�
 gateway (Spring Boot + MyBatis + MySQL + Redis)        action_ledger：同 key 同内容→重放，同 key 不同内容→409
         │ ② Toxiproxy :18000
         ▼
-agent (FastAPI + LangGraph + Postgres)                 一个 step = 一个 LangGraph 线程；revalidate → executor
-        │ ③ Toxiproxy :19000                           tool_ledger：INTENT → COMMITTED，结果不明时先按 step_key 查
+agent (FastAPI + LangGraph + Postgres)                 一个 step = 一个 LangGraph 线程；revalidate → executor（MCP 客户端）
+        │ MCP · Toxiproxy :19200                       可选：Langfuse，每个 plan 一条 trace
+        ▼
+tools (MCP Server，streamable HTTP)                    tool_ledger：INTENT → COMMITTED，结果不明时先按 step_key 查
+        │ ③ Toxiproxy :19000
         ▼
 mocks (模拟医院预约 / 家属通知)                         故意不去重；/metrics/side_effects 是评测的唯一依据
 ```
@@ -40,7 +43,7 @@ mocks (模拟医院预约 / 家属通知)                         故意不去�
 |---|---|
 | [client/](client/) | KMP 客户端：`shared`（业务逻辑 + Compose UI）、`androidApp`、`iosApp`、`desktopApp` |
 | [services/gateway/](services/gateway/) | 同步网关，在 MedTrack sync-server 基础上新增 `action_ledger` 和 `/v1/actions` |
-| [services/agent/](services/agent/) | Agent 服务：LangGraph 图、tool ledger、MCP Server |
+| [services/agent/](services/agent/) | Agent 服务（LangGraph 图、Langfuse 追踪）和 MCP 工具服务（tool ledger），同一个镜像 |
 | [services/mocks/](services/mocks/) | 模拟外部系统，带副作用计数和"提交后响应丢失"故障 |
 | [services/rag/](services/rag/) | 从 MedTrack 拷贝的说明书 RAG + Gemini 问答 Agent，供药学问答步骤调用 |
 | [chaos/](chaos/) | Toxiproxy 三跳配置和故障注入脚本 |
@@ -62,7 +65,7 @@ scripts/up.sh                 # 没有 .env 时用随机密码生成一个 → d
 ```sh
 cp .env.example .env          # 填三个数据库密码和 MEDSYNC_INTERNAL_SECRET；要回答用药问题再填 GEMINI_API_KEY
 docker compose up --build -d --wait
-python3 scripts/smoke.py      # 12 项检查：重放、409、响应丢失、Agent 不可达、号源被抢、安全审核、跨 Agent 冲突、无重复副作用
+python3 scripts/smoke.py      # 14 项检查：重放、409、响应丢失、Agent 不可达、号源被抢、安全审核、MCP 连接断开和丢响应、跨 Agent 冲突、无重复副作用
 ```
 
 | 地址 | 用途 |
@@ -70,7 +73,8 @@ python3 scripts/smoke.py      # 12 项检查：重放、409、响应丢失、Age
 | `127.0.0.1:18081` | 客户端入口（经过 Toxiproxy 第①跳）。Android 模拟器用 `10.0.2.2:18081` |
 | `127.0.0.1:8474` | Toxiproxy 控制 API，`python3 chaos/toxic.py list` |
 | `127.0.0.1:9100` | mocks，直连无故障，评测用来读真实副作用 |
-| `127.0.0.1:8091` / `8100` | gateway / agent 直连，仅调试 |
+| `127.0.0.1:8091` / `8100` / `8200` | gateway / agent / MCP 工具服务（`/mcp`）直连，仅调试 |
+| `127.0.0.1:3000` | Langfuse（只在 `scripts/up.sh --langfuse` 时启动） |
 
 端口避开了 MedTrack（8081、8765），两套可以同时运行。
 
@@ -80,11 +84,23 @@ python3 scripts/smoke.py      # 12 项检查：重放、409、响应丢失、Age
 python3 chaos/toxic.py down gateway_agent          # 第②跳断开
 python3 chaos/toxic.py latency device_gateway 3000 # 第①跳慢网
 python3 chaos/toxic.py reset agent_external        # 第③跳连接被重置
+python3 chaos/toxic.py down agent_tools            # agent → MCP 工具服务断开
 python3 chaos/toxic.py clear
 # "医院已提交、响应丢失"：Toxiproxy 无法只针对单个接口，所以这个故障由 mocks 提供
 curl -X POST 127.0.0.1:9100/admin/faults -H 'Content-Type: application/json' \
      -d '{"path": "/hospital/bookings", "delay_s": 8}'
 ```
+
+### 工具走 MCP，追踪用 Langfuse
+
+agent 的 executor 不直接调用外部系统，而是通过 MCP 客户端调用 `tools` 服务。只执行一次的保证放在工具服务里：它独占 tool_ledger，所以任何 MCP 客户端（这个 agent、别的 LLM planner、Claude）只要带上同一个 step_key，都不会重复预约或重复发消息。MCP 回复丢了，也按"结果未知、用同一个 step_key 重试"处理，冒烟测试里有这一项（[ADR 0009](docs/adr/0009-mcp-tool-server-owns-exactly-once.md)）。
+
+```sh
+scripts/up.sh --langfuse      # 另外自托管一套 Langfuse，界面在 http://localhost:3000，账号和密码在 .env 里
+python3 scripts/langfuse_check.py   # 发一个两步的 plan，检查它在 Langfuse 里是一条 trace、含节点和 MCP 调用、没有自由文本
+```
+
+每个 plan 一条 trace：同一句话拆出的几个步骤，哪怕隔了几个小时才陆续执行，也在同一条 trace 里，下面是 LangGraph 的每个节点和每次 MCP 调用。用户写的消息、备注、提问只记录长度，账户 id 做哈希。
 
 ## 对比实验
 
@@ -164,7 +180,7 @@ cd client
 
 ```sh
 cd services/gateway && ./mvnw -q -Dtest='ActionLedgerTest,RedisFallbackTest,DelegationTest,AgentClientTest' test   # 20 项
-cd services/agent   && uv run pytest -q                                            # 51 项
+cd services/agent   && uv run pytest -q                                            # 60 项（含 MCP 6 项、Langfuse 追踪 3 项）
 cd services/rag     && .venv/bin/python -B -m unittest test_safety_review test_agent test_label_api test_medtrack   # 60 项
 cd services/rag     && .venv/bin/python -B evaluate_safety.py                      # 相互作用提醒评测，32 个用例
 cd services/mocks   && uv run pytest -q                                            # 4 项

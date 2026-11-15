@@ -1,5 +1,6 @@
 [
   {"name": "device_gateway", "listen": "0.0.0.0:18081", "upstream": "gateway:8081", "enabled": true},
-  {"name": "gateway_agent",  "listen": "0.0.0.0:18000", "upstream": "agent:8000",   "enabled": true},
-  {"name": "agent_external", "listen": "0.0.0.0:19000", "upstream": "mocks:9000",   "enabled": true}
+  {"name": "gateway_agent", "listen": "0.0.0.0:18000", "upstream": "agent:8000", "enabled": true},
+  {"name": "agent_tools", "listen": "0.0.0.0:19200", "upstream": "tools:8200", "enabled": true},
+  {"name": "agent_external", "listen": "0.0.0.0:19000", "upstream": "mocks:9000", "enabled": true}
 ]

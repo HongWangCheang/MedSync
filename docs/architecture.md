@@ -25,12 +25,18 @@ flowchart TB
 
   subgraph AG["agent（FastAPI + LangGraph + Postgres）"]
     direction LR
-    RV["revalidate<br/>过期 / 号源 / 契约"] --> SR["safety_review<br/>服药记录 → 安全审核"] --> CF["冲突检测<br/>查发现板"] --> EX["executor"]
-    TL[("tool_ledger<br/>INTENT → COMMITTED")]
+    RV["revalidate<br/>过期 / 号源 / 契约"] --> SR["safety_review<br/>服药记录 → 安全审核"] --> CF["冲突检测<br/>查发现板"] --> EX["executor<br/>MCP 客户端"]
     FB[("发现板<br/>agent_finding")]
-    EX --- TL
     CF --- FB
   end
+
+  subgraph TS["tools（MCP Server，streamable HTTP）"]
+    MT["book_appointment · notify_family · check_slot"]
+    TL[("tool_ledger<br/>INTENT → COMMITTED")]
+    MT --- TL
+  end
+
+  LF["Langfuse（可选）<br/>每个 plan 一条 trace"]
 
   subgraph RAG["rag（FastAPI）"]
     PH["药学 Agent<br/>openFDA 说明书检索 + Gemini，带引用"]
@@ -41,14 +47,16 @@ flowchart TB
 
   SE -- "① 设备→网关（Toxiproxy :18081）" --> AL
   AL -- "② 网关→Agent（Toxiproxy :18000）" --> RV
-  EX -- "③ Agent→外部（Toxiproxy :19000）" --> MK
+  EX -- "MCP（Toxiproxy :19200）" --> MT
+  MT -- "③ 工具→外部（Toxiproxy :19000）" --> MK
+  AG -. "trace" .-> LF
   EX -- "药学问答" --> PH
   SR --> SA
   SR -. "写入结论" .-> FB
   PH -. "相互作用提醒" .-> FB
 ```
 
-一共有三跳网络，每一跳前面都有 Toxiproxy，可以单独注入超时、断连、延迟。评测时，"执行了几次"以 mocks 统计的副作用次数为准，不依赖任何一方自己上报。
+一共有三跳网络：设备→网关、网关→Agent、工具→外部系统。另外 agent 通过 MCP 调用工具服务，这段连接也算一跳。每一跳前面都有 Toxiproxy，可以单独注入超时、断连、延迟。评测时，"执行了几次"以 mocks 统计的副作用次数为准，不依赖任何一方自己上报。
 
 ## 2. 一个动作的一生
 
@@ -61,6 +69,7 @@ sequenceDiagram
   participant G as gateway
   participant A as agent
   participant R as rag
+  participant T as tools（MCP）
   participant M as mocks
   U->>C: 我吃了布洛芬，告诉女儿我没事（离线）
   C->>C: 危险信号：规则 → 端侧模型（均无）
@@ -81,9 +90,11 @@ sequenceDiagram
   U->>C: 附上提醒再发
   C->>G: POST /v1/actions/{step_key}/resume
   G->>A: Command(resume=…)
-  A->>A: tool_ledger 写 INTENT
-  A->>M: 发送（提醒文字由服务器生成）
-  A->>A: tool_ledger 改为 COMMITTED
+  A->>T: MCP notify_family(step_key, …)（提醒文字由服务器生成）
+  T->>T: tool_ledger 写 INTENT
+  T->>M: 发送
+  T->>T: tool_ledger 改为 COMMITTED
+  T-->>A: DONE
   A-->>C: DONE
 ```
 
@@ -95,7 +106,8 @@ sequenceDiagram
 |---|---|---|
 | ① 设备→网关 | `action_ledger`（MySQL，唯一键 step_key） | 同一个 key、内容相同：返回已有结果；内容不同：409 |
 | ② 网关→Agent | LangGraph 线程 id = `账户:step_key`，PostgresSaver 持久化 | 重派时接着原来的线程跑，不会新开一次 |
-| ③ Agent→外部 | `tool_ledger`（Postgres） | 调用前写 INTENT，成功后改 COMMITTED；已 COMMITTED 直接返回缓存结果；INTENT 但结果不明时，先按 step_key 去外部系统查，查到就不再调用 |
+| Agent→工具服务（MCP） | 同一个 step_key 作为工具参数 | MCP 回复丢了算"结果未知"，下次用同一个 step_key 重试，由工具服务的 tool_ledger 返回原结果（[ADR 0009](adr/0009-mcp-tool-server-owns-exactly-once.md)） |
+| ③ 工具服务→外部 | `tool_ledger`（Postgres，由 tools 服务独占） | 调用前写 INTENT，成功后改 COMMITTED；已 COMMITTED 直接返回缓存结果；INTENT 但结果不明时，先按 step_key 去外部系统查，查到就不再调用 |
 
 第③跳最容易出问题：外部系统已经提交了，但响应丢了。这时请求级幂等和参数哈希去重都挡不住重复执行。对比实验专门测了这个情况，见 [eval/report.md](../eval/report.md)：640 个故障回合中，重复副作用率朴素重试是 50%，请求级幂等和参数哈希去重都是 33%，MedSync 是 0%。
 
@@ -165,7 +177,20 @@ sequenceDiagram
 - **安全审核只用说明书原文**：认不出的药名列为"未检查"，不写"没问题"。
 - **危险信号只建议就医或求助**：从不诊断。
 
-## 9. 代码在哪里
+## 9. 可观测：每个 plan 一条 trace
+
+agent 接入了 Langfuse（`tracing.py`）。没有配置密钥时，追踪完全关闭，不影响执行。
+
+- **一个 plan 一条 trace**：trace id 由"账户 + plan_id"算出来。同一句话拆出的几个步骤，哪怕隔了几个小时才陆续到达（离线排队、重试、等用户确认），都落在同一条 trace 里。
+- **trace 里的层级**：每次派发或恢复一个步骤，记一条 observation；它下面是 LangGraph 的各个节点，以及每次 MCP 工具调用。失败的案例可以从这里回放。
+- **健康数据不出进程**：
+  - 用户自己写的内容（给家人的消息、备注、提问、回答、说明书摘录）只记录长度，除非设置 `MEDSYNC_TRACE_CONTENT=1`。
+  - 账户 id 做哈希，包括 LangGraph 写进元数据的 thread_id。
+  - 委托令牌本来就不在状态里。
+  - `test_tracing.py` 用内存导出器检查过导出的每个字段。
+- **本机自托管**：`scripts/up.sh --langfuse` 用 `docker-compose.langfuse.yml` 启动一套 Langfuse，自动创建项目和密钥，界面在 http://localhost:3000。
+
+## 10. 代码在哪里
 
 | 部分 | 位置 |
 |---|---|
@@ -174,14 +199,16 @@ sequenceDiagram
 | 路由、危险信号、安全审核展示 | `client/shared/.../agents/` |
 | 端侧模型（桌面） | `client/desktopApp/src/main/kotlin/com/medsync/client/LiteRt*.kt` |
 | action_ledger、委托令牌 | `services/gateway/src/main/java/com/medsync/gateway/` |
-| LangGraph 图、revalidate、executor、tool_ledger、发现板、冲突检测 | `services/agent/medsync_agent/` |
+| LangGraph 图、revalidate、executor、发现板、冲突检测 | `services/agent/medsync_agent/` |
+| MCP 工具服务、tool_ledger、MCP 客户端 | `services/agent/medsync_agent/mcp_server.py`、`tool_ledger.py`、`tools.py` |
+| Langfuse 追踪 | `services/agent/medsync_agent/tracing.py`、`docker-compose.langfuse.yml` |
 | 药学 Agent、安全审核 | `services/rag/` |
 | 模拟外部系统 | `services/mocks/` |
 | 故障注入 | `chaos/` |
 
-## 10. 已知局限
+## 11. 已知局限
 
 - **端侧只在桌面上跑过**：Android 的 litertlm-android 没接，也没有真机延迟数据；iOS 没有构建过（需要 Xcode）。
 - **评测集偏小**：路由 210 句，危险信号 127 句，相互作用 32 例。标签都是作者自己写的，没有经过临床审核。
 - **"漂移"是模拟的**："LLM 重新推理生成不同参数"在对比实验里用模拟改写代替，没有用真实 LLM 跑。
-- **还没做**：Langfuse 追踪，以及 executor 通过 MCP 客户端调用工具（目前工具已经通过 MCP Server 暴露，但 executor 直接调用）。
+- **追踪只覆盖 agent**：设备端、网关和 rag 服务还没有接入 Langfuse，所以一条 trace 里看得到 agent 里每个节点和每次 MCP 调用，但看不到设备离线排了多久、网关重派了几次。

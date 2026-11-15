@@ -8,6 +8,9 @@ services:
       # Ablation: MEDSYNC_EXPERIMENT_REPHRASE=0 docker compose ... up -d agent  (retries resend identical arguments)
       MEDSYNC_EXPERIMENT_REPHRASE: ${MEDSYNC_EXPERIMENT_REPHRASE:-1}
       MEDSYNC_EXTERNAL_TIMEOUT_S: "1"
+  tools:
+    environment:
+      MEDSYNC_EXTERNAL_TIMEOUT_S: "1"
   gateway:
     environment:
       MEDSYNC_AGENT_READ_TIMEOUT: 2s
