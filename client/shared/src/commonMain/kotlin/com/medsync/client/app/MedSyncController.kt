@@ -2,7 +2,7 @@ package com.medsync.client.app
 
 import com.medsync.client.agents.PharmacistAnswer
 import com.medsync.client.agents.RedFlag
-import com.medsync.client.agents.RedFlagDetector
+import com.medsync.client.agents.RedFlagScreen
 import com.medsync.client.agents.OnDeviceRouter
 import com.medsync.client.agents.RuleBasedRouter
 import com.medsync.client.agents.RuleRouter
@@ -46,6 +46,8 @@ class MedSyncController(
     api: GatewayApi? = null,
     /** On-device router: rules by default; a platform can pass a model with rule fallback ([FallbackRouter]). */
     private val router: OnDeviceRouter = RuleBasedRouter,
+    /** Danger signs: rules alone by default; a platform can add its on-device model as a second opinion. */
+    private val redFlags: RedFlagScreen = RedFlagScreen(),
 ) {
     private val dao = db.actions()
     private val kv = db.kv()
@@ -70,8 +72,14 @@ class MedSyncController(
     fun submit(text: String) = scope.launch {
         val input = text.trim()
         if (input.isEmpty()) return@launch
-        // Danger signs first, fully offline, before anything else happens.
-        redFlag.value = RedFlagDetector.detect(input)
+        // Danger signs first, fully offline, before anything else happens: the rules at once, then the model for
+        // what the rules let through. The model can add an alert, never remove one.
+        redFlag.value = redFlags.rules(input)
+        if (redFlag.value == null && redFlags.hasModel) {
+            notice.value = CHECKING
+            redFlag.value = redFlags.second(input)
+            if (notice.value == CHECKING) notice.value = null
+        }
         val now = clock()
         val today = Instant.fromEpochMilliseconds(now).toLocalDateTime(TimeZone.currentSystemDefault()).date
         val conversation = PharmacistAnswer.followUp(dao.all(), now)
@@ -152,6 +160,7 @@ class MedSyncController(
 }
 
 private const val SAVED_OFFLINE = "已保存在本机，联网后自动同步"
+private const val CHECKING = "本机模型检查危险信号…"
 
 /** One controller per process, shared by the UI and background schedulers (e.g. Android WorkManager). */
 object MedSyncApp {
@@ -159,12 +168,13 @@ object MedSyncApp {
         private set
 
     fun init(builder: RoomDatabase.Builder<MedSyncDatabase>, gatewayUrl: String,
-             router: OnDeviceRouter = RuleBasedRouter): MedSyncController =
+             router: OnDeviceRouter = RuleBasedRouter, redFlags: RedFlagScreen = RedFlagScreen()): MedSyncController =
         controller ?: MedSyncController(
             db = buildDatabase(builder),
             gatewayUrl = gatewayUrl,
             scope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
             router = router,
+            redFlags = redFlags,
         ).also {
             controller = it
             it.startLoop()

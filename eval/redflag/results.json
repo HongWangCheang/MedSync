@@ -1,0 +1,482 @@
+{
+  "dev": {
+    "qwen3-0.6b": {
+      "n": 79,
+      "recall": [
+        39,
+        44
+      ],
+      "false_alarms": [
+        6,
+        35
+      ],
+      "crisis_routed": [
+        8,
+        11
+      ],
+      "groups": {
+        "explicit": [
+          8,
+          9
+        ],
+        "paraphrase": [
+          17,
+          18
+        ],
+        "crisis_explicit": [
+          3,
+          3
+        ],
+        "crisis_paraphrase": [
+          5,
+          8
+        ],
+        "third_party": [
+          6,
+          6
+        ],
+        "negated": [
+          0,
+          7
+        ],
+        "mild": [
+          2,
+          10
+        ],
+        "idiom": [
+          2,
+          6
+        ],
+        "question_history": [
+          1,
+          6
+        ],
+        "routine": [
+          1,
+          6
+        ]
+      },
+      "p50_ms": 1492.705,
+      "p95_ms": 3092.862,
+      "misses": [
+        "explicit-10",
+        "paraphrase-12",
+        "crisis_paraphrase-01",
+        "crisis_paraphrase-02",
+        "crisis_paraphrase-06"
+      ],
+      "false_alarm_ids": [
+        "mild-00",
+        "mild-06",
+        "idiom-01",
+        "idiom-06",
+        "question_history-02",
+        "routine-00"
+      ]
+    },
+    "rules": {
+      "n": 79,
+      "recall": [
+        13,
+        44
+      ],
+      "false_alarms": [
+        2,
+        35
+      ],
+      "crisis_routed": [
+        3,
+        11
+      ],
+      "groups": {
+        "explicit": [
+          9,
+          9
+        ],
+        "paraphrase": [
+          0,
+          18
+        ],
+        "crisis_explicit": [
+          3,
+          3
+        ],
+        "crisis_paraphrase": [
+          0,
+          8
+        ],
+        "third_party": [
+          1,
+          6
+        ],
+        "negated": [
+          0,
+          7
+        ],
+        "mild": [
+          0,
+          10
+        ],
+        "idiom": [
+          1,
+          6
+        ],
+        "question_history": [
+          1,
+          6
+        ],
+        "routine": [
+          0,
+          6
+        ]
+      },
+      "p50_ms": 0.005,
+      "p95_ms": 0.019,
+      "misses": [
+        "paraphrase-00",
+        "paraphrase-01",
+        "paraphrase-02",
+        "paraphrase-05",
+        "paraphrase-06",
+        "paraphrase-07",
+        "paraphrase-10",
+        "paraphrase-11",
+        "paraphrase-12",
+        "paraphrase-15",
+        "paraphrase-16",
+        "paraphrase-17",
+        "paraphrase-20",
+        "paraphrase-21",
+        "paraphrase-22",
+        "paraphrase-25",
+        "paraphrase-26",
+        "paraphrase-27",
+        "crisis_paraphrase-00",
+        "crisis_paraphrase-01",
+        "crisis_paraphrase-02",
+        "crisis_paraphrase-05",
+        "crisis_paraphrase-06",
+        "crisis_paraphrase-07",
+        "crisis_paraphrase-10",
+        "crisis_paraphrase-11",
+        "third_party-01",
+        "third_party-02",
+        "third_party-05",
+        "third_party-06",
+        "third_party-07"
+      ],
+      "false_alarm_ids": [
+        "idiom-06",
+        "question_history-00"
+      ]
+    },
+    "rules+qwen3-0.6b": {
+      "n": 79,
+      "recall": [
+        40,
+        44
+      ],
+      "false_alarms": [
+        7,
+        35
+      ],
+      "crisis_routed": [
+        8,
+        11
+      ],
+      "groups": {
+        "explicit": [
+          9,
+          9
+        ],
+        "paraphrase": [
+          17,
+          18
+        ],
+        "crisis_explicit": [
+          3,
+          3
+        ],
+        "crisis_paraphrase": [
+          5,
+          8
+        ],
+        "third_party": [
+          6,
+          6
+        ],
+        "negated": [
+          0,
+          7
+        ],
+        "mild": [
+          2,
+          10
+        ],
+        "idiom": [
+          2,
+          6
+        ],
+        "question_history": [
+          2,
+          6
+        ],
+        "routine": [
+          1,
+          6
+        ]
+      },
+      "p50_ms": 1453.2240000000002,
+      "p95_ms": 3092.866,
+      "misses": [
+        "paraphrase-12",
+        "crisis_paraphrase-01",
+        "crisis_paraphrase-02",
+        "crisis_paraphrase-06"
+      ],
+      "false_alarm_ids": [
+        "mild-00",
+        "mild-06",
+        "idiom-01",
+        "idiom-06",
+        "question_history-00",
+        "question_history-02",
+        "routine-00"
+      ]
+    }
+  },
+  "test": {
+    "qwen3-0.6b": {
+      "n": 48,
+      "recall": [
+        21,
+        26
+      ],
+      "false_alarms": [
+        5,
+        22
+      ],
+      "crisis_routed": [
+        2,
+        6
+      ],
+      "groups": {
+        "explicit": [
+          4,
+          6
+        ],
+        "paraphrase": [
+          11,
+          12
+        ],
+        "crisis_explicit": [
+          1,
+          2
+        ],
+        "crisis_paraphrase": [
+          3,
+          4
+        ],
+        "third_party": [
+          2,
+          2
+        ],
+        "negated": [
+          0,
+          4
+        ],
+        "mild": [
+          3,
+          6
+        ],
+        "idiom": [
+          2,
+          4
+        ],
+        "question_history": [
+          0,
+          4
+        ],
+        "routine": [
+          0,
+          4
+        ]
+      },
+      "p50_ms": 1444.972,
+      "p95_ms": 2431.36,
+      "misses": [
+        "explicit-08",
+        "explicit-13",
+        "paraphrase-23",
+        "crisis_explicit-04",
+        "crisis_paraphrase-09"
+      ],
+      "false_alarm_ids": [
+        "mild-08",
+        "mild-09",
+        "mild-13",
+        "idiom-03",
+        "idiom-08"
+      ]
+    },
+    "rules": {
+      "n": 48,
+      "recall": [
+        8,
+        26
+      ],
+      "false_alarms": [
+        5,
+        22
+      ],
+      "crisis_routed": [
+        2,
+        6
+      ],
+      "groups": {
+        "explicit": [
+          6,
+          6
+        ],
+        "paraphrase": [
+          0,
+          12
+        ],
+        "crisis_explicit": [
+          2,
+          2
+        ],
+        "crisis_paraphrase": [
+          0,
+          4
+        ],
+        "third_party": [
+          0,
+          2
+        ],
+        "negated": [
+          0,
+          4
+        ],
+        "mild": [
+          0,
+          6
+        ],
+        "idiom": [
+          2,
+          4
+        ],
+        "question_history": [
+          3,
+          4
+        ],
+        "routine": [
+          0,
+          4
+        ]
+      },
+      "p50_ms": 0.005,
+      "p95_ms": 0.016,
+      "misses": [
+        "paraphrase-03",
+        "paraphrase-04",
+        "paraphrase-08",
+        "paraphrase-09",
+        "paraphrase-13",
+        "paraphrase-14",
+        "paraphrase-18",
+        "paraphrase-19",
+        "paraphrase-23",
+        "paraphrase-24",
+        "paraphrase-28",
+        "paraphrase-29",
+        "crisis_paraphrase-03",
+        "crisis_paraphrase-04",
+        "crisis_paraphrase-08",
+        "crisis_paraphrase-09",
+        "third_party-03",
+        "third_party-04"
+      ],
+      "false_alarm_ids": [
+        "idiom-03",
+        "idiom-08",
+        "question_history-03",
+        "question_history-04",
+        "question_history-09"
+      ]
+    },
+    "rules+qwen3-0.6b": {
+      "n": 48,
+      "recall": [
+        24,
+        26
+      ],
+      "false_alarms": [
+        8,
+        22
+      ],
+      "crisis_routed": [
+        3,
+        6
+      ],
+      "groups": {
+        "explicit": [
+          6,
+          6
+        ],
+        "paraphrase": [
+          11,
+          12
+        ],
+        "crisis_explicit": [
+          2,
+          2
+        ],
+        "crisis_paraphrase": [
+          3,
+          4
+        ],
+        "third_party": [
+          2,
+          2
+        ],
+        "negated": [
+          0,
+          4
+        ],
+        "mild": [
+          3,
+          6
+        ],
+        "idiom": [
+          2,
+          4
+        ],
+        "question_history": [
+          3,
+          4
+        ],
+        "routine": [
+          0,
+          4
+        ]
+      },
+      "p50_ms": 1320.288,
+      "p95_ms": 1881.1779999999999,
+      "misses": [
+        "paraphrase-23",
+        "crisis_paraphrase-09"
+      ],
+      "false_alarm_ids": [
+        "mild-08",
+        "mild-09",
+        "mild-13",
+        "idiom-03",
+        "idiom-08",
+        "question_history-03",
+        "question_history-04",
+        "question_history-09"
+      ]
+    }
+  }
+}

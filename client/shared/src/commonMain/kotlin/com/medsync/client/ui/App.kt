@@ -76,8 +76,11 @@ fun App(controller: MedSyncController) {
                 redFlag?.let { flag ->
                     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)) {
                         Column(Modifier.padding(12.dp)) {
-                            Text("检测到危险信号：「${flag.matched}」", style = MaterialTheme.typography.titleSmall)
+                            Text(if (flag.source == "rules") "检测到危险信号：「${flag.matched}」"
+                                else "可能是危险信号：「${flag.matched}」", style = MaterialTheme.typography.titleSmall)
                             Text(flag.advice)
+                            if (flag.source != "rules") Text("由本机模型判断（规则词库没有命中），宁可多提醒一次。",
+                                style = MaterialTheme.typography.bodySmall)
                         }
                     }
                 }
