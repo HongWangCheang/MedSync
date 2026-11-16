@@ -17,7 +17,9 @@ ENV MEDTRACK_CACHE_DIR=/app/.cache \
     HF_HOME=/app/.cache/hf
 EXPOSE 8765
 
-HEALTHCHECK --interval=10s --timeout=5s --start-period=90s --retries=5 \
+# The first start after the label snapshots change embeds every passage (~4,500, a few minutes on CPU); the vectors
+# are cached in the model-cache volume, so later starts take seconds.
+HEALTHCHECK --interval=10s --timeout=5s --start-period=300s --retries=5 \
     CMD python -c "import urllib.request as u; u.urlopen('http://127.0.0.1:8765/health', timeout=4)" || exit 1
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8765"]

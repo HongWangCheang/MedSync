@@ -13,7 +13,7 @@ from starlette.concurrency import run_in_threadpool
 
 from agent import LabelAgent, gemini_summarize, verified_owner
 from safety_review import SafetyChecker
-from label_corpus import DEFAULT_CORPUS, safety_records
+from label_corpus import DEFAULT_CORPUS, RX_CORPUS, safety_records
 from label_retrieval import LabelIndex, LabelSnapshot, load_model, load_reranker
 from medtrack_server import ApiError, DEMO_LABELS, DemoLabels, MedTrack, demo_select, live_service, load_local_config, route
 
@@ -66,7 +66,10 @@ class LabelQuestion(BaseModel):
 def build_index():
     demo = os.getenv("MEDTRACK_SYNTHETIC_LABELS") == "1"
     path = Path(os.getenv("MEDTRACK_CORPUS", str(DEFAULT_CORPUS)))
-    records = DEMO_LABELS if demo else json.loads(path.read_text(encoding="utf-8"))["results"]
+    # The pharmacist and the safety review read the same labels: the main snapshot plus the prescription-label one
+    # (warfarin, amiodarone…). MEDTRACK_RX_CORPUS="" turns the latter off.
+    rx = os.getenv("MEDTRACK_RX_CORPUS", str(RX_CORPUS))
+    records = DEMO_LABELS if demo else safety_records(path, rx or "/nonexistent")
     index = LabelIndex(LabelSnapshot(records, public=not demo), load_model(), load_reranker())
     index.prepare_vectors()
     return index
@@ -77,10 +80,7 @@ def create_app(index=None, legacy=None, agent=None):
     async def lifespan(app):
         app.state.index = index or await run_in_threadpool(build_index)
         app.state.agent = agent or LabelAgent(app.state.index, summarize=gemini_summarize)
-        # The safety review also reads prescription labels (warfarin, digoxin…); no embeddings needed for it.
-        app.state.safety_index = None if index is not None or os.getenv("MEDTRACK_SYNTHETIC_LABELS") == "1" else \
-            await run_in_threadpool(lambda: LabelIndex(LabelSnapshot(safety_records(), public=True), model=None))
-        app.state.safety = SafetyChecker(app.state.safety_index or app.state.index)
+        app.state.safety = SafetyChecker(app.state.index)
         if legacy is not None:
             app.state.legacy = legacy
         elif os.getenv("MEDTRACK_SYNTHETIC_LABELS") == "1":
@@ -93,8 +93,6 @@ def create_app(index=None, legacy=None, agent=None):
         finally:
             if index is None:
                 app.state.index.db.close()
-            if app.state.safety_index is not None:
-                app.state.safety_index.db.close()
 
     app = FastAPI(title="MedTrack label search and question answering", version="1.0", lifespan=lifespan)
 

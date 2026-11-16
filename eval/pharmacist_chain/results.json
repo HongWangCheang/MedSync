@@ -1,0 +1,515 @@
+[
+  {
+    "id": "A01.1",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 4.98,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "check_interaction"
+    ],
+    "statuses": [
+      "mentioned"
+    ],
+    "citations": [
+      {
+        "label": "TYLENOL 8 HR ARTHRITIS PAIN",
+        "label_id": "21acf19d-d04f-97ca-e063-6294a90a5e41",
+        "version": "3",
+        "section": "Warnings",
+        "excerpt": "If you are not sure whether a drug contains acetaminophen, ask a doctor or pharmacist. if you are allergic to acetaminophen or any of the inactive ingredients in this product Ask a doctor before use if you have liver disease Ask a doctor or pharmacist before use if you are taking the blood thinning drug warfarin Stop use and ask a doctor if pain gets worse or lasts more than 10 days fever gets wor"
+      },
+      {
+        "label": "TYLENOL 8 HR ARTHRITIS PAIN",
+        "label_id": "21acf19d-d04f-97ca-e063-6294a90a5e41",
+        "version": "3",
+        "section": "Ask a doctor or pharmacist before use",
+        "excerpt": "Ask a doctor or pharmacist before use if you are taking the blood thinning drug warfarin"
+      }
+    ],
+    "cited": 2,
+    "good_citations": 2,
+    "grounded": true,
+    "text": "The TYLENOL 8 HR ARTHRITIS PAIN label states that you should ask a doctor or pharmacist before use if you are taking the blood thinning drug warfarin [S1, S2]."
+  },
+  {
+    "id": "A01.2",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 4.89,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "search_label"
+    ],
+    "statuses": [
+      "answered"
+    ],
+    "citations": [
+      {
+        "label": "TYLENOL 8 HR ARTHRITIS PAIN",
+        "label_id": "21acf19d-d04f-97ca-e063-6294a90a5e41",
+        "version": "3",
+        "section": "Warnings",
+        "excerpt": "Warnings Liver warning This product contains acetaminophen. Severe liver damage may occur if you take more than 6 caplets in 24 hours, which is the maximum daily amount with other drugs containing acetaminophen 3 or more alcoholic drinks every day while using this product Allergy alert acetaminophen may cause severe skin reactions. Symptoms may include: skin reddening blisters rash If a skin react"
+      }
+    ],
+    "cited": 1,
+    "good_citations": 1,
+    "grounded": true,
+    "text": "The label states: \"Do not use with any other drug containing acetaminophen (prescription or nonprescription).\" [S3] It also warns that severe liver damage may occur if you take more than 6 caplets in 24 hours, which is the maximum daily amount when combined with other drugs containing acetaminophen [S3]."
+  },
+  {
+    "id": "A02.1",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 7.63,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "search_label",
+      "check_interaction"
+    ],
+    "statuses": [
+      "answered",
+      "mentioned"
+    ],
+    "citations": [
+      {
+        "label": "Zoloft",
+        "label_id": "fd27d2f5-1ade-4dbf-b2d2-bb98daf7da3a",
+        "version": "7",
+        "section": "Drug interactions",
+        "excerpt": "Examples: selegiline, tranylcypromine, isocarboxazid, phenelzine, linezolid, methylene blue Pimozide Clinical Impact: Increased plasma concentrations of pimozide, a drug with a narrow therapeutic index, may increase the risk of QTc prolongation and ventricular arrhythmias. Intervention: Concomitant use of pimozide and ZOLOFT is contraindicated [See Contraindications (4) ]. Other Serotonergic Drugs"
+      }
+    ],
+    "cited": 1,
+    "good_citations": 1,
+    "grounded": true,
+    "text": "The Zoloft label states that the concomitant use of serotonergic drugs with ZOLOFT increases the risk of serotonin syndrome [S2]. Phenelzine is listed as an example of a monoamine oxidase inhibitor (MAOI) that interacts with Zoloft [S2]."
+  },
+  {
+    "id": "A02.2",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 2.76,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "check_interaction"
+    ],
+    "statuses": [
+      "mentioned"
+    ],
+    "citations": [
+      {
+        "label": "Zoloft",
+        "label_id": "fd27d2f5-1ade-4dbf-b2d2-bb98daf7da3a",
+        "version": "7",
+        "section": "Warnings and precautions",
+        "excerpt": "The risk is increased with concomitant use of other serotonergic drugs (including triptans, tricyclic antidepressants, fentanyl, lithium, tramadol, meperidine, methadone, tryptophan, buspirone, amphetamines, and St. John’s Wort) and with drugs that impair metabolism of serotonin, i.e., MAOIs [See Contraindications (4) , Drug Interactions (7.1) ] . Serotonin syndrome can also occur when these drugs"
+      },
+      {
+        "label": "Zoloft",
+        "label_id": "fd27d2f5-1ade-4dbf-b2d2-bb98daf7da3a",
+        "version": "7",
+        "section": "Drug interactions",
+        "excerpt": "Intervention: Monitor patients for signs and symptoms of serotonin syndrome, particularly during treatment initiation and dosage increases. If serotonin syndrome occurs, consider discontinuation of ZOLOFT and/or concomitant serotonergic drugs [See Warnings and Precautions (5.2) ]. Examples: Other SSRIs, SNRIs, triptans, tricyclic antidepressants, opioids, lithium, tryptophan, buspirone, amphetamin"
+      }
+    ],
+    "cited": 2,
+    "good_citations": 2,
+    "grounded": true,
+    "text": "The Zoloft label states that the risk of serotonin syndrome is increased with the concomitant use of other serotonergic drugs, including St. John’s Wort [S3, S4]. Patients should be monitored for signs and symptoms of serotonin syndrome, particularly during treatment initiation and dosage increases [S4]."
+  },
+  {
+    "id": "A03.1",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 14.07,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "search_label"
+    ],
+    "statuses": [
+      "answered"
+    ],
+    "citations": [
+      {
+        "label": "Lipitor",
+        "label_id": "dd011a82-7356-4b83-86c4-b21cd9138fc6",
+        "version": "8",
+        "section": "Drug interactions",
+        "excerpt": "If concomitant use is decided, monitor patients for signs and symptoms of myopathy particularly during initiation of therapy and during upward dose titration of either drug. Grapefruit Juice Clinical Impact: Grapefruit juice consumption, especially excessive consumption, more than 1.2 liters/daily, can raise the plasma levels of atorvastatin and may increase the risk of myopathy and rhabdomyolysis"
+      }
+    ],
+    "cited": 1,
+    "good_citations": 1,
+    "grounded": true,
+    "text": "Consuming large quantities of grapefruit juice (more than 1.2 liters daily) can raise the plasma levels of atorvastatin and may increase the risk of myopathy and rhabdomyolysis [S1]. The label advises avoiding the intake of large quantities of grapefruit juice (more than 1.2 liters daily) when taking Lipitor [S1]."
+  },
+  {
+    "id": "A03.2",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 12.08,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "check_interaction"
+    ],
+    "statuses": [
+      "mentioned"
+    ],
+    "citations": [
+      {
+        "label": "Lipitor",
+        "label_id": "dd011a82-7356-4b83-86c4-b21cd9138fc6",
+        "version": "8",
+        "section": "Drug interactions",
+        "excerpt": "Intervention: Concomitant use of cyclosporine or gemfibrozil with LIPITOR is not recommended. Anti-Viral Medications Clinical Impact: Atorvastatin plasma levels were significantly increased with concomitant administration of LIPITOR with many anti-viral medications, which are inhibitors of CYP3A4 and/or transporters (e.g., BCRP, OATP1B1/1B3, P-gp, MRP2, and/or OAT2) [see Clinical Pharmacology (12."
+      },
+      {
+        "label": "Lipitor",
+        "label_id": "dd011a82-7356-4b83-86c4-b21cd9138fc6",
+        "version": "8",
+        "section": "Warnings and precautions",
+        "excerpt": "Steps to Prevent or Reduce the Risk of Myopathy and Rhabdomyolysis LIPITOR exposure may be increased by drug interactions due to inhibition of cytochrome P450 enzyme 3A4 (CYP3A4) and/or transporters (e.g., breast cancer resistant protein [BCRP], organic anion-transporting polypeptide [OATP1B1/OATP1B3] and P-glycoprotein [P-gp]), resulting in an increased risk of myopathy and rhabdomyolysis. Concom"
+      },
+      {
+        "label": "Lipitor",
+        "label_id": "dd011a82-7356-4b83-86c4-b21cd9138fc6",
+        "version": "8",
+        "section": "Drug interactions",
+        "excerpt": "Table 2: Drug Interactions that may Increase the Risk of Myopathy and Rhabdomyolysis with LIPITOR Cyclosporine or Gemfibrozil Clinical Impact: Atorvastatin plasma levels were significantly increased with concomitant administration of LIPITOR and cyclosporine, an inhibitor of CYP3A4 and OATP1B1 [see Clinical Pharmacology (12.3) ] . Gemfibrozil may cause myopathy when given alone. The risk of myopat"
+      }
+    ],
+    "cited": 3,
+    "good_citations": 3,
+    "grounded": true,
+    "text": "Concomitant use of gemfibrozil with Lipitor is not recommended [S2, S5]. Gemfibrozil significantly increases atorvastatin plasma levels, and taking them together increases the risk of myopathy and rhabdomyolysis [S3]."
+  },
+  {
+    "id": "A04.1",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 2.97,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "search_label"
+    ],
+    "statuses": [
+      "answered"
+    ],
+    "citations": [
+      {
+        "label": "Benadryl Allergy Extra Strength Liqui-Gels",
+        "label_id": "451a21a1-4357-d575-e063-6394a90a900a",
+        "version": "3",
+        "section": "When using this product",
+        "excerpt": "When using this product marked drowsiness may occur alcohol, sedatives, and tranquilizers may increase drowsiness be careful when driving a motor vehicle or operating machinery excitability may occur, especially in children avoid alcoholic drinks"
+      }
+    ],
+    "cited": 1,
+    "good_citations": 1,
+    "grounded": true,
+    "text": "When using this product, marked drowsiness may occur [S1]. Alcohol, sedatives, and tranquilizers may increase drowsiness, and you should be careful when driving a motor vehicle or operating machinery [S1]."
+  },
+  {
+    "id": "A04.2",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 6.8,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "check_interaction"
+    ],
+    "statuses": [
+      "mentioned"
+    ],
+    "citations": [
+      {
+        "label": "Benadryl Allergy Extra Strength Liqui-Gels",
+        "label_id": "451a21a1-4357-d575-e063-6394a90a900a",
+        "version": "3",
+        "section": "Warnings",
+        "excerpt": "Warnings Do not use to make a child sleepy with any other product containing diphenhydramine, even one used on skin Ask a doctor before use if you have glaucoma a breathing problem such as emphysema or chronic bronchitis trouble urinating due to an enlarged prostate gland Ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers When using this product marked drowsiness ma"
+      },
+      {
+        "label": "Benadryl Allergy Extra Strength Liqui-Gels",
+        "label_id": "451a21a1-4357-d575-e063-6394a90a900a",
+        "version": "3",
+        "section": "Ask a doctor or pharmacist before use",
+        "excerpt": "Ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers"
+      },
+      {
+        "label": "Benadryl Allergy Extra Strength Liqui-Gels",
+        "label_id": "451a21a1-4357-d575-e063-6394a90a900a",
+        "version": "3",
+        "section": "When using this product",
+        "excerpt": "When using this product marked drowsiness may occur alcohol, sedatives, and tranquilizers may increase drowsiness be careful when driving a motor vehicle or operating machinery excitability may occur, especially in children avoid alcoholic drinks"
+      }
+    ],
+    "cited": 3,
+    "good_citations": 3,
+    "grounded": true,
+    "text": "You should ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers [S2, S3]. Alcohol, sedatives, and tranquilizers may increase drowsiness when using this product [S1, S2]."
+  },
+  {
+    "id": "A05.1",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 12.04,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "get_my_medications",
+      "search_label"
+    ],
+    "statuses": [
+      "ok",
+      "answered"
+    ],
+    "citations": [
+      {
+        "label": "Motrin IB Migraine",
+        "label_id": "460cceff-0b2e-cbfe-e063-6394a90aa46f",
+        "version": "4",
+        "section": "Warnings",
+        "excerpt": "care for any serious condition taking aspirin for heart attack or stroke, because ibuprofen may decrease this benefit of aspirin taking any other drug When using this product take with food or milk if stomach upset occurs Stop use and ask a doctor if you experience any of the following signs of stomach bleeding: feel faint vomit blood have bloody or black stools have stomach pain that does not get"
+      }
+    ],
+    "cited": 1,
+    "good_citations": 1,
+    "grounded": true,
+    "text": "The Motrin IB Migraine label states that ibuprofen may decrease the benefit of aspirin taken for heart attack or stroke [S1]. It advises that if you are taking aspirin for this purpose, you should talk to a doctor or pharmacist before use [S1]."
+  },
+  {
+    "id": "A06.1",
+    "expect": "clarify",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 8.36,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "search_label"
+    ],
+    "statuses": [
+      "needs_selection"
+    ],
+    "citations": [],
+    "cited": 0,
+    "good_citations": null,
+    "grounded": true,
+    "text": "Which Tylenol Extra Strength product do you mean?\n- Tylenol Extra Strength (Kenvue Brands LLC, version 2)\n- TYLENOL Extra Strength (Kenvue Brands LLC, version 11)"
+  },
+  {
+    "id": "A06.2",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 16.11,
+    "tool_ok": true,
+    "passed": false,
+    "called": [
+      "search_label",
+      "search_label",
+      "search_label"
+    ],
+    "statuses": [
+      "needs_selection",
+      "user_must_choose",
+      "needs_selection"
+    ],
+    "citations": [],
+    "cited": 0,
+    "good_citations": 0,
+    "grounded": true,
+    "text": "Which Tylenol Extra Strength product do you mean?\n- Tylenol Extra Strength (Kenvue Brands LLC, version 2)\n- TYLENOL Extra Strength (Kenvue Brands LLC, version 11)"
+  },
+  {
+    "id": "A07.1",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 9.18,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "get_my_medications",
+      "search_label",
+      "search_label"
+    ],
+    "statuses": [
+      "ok",
+      "answered",
+      "answered"
+    ],
+    "citations": [
+      {
+        "label": "Benadryl Allergy Extra Strength Liqui-Gels",
+        "label_id": "451a21a1-4357-d575-e063-6394a90a900a",
+        "version": "3",
+        "section": "Warnings",
+        "excerpt": "avoid alcoholic drinks If pregnant or breast-feeding If pregnant or breast-feeding, ask a health professional before use. Keep out of reach of children In case of overdose, get medical help or contact a Poison Control Center right away. (1-800-222-1222)"
+      },
+      {
+        "label": "PEPCID AC Maximum Strength",
+        "label_id": "21af0de6-18c5-b8e8-e063-6394a90af51f",
+        "version": "23",
+        "section": "Warnings",
+        "excerpt": "Warnings Allergy alert Do not use if you are allergic to famotidine or other acid reducers Do not use if you have trouble or pain swallowing food, vomiting with blood, or bloody or black stools. These may be signs of a serious condition. See your doctor. with other acid reducers Ask a doctor before use if you have had heartburn over 3 months. This may be a sign of a more serious condition. heartbu"
+      }
+    ],
+    "cited": 2,
+    "good_citations": 1,
+    "grounded": true,
+    "text": "For **Benadryl Allergy Extra Strength Liqui-Gels**, the label warns to \"avoid alcoholic drinks\" [S2]. \n\nFor **PEPCID AC Maximum Strength**, the retrieved label section does not mention alcohol warnings [S1]."
+  },
+  {
+    "id": "A08.1",
+    "expect": "uncited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 2.91,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "get_my_medications"
+    ],
+    "statuses": [
+      "ok"
+    ],
+    "citations": [],
+    "cited": 0,
+    "good_citations": null,
+    "grounded": true,
+    "text": "You are not currently taking any medications according to your records."
+  },
+  {
+    "id": "A09.1",
+    "expect": "not_safe_claim",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 14.07,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "check_interaction"
+    ],
+    "statuses": [
+      "not_mentioned"
+    ],
+    "citations": [],
+    "cited": 0,
+    "good_citations": null,
+    "grounded": true,
+    "text": "The PEPCID AC Maximum Strength label does not mention ibuprofen."
+  },
+  {
+    "id": "A10.1",
+    "expect": "uncited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 12.06,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "search_label"
+    ],
+    "statuses": [
+      "no_evidence"
+    ],
+    "citations": [],
+    "cited": 0,
+    "good_citations": null,
+    "grounded": true,
+    "text": "The drug label for Claritin Chewable Grape and Bubblegum does not mention pricing or cost information at Walgreens."
+  },
+  {
+    "id": "A11.1",
+    "expect": "no_unsourced",
+    "status": "DONE",
+    "reason": "refused_without_evidence",
+    "seconds": 1.44,
+    "tool_ok": true,
+    "passed": true,
+    "called": [],
+    "statuses": [],
+    "citations": [],
+    "cited": 0,
+    "good_citations": null,
+    "grounded": false,
+    "text": "I can't give a sourced answer to that. Please check the printed label or ask a pharmacist."
+  },
+  {
+    "id": "A12.1",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 8.68,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "search_label"
+    ],
+    "statuses": [
+      "answered"
+    ],
+    "citations": [
+      {
+        "label": "CHILDRENS FLONASE ALLERGY RELIEF",
+        "label_id": "3ea5ea2a-3bc5-4b15-b936-fefc97fcfec3",
+        "version": "9",
+        "section": "Do not use",
+        "excerpt": "Do not use • in children under 4 years of age • to treat asthma • if you have an injury or surgery to your nose that is not fully healed • if you have ever had an allergic reaction to this product or any of the ingredients"
+      }
+    ],
+    "cited": 1,
+    "good_citations": 1,
+    "grounded": true,
+    "text": "Children under 4 years of age should not use Children's Flonase Allergy Relief [S1]."
+  },
+  {
+    "id": "A12.2",
+    "expect": "cited",
+    "status": "DONE",
+    "reason": null,
+    "seconds": 16.12,
+    "tool_ok": true,
+    "passed": true,
+    "called": [
+      "search_label"
+    ],
+    "statuses": [
+      "answered"
+    ],
+    "citations": [
+      {
+        "label": "CHILDRENS FLONASE ALLERGY RELIEF",
+        "label_id": "3ea5ea2a-3bc5-4b15-b936-fefc97fcfec3",
+        "version": "9",
+        "section": "Ask a doctor before use",
+        "excerpt": "Ask a doctor before use if you have or had glaucoma or cataracts"
+      }
+    ],
+    "cited": 1,
+    "good_citations": 1,
+    "grounded": true,
+    "text": "Yes, you should ask a doctor before use if you have or had glaucoma [S2]."
+  }
+]

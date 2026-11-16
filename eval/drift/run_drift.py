@@ -281,15 +281,20 @@ def main() -> int:
     parser.add_argument("--report", action="store_true", help="only rebuild REPORT.md from calls.jsonl")
     parser.add_argument("--limit", type=int, help="first N utterances (smoke test)")
     parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument("--resume", action="store_true",
+                        help="only the utterances not yet in calls.jsonl, appended (the free tier stops at 500 a day)")
     args = parser.parse_args()
     out = HERE / "calls.jsonl"
     if not args.report:
         utterances = [json.loads(l) for l in (ROOT / "eval/routing/utterances.jsonl").read_text().splitlines()
                       if l.strip()][1:]
         rows = [r for r in utterances if any(s["tool"] in IDENTITY for s in r["expect"])][:args.limit]
+        if args.resume and out.exists():
+            done_ids = {json.loads(l)["id"] for l in out.read_text().splitlines() if l.strip()}
+            rows = [r for r in rows if r["id"] not in done_ids]
         api_key = key()
         lock, done = threading.Lock(), [0]
-        with out.open("w") as sink, ThreadPoolExecutor(args.workers) as pool:
+        with out.open("a" if args.resume else "w") as sink, ThreadPoolExecutor(args.workers) as pool:
             def work(row):
                 result = run_one(row, api_key)
                 with lock:

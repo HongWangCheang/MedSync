@@ -76,15 +76,19 @@ def parse_sse(lines: Iterable[str]) -> Iterator[tuple[str, dict[str, Any]]]:
 
 def summarize(answer: dict[str, Any], tools: list[str], session_id: str | None = None,
               awaiting_choice: bool = False, choices: list[dict[str, Any]] | None = None,
-              interaction_mentioned: bool = False) -> dict[str, Any]:
+              interaction_mentioned: bool = False, statuses: list[str] | None = None) -> dict[str, Any]:
     """What the device stores and shows: the answer, whether it is grounded, and short excerpts of each source."""
     citations = [
-        {"id": cid, "label": c.get("label_name"), "section": c.get("section"),
+        {"id": cid, "label": c.get("label_name"), "label_id": c.get("label_id"), "version": c.get("version"),
+         "section": c.get("section"),
          "excerpt": (c.get("text") or "")[:EXCERPT_CHARS], "source_url": c.get("source_url")}
         for cid, c in (answer.get("citations") or {}).items()
     ]
     return {"answer": answer.get("text", ""), "grounded": bool(answer.get("grounded")),
             "refusal_reason": answer.get("refusal_reason"), "citations": citations, "tools": tools,
+            # What each tool found ("mentioned", "not_mentioned", "needs_selection"…), so "the label does not
+            # mention it" can be told apart from "nothing was checked".
+            "tool_statuses": statuses or [],
             "session_id": session_id, "awaiting_choice": awaiting_choice,
             # check_interaction found label text about the combination; posted to the findings board when grounded.
             "interaction_mentioned": interaction_mentioned,
@@ -101,6 +105,7 @@ class RagPharmacist:
     def ask(self, question: str, session_id: str | None = None, owner: str | None = None,
             token: str | None = None, selection: dict[str, str] | None = None) -> dict[str, Any]:
         tools: list[str] = []
+        statuses: list[str] = []
         answer, session, awaiting, choices, mentioned = None, session_id, False, [], False
         body = {"message": question[:1000], **({"session_id": session_id} if session_id else {}),
                 **({"selection": {"label_id": selection["label_id"], "version": selection["version"]}}
@@ -118,6 +123,7 @@ class RagPharmacist:
                     elif event == "tool_call":
                         tools.append(str(data.get("name")))
                     elif event == "tool_result":
+                        statuses.append(str(data.get("status")))
                         awaiting = awaiting or data.get("status") in CHOICE_STATUSES
                         mentioned = mentioned or (data.get("name") == "check_interaction"
                                                   and data.get("status") == "mentioned")
@@ -133,4 +139,5 @@ class RagPharmacist:
         if answer is None:
             raise PharmacistUnavailable("stream ended without an answer")
         # Only a turn that ended without citations is still waiting on the choice; a later tool call may resolve it.
-        return summarize(answer, tools, session, awaiting and not answer.get("citations"), choices, mentioned)
+        return summarize(answer, tools, session, awaiting and not answer.get("citations"), choices, mentioned,
+                         statuses)

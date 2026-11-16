@@ -14,7 +14,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 from app import app
-from label_corpus import DEFAULT_CORPUS
+from label_corpus import DEFAULT_CORPUS, RX_CORPUS
 from label_retrieval import MODEL_NAME, RERANK_MIN_SCORE, RERANK_MODEL, source_url
 
 QUESTIONS = Path(__file__).with_name("eval") / "questions.json"
@@ -131,7 +131,7 @@ def report(cases, outcomes, summary, metadata):
                 text.append(f"- **{case['id']}** {case['request']['question']} · 标注 `{gold}` · {got}")
         if not found:
             text.append("这组题中没有此类变化。")
-    text += ["", f"向量模型 `{MODEL_NAME}`。语料 SHA-256 `{metadata['corpus_sha256']}`。"
+    text += ["", f"向量模型 `{MODEL_NAME}`。语料 SHA-256 `{metadata['corpus_sha256']}`，处方药快照 SHA-256 `{metadata.get('rx_corpus_sha256')}`。"
              f"题集 SHA-256 `{metadata['questions_sha256']}`。", ""]
     return "\n".join(text)
 
@@ -163,6 +163,7 @@ def main():
         "labels": health["labels"], "passages": health["passages"], "repeats": args.repeats,
         "platform": f"{platform.system()} {platform.machine()}, Python {platform.python_version()}",
         "corpus_sha256": hashlib.sha256(DEFAULT_CORPUS.read_bytes()).hexdigest(),
+        "rx_corpus_sha256": hashlib.sha256(RX_CORPUS.read_bytes()).hexdigest() if RX_CORPUS.exists() else None,
         "questions_sha256": hashlib.sha256(raw).hexdigest(),
     }
     args.output_dir.mkdir(parents=True, exist_ok=True)

@@ -43,8 +43,8 @@ RX_CORPUS = DEFAULT_CORPUS.with_name("openfda_rx_labels.json")
 
 
 def safety_records(base=DEFAULT_CORPUS, extra=RX_CORPUS):
-    """Labels the safety review reads: the main snapshot plus the prescription-label snapshot (fetch_rx_labels.py).
-    The pharmacist reads only the main snapshot; its retrieval evaluation is pinned to that file."""
+    """Labels the app reads (pharmacist and safety review): the main snapshot plus the prescription-label snapshot
+    (fetch_rx_labels.py). A missing second file is skipped."""
     records = json.loads(Path(base).read_text(encoding="utf-8"))["results"]
     if Path(extra).exists():
         records = records + json.loads(Path(extra).read_text(encoding="utf-8"))["results"]

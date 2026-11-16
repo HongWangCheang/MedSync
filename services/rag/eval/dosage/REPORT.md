@@ -1,17 +1,17 @@
 # MedTrack 固定题评测
 
-openFDA 快照含 48 条版本记录，索引 1020 个段落。
+openFDA 快照含 100 条版本记录，索引 4517 个段落。
 共 14 题，每题每种模式运行 3 次。运行环境为 Darwin arm64, Python 3.12.16。
 
 | 检索方式 | Recall@5 | 引用正确率 | P95 | 已选标签 P95 | 通过题数 |
 |---|---:|---:|---:|---:|---:|
-| keyword | 88.6% | 75.0% (9/12) | 1.94 ms | 1.94 ms | 9/14 |
-| hybrid | 97.1% | 92.9% (13/14) | 6.59 ms | 6.59 ms | 13/14 |
-| rerank | 100.0% | 100.0% (14/14) | 320.82 ms | 320.82 ms | 14/14 |
+| keyword | 87.6% | 90.9% (10/11) | 3.18 ms | 3.18 ms | 10/14 |
+| hybrid | 98.6% | 92.9% (13/14) | 7.14 ms | 7.14 ms | 13/14 |
+| rerank | 100.0% | 100.0% (14/14) | 315.38 ms | 315.38 ms | 14/14 |
 
 | 题型 | 总题数 | 关键词通过 | 混合通过 | 混合+重排通过 |
 |---|---:|---:|---:|---:|
-| dosage | 14 | 9 | 13 | 14 |
+| dosage | 14 | 10 | 13 | 14 |
 
 Recall@5 为可回答题的相关段落召回率宏平均。引用正确率按实际返回的引用计，引用须命中预先标注的段落且包含标注原文。可回答题漏答由通过题数体现，单独报告以免高拒答率抬高引用正确率。
 P95 用预热后的进程内 FastAPI 请求计时，包含检索、引用选择和序列化。已选标签 P95 只统计进入段落检索路径的题。
@@ -29,9 +29,8 @@ P95 用预热后的进程内 FastAPI 请求计时，包含检索、引用选择�
 ## 混合检索答对、关键词未答对
 
 - **D03** How many capsules can an adult take per day? · 标注 `dosage_and_administration:1:1` · 关键词 `no_evidence` · 混合 `dosage_and_administration:1:1` · 混合+重排 `dosage_and_administration:1:1`
-- **D04** How many days is one course of treatment? · 标注 `dosage_and_administration:1:1, dosage_and_administration:1:2` · 关键词 `stop_use:1:1` · 混合 `dosage_and_administration:1:2` · 混合+重排 `dosage_and_administration:1:1`
 - **D06** What is the most I can take in one day? · 标注 `dosage_and_administration:1:1` · 关键词 `no_evidence` · 混合 `dosage_and_administration:1:1` · 混合+重排 `dosage_and_administration:1:1`
-- **D11** When should it be taken in relation to breakfast? · 标注 `dosage_and_administration:1:1, dosage_and_administration:1:2` · 关键词 `information_for_patients:1:2` · 混合 `dosage_and_administration:1:1` · 混合+重排 `dosage_and_administration:1:1`
+- **D11** When should it be taken in relation to breakfast? · 标注 `dosage_and_administration:1:1, dosage_and_administration:1:2` · 关键词 `no_evidence` · 混合 `dosage_and_administration:1:1` · 混合+重排 `dosage_and_administration:1:1`
 
 ## 关键词答对、混合检索未答对
 
@@ -41,4 +40,4 @@ P95 用预热后的进程内 FastAPI 请求计时，包含检索、引用选择�
 
 这组题中没有此类变化。
 
-向量模型 `BAAI/bge-small-en-v1.5`。语料 SHA-256 `e80137d1d11381a34b28f185b6f5d16921eb1b20ac89e0379e4d0406d1087565`。题集 SHA-256 `996bf848b4fb5ac39c897b69bce1e8552f10ef664264940117ade65e632c5b14`。
+向量模型 `BAAI/bge-small-en-v1.5`。语料 SHA-256 `e80137d1d11381a34b28f185b6f5d16921eb1b20ac89e0379e4d0406d1087565`，处方药快照 SHA-256 `475f0ab9b6aa9cad4afceb5d1518ed262c81203e7e0d2b5ec491352f7c0ddf47`。题集 SHA-256 `996bf848b4fb5ac39c897b69bce1e8552f10ef664264940117ade65e632c5b14`。
