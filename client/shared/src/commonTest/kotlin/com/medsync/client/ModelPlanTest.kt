@@ -96,6 +96,21 @@ class ModelPlanTest {
     }
 
     @Test
+    fun aBodyPartAloneIsReadWithWhatTheUserSaysAboutIt() = runTest {
+        // Seen in the demo: "胸口像被人攥住一样" was recorded as the symptom "胸口".
+        val (squeezed, _) = plan("胸口像被人攥住一样", "胸口像被人攥住一样" to listOf(Call("record_symptom", mapOf("symptom" to "胸口"))))
+        assertEquals("胸闷", squeezed.arg(0, "category"))
+        val (aching, _) = plan("心口疼", "心口疼" to listOf(Call("record_symptom", mapOf("symptom" to "心口"))))
+        assertEquals("胸痛", aching.arg(0, "category"))
+        // The description can come first: "拉肚子" (the model says "肚子").
+        val (runs, _) = plan("拉肚子", "拉肚子" to listOf(Call("record_symptom", mapOf("symptom" to "肚子"))))
+        assertEquals("腹泻", runs.arg(0, "category"))
+        // Nothing recognisable said about it: no symptom rather than one called "胸口".
+        assertEquals(emptyList(), plan("胸口那里贴了膏药",
+            "胸口那里贴了膏药" to listOf(Call("record_symptom", mapOf("symptom" to "胸口")))).first.tools())
+    }
+
+    @Test
     fun oneCallWithTwoDrugsBecomesTwoRecords() = runTest {
         val (routed, _) = plan("吃了两片泰诺和奥美拉唑",
             "吃了两片泰诺和奥美拉唑" to listOf(Call("record_medication", mapOf("name" to "两片泰诺和奥美拉唑"))))

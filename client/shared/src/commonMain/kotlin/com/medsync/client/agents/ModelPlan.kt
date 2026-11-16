@@ -41,7 +41,7 @@ object ModelPlan {
         "头晕" to listOf("头晕", "头昏", "晕"), "头痛" to listOf("头痛", "头疼"),
         "胃痛" to listOf("胃痛", "胃疼", "胃不舒服"), "腹痛" to listOf("腹痛", "肚子疼", "肚子痛"),
         "恶心" to listOf("恶心", "想吐", "反胃", "呕吐"), "发热" to listOf("发热", "发烧"), "咳嗽" to listOf("咳嗽", "咳"),
-        "胸闷" to listOf("胸闷", "胸口闷"), "乏力" to listOf("乏力", "没劲", "没力气", "无力"), "失眠" to listOf("失眠", "睡不着"),
+        "胸闷" to listOf("胸闷", "胸口闷"), "胸痛" to listOf("胸痛", "胸口痛", "胸口疼", "心口疼", "心口痛"), "乏力" to listOf("乏力", "没劲", "没力气", "无力"), "失眠" to listOf("失眠", "睡不着"),
         "腹泻" to listOf("腹泻", "拉肚子"), "皮疹" to listOf("皮疹", "疹子", "红疹", "起疹"),
         "心悸" to listOf("心悸", "心慌", "心跳快", "心跳很快"), "咽痛" to listOf("咽痛", "嗓子疼", "喉咙痛", "嗓子痛", "喉咙疼"),
         "腰痛" to listOf("腰痛", "腰疼"), "关节痛" to listOf("关节痛", "关节疼"), "肌肉痛" to listOf("肌肉痛", "肌肉疼", "肌肉酸痛"),
@@ -92,6 +92,27 @@ object ModelPlan {
     fun relative(value: String): String = canon(value.removePrefix("给"), relatives)  // keep 我: "我妈" → 妈妈
     fun drug(value: String): String = quantity.replace(value.trim(), "").trim()
 
+    // A bare body part is not a symptom ("胸口像被人攥住一样" → the model says "胸口"). Read what the user says about it
+    // right after it; with nothing recognisable, record nothing rather than a symptom called "胸口".
+    private val bodyParts = listOf(
+        listOf("胸口", "心口", "胸") to listOf("闷|压|攥|紧|憋|堵|喘不" to "胸闷", "疼|痛|刺|绞" to "胸痛"),
+        listOf("肚子", "腹部", "腹") to listOf("疼|痛|绞" to "腹痛"),
+        listOf("头") to listOf("晕|昏|转" to "头晕", "疼|痛|胀|炸" to "头痛"),
+        listOf("胃") to listOf("疼|痛|难受|不舒服|绞" to "胃痛"),
+        listOf("嗓子", "喉咙") to listOf("疼|痛" to "咽痛"),
+        listOf("腰") to listOf("疼|痛|酸" to "腰痛"),
+    )
+
+    /** The symptom category for a model answer that is only a body part, read from [source]; "" when there is none. */
+    fun bodyPartSymptom(raw: String, source: String): String? {
+        val (_, descriptors) = bodyParts.firstOrNull { (parts, _) -> raw in parts } ?: return null
+        // A known symptom phrase in the user's words that contains the body part: "拉肚子" → 腹泻.
+        symptoms.entries.firstOrNull { (_, phrases) -> phrases.any { raw in it && it in source } }?.let { return it.key }
+        val at = source.indexOf(raw).takeIf { it >= 0 } ?: return ""
+        val after = source.substring(at + raw.length).take(8)
+        return descriptors.firstOrNull { (pattern, _) -> Regex(pattern).containsMatchIn(after) }?.second ?: ""
+    }
+
     private fun Map<String, Any?>.text(key: String): String = (this[key] as? String)?.trim().orEmpty()
 
     fun toRouted(calls: List<Call>, text: String, today: LocalDate, nowMs: Long): RuleRouter.Routed {
@@ -102,7 +123,7 @@ object ModelPlan {
         val seen = mutableSetOf<String>()
         fun addSymptom(raw: String, source: String) {
             if (negated.containsMatchIn(raw) || !grounded(raw, source, symptoms)) return  // "没有头疼"; "腰疼" → 头痛
-            val category = symptom(raw)
+            val category = bodyPartSymptom(raw, source) ?: symptom(raw)
             if (category.isEmpty() || !seen.add("sym:$category")) return
             if (symptom == null) symptom = steps.size
             steps += StepDraft("record_symptom", buildJsonObject {

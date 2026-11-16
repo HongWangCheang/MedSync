@@ -29,14 +29,29 @@ object RedFlagDetector {
         "抽搐", "吐血", "咯血", "便血", "黑便", "剧烈头痛", "口角歪斜", "说话不清", "半边身体", "一侧肢体",
         "过量", "吃多了", "一整瓶", "吃了一瓶",
     )
-    private val crisis = listOf("不想活", "自杀", "轻生", "结束生命")
+    // Explicit self-harm intent (standard suicide warning signs): precise enough to alert on their own, offline.
+    private val crisis = listOf("不想活", "自杀", "轻生", "结束生命", "想死", "寻死", "活不下去", "一了百了", "遗书",
+        "割腕", "跳楼", "自残", "伤害自己", "了结自己", "结束自己")
+
+    // Weaker signs (hopelessness, being a burden, saying goodbye, saving up pills): not an alert by themselves, but
+    // when an alert is raised for such a sentence it is a crisis, so the hotline is shown and not only 120.
+    private val crisisHints = Regex("解脱|累赘|拖累|撑不下去|不想醒|别再醒|醒不过来|后事|告别|活着没|没有意义|没意思|" +
+        "攒.{0,8}药|药.{0,6}(全|都)(吞|吃)|(全|都)吞")
     private val negations = listOf("没有", "没", "无", "不", "未")
 
     fun detect(text: String): RedFlag? {
         crisis.firstOrNull { hit(text, it) }?.let { return RedFlag(it, CRISIS, RedFlagKind.CRISIS) }
-        emergency.firstOrNull { hit(text, it) }?.let { return RedFlag(it, EMERGENCY) }
+        emergency.firstOrNull { hit(text, it) }?.let { return asCrisisIfHinted(text, RedFlag(it, EMERGENCY)) }
         return null
     }
+
+    /** True when the sentence carries a self-harm sign, strong or weak (negated strong ones do not count). */
+    fun selfHarm(text: String): Boolean = crisis.any { hit(text, it) } || crisisHints.containsMatchIn(text)
+
+    /** "把攒的药全吃了" is an overdose AND a crisis: the crisis advice already says to call 120. */
+    fun asCrisisIfHinted(text: String, flag: RedFlag): RedFlag =
+        if (flag.kind == RedFlagKind.EMERGENCY && selfHarm(text)) flag.copy(advice = CRISIS, kind = RedFlagKind.CRISIS)
+        else flag
 
     /** True if [keyword] occurs at least once without a negation right before it ("没有胸痛" is not a hit). */
     fun hit(text: String, keyword: String): Boolean {
@@ -128,7 +143,8 @@ class RedFlagScreen(
             if (HYPERBOLE.containsMatchIn(evidence)) return null
             if (plainDose(text, evidence)) return null
             val advice = if (opinion.kind == RedFlagKind.CRISIS) RedFlagDetector.CRISIS else RedFlagDetector.EMERGENCY
-            return RedFlag(evidence, advice, opinion.kind, source)
+            // The small model often files self-harm under "emergency"; the user's words decide.
+            return RedFlagDetector.asCrisisIfHinted(text, RedFlag(evidence, advice, opinion.kind, source))
         }
     }
 }

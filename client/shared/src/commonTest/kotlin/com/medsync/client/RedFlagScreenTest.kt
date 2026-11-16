@@ -75,6 +75,23 @@ class RedFlagScreenTest {
     }
 
     @Test
+    fun selfHarmAlwaysGetsTheHotlineNotOnly120() = runTest {
+        // Explicit intent is caught by the rules, instantly and offline.
+        assertEquals(RedFlagKind.CRISIS, RedFlagDetector.detect("活不下去了")?.kind)
+        assertNull(RedFlagDetector.detect("没有想死，就是累"))  // negated
+        // The model files an overdose of saved-up pills under "emergency"; the sentence says crisis.
+        val text = "把攒了半年的安眠药都吃了"
+        val flag = assertNotNull(RedFlagScreen.accept(text, emergency("安眠药都吃了"), "m"))
+        assertEquals(RedFlagKind.CRISIS, flag.kind)
+        assertEquals(RedFlagDetector.CRISIS, flag.advice)
+        assertTrue("120" in flag.advice)  // the crisis advice still says to call 120
+        // A rule emergency in a hopeless sentence is upgraded too.
+        assertEquals(RedFlagKind.CRISIS, RedFlagDetector.detect("药吃多了，想解脱")?.kind)
+        // An ordinary emergency stays an emergency.
+        assertEquals(RedFlagKind.EMERGENCY, RedFlagScreen.accept("心口像压了块石头", emergency("心口像压了块石头"), "m")?.kind)
+    }
+
+    @Test
     fun aMissingSlowOrBrokenModelLeavesTheRulesAnswer() = runTest {
         val broken = object : RedFlagModel {
             override val name = "broken"
