@@ -41,7 +41,7 @@ mocks (模拟医院预约 / 家属通知)                         故意不去�
 
 | 目录 | 内容 |
 |---|---|
-| [client/](client/) | KMP 客户端：`shared`（业务逻辑 + Compose UI）、`androidApp`、`iosApp`、`desktopApp` |
+| [client/](client/) | KMP 客户端：`shared`（业务逻辑 + Compose UI）、`androidApp`、`iosApp`、`desktopApp`；`web`（React + TypeScript，离线队列移植自 `shared`） |
 | [services/gateway/](services/gateway/) | 同步网关，在 MedTrack sync-server 基础上新增 `action_ledger` 和 `/v1/actions` |
 | [services/agent/](services/agent/) | Agent 服务（LangGraph 图、Langfuse 追踪）和 MCP 工具服务（tool ledger），同一个镜像 |
 | [services/mocks/](services/mocks/) | 模拟外部系统，带副作用计数和"提交后响应丢失"故障 |
@@ -155,6 +155,8 @@ cd client
 ./gradlew :desktopApp:packageDistributionForCurrentOS   # 打包 .dmg / .msi / .deb
 ./gradlew :shared:jvmTest                 # 共享逻辑的单元测试
 ```
+
+**Web 客户端（React）**：`cd client/web && npm install && npm run dev`，打开 http://localhost:5173。outbox、step_key、同步和规则路由都移植成了 TypeScript，数据存在 IndexedDB 里，所以断网时说的话先存在浏览器里，联网后按顺序同步。step_key 和 Kotlin 客户端逐字节一致，两边用同一组测试向量。网页版没有端侧模型，理解句子和判断危险信号只靠规则。详见 [client/web/README.md](client/web/README.md)。
 
 **iOS**：需要完整的 Xcode（只有 Command Line Tools 不够）。用 Xcode 打开 `client/iosApp/iosApp.xcodeproj` 运行即可，构建时会自动调用 Gradle 编译 `shared` 框架。真机运行需要在 `client/iosApp/Configuration/Config.xcconfig` 里填 `TEAM_ID`。
 

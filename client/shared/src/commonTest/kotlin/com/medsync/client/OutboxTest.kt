@@ -72,4 +72,21 @@ class OutboxTest {
         assertEquals(ActionState.PENDING, ActionStateMachine.next(ActionState.NEEDS_USER, ActionEvent.UserConfirmed))
         assertEquals(ActionState.ACKED, ActionStateMachine.next(ActionState.ACKED, ActionEvent.TransientError))
     }
+
+    @Test
+    fun stepKeyMatchesTheWebClientByteForByte() {
+        // The same vectors are asserted in client/web/src/core/core.test.ts: a step planned in the browser and one
+        // planned on a phone must hash identically, or the gateway's ledger would treat them as different steps.
+        assertEquals("859400be70f2b074c571f6497d0bb03702f495233f6a32de3aed19ac042fec1e",
+            StepKey.of("device-1", "plan-1", 0, "book_appointment", buildJsonObject {
+                put("patient_id", "self"); put("department", "消化内科"); put("date", "2026-11-18")
+            }))
+        assertEquals("747011280527089efabd7314b4e648f865d5e5d993b5b53c50f1fd8af7c7b137",
+            StepKey.of("device-1", "plan-1", 1, "record_medication", buildJsonObject {
+                put("takenAt", 1763280000000L); put("name", "布洛芬")
+            }))
+        assertEquals("b963287cedff260e943188c66c0f0542ea167609ba34594157a4497a4bd00e89",
+            StepKey.of("d", "p", 2, "notify_family", buildJsonObject { put("to", "女儿 \"老大\"\n") }))
+    }
 }
+
